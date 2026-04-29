@@ -9,5 +9,12 @@ package vektra.Model;
  * @author santi
  */
 public class Vehiculo {
-    
+
+    private String id;
+    private int capacidad;
+ 
+    public Vehiculo(String id, int capacidad) {
+        this.id = id;
+        this.capacidad = capacidad;
+}
 }
