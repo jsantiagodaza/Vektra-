@@ -8,6 +8,15 @@ package vektra.Model;
  *
  * @author santi
  */
-public class Persona {
+public abstract class Persona {
+
+    protected String id;
+    protected String nombre;
+
+    public Persona(String id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+    }
+
     
 }
