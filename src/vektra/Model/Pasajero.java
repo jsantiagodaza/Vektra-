@@ -8,6 +8,14 @@ package vektra.Model;
  *
  * @author santi
  */
-public class Pasajero {
+public class Pasajero extends Persona {
+    private String email;
+
+    public Pasajero(String email, String id, String nombre) {
+        super(id, nombre);
+        this.email = email;
+    }
+
+   
     
 }
