@@ -8,6 +8,13 @@ package vektra.Model;
  *
  * @author santi
  */
-public class Conductor {
+public class Conductor extends Persona {
+    private String licencia;
+
+    public Conductor(String licencia, String id, String nombre) {
+        super(id, nombre);
+        this.licencia = licencia;
+    }
+    
     
 }
