@@ -13,6 +13,8 @@ import java.util.ArrayList;
  */
 public class Ruta {
 
+    //static String getOrigen;
+
     private String id;
     private Estacion origen;
     private Estacion destino;
