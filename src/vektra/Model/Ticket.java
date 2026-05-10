@@ -16,12 +16,49 @@ public class Ticket {
     private LocalDateTime fecha;
     private double precio;
     private String codigoQR;
-
-    public Ticket(String id, LocalDateTime fecha, double precio, String codigoQR) {
+    private Pasajero pasajero;
+    private Estacion estacionOrigen;
+    private Estacion estacionDestino;
+    
+    public Ticket(){
+    }
+    
+    public Ticket(String id, LocalDateTime fecha, double precio, String codigoQR, Pasajero pasajero, Estacion estacionOrigen, Estacion estacionDestino) {
         this.id = id;
         this.fecha = fecha;
         this.precio = precio;
         this.codigoQR = codigoQR;
+        this.pasajero = pasajero;
+        this.estacionOrigen = estacionOrigen;
+        this.estacionDestino = estacionDestino;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public String getCodigoQR() {
+        return codigoQR;
+    }
+
+    public Pasajero getPasajero() {
+        return pasajero;
+    }
+
+    public Estacion getEstacionOrigen() {
+        return estacionOrigen;
+    }
+
+    public Estacion getEstacionDestino() {
+        return estacionDestino;
     }
     
     
