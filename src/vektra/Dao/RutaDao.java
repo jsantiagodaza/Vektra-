@@ -51,7 +51,8 @@ public class RutaDao {
         
         conexiones.putIfAbsent(origen, new ArrayList<>());
         conexiones.putIfAbsent(destino, new ArrayList<>());
-        
+        conexiones.get(origen).add(destino);
+        conexiones.get(destino).add(origen);
     }
         
 }
