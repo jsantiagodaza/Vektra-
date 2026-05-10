@@ -34,6 +34,12 @@ public class Ruta {
         this.tiempoTotal = tiempoTotal;
         this.transbordos = transbordos;
     }
+    public void agregarEstacionIntermedia(Estacion estacion){
+        if(estacionesIntermedias==null){
+            estacionesIntermedias= new ArrayList<>(); 
+        }
+        estacionesIntermedias.add(estacion);
+    }
 
     public String getId() {
         return id;
@@ -58,9 +64,15 @@ public class Ruta {
     public double getTiempoTotal() {
         return tiempoTotal;
     }
+    public void setTiempoTotal(double tiempoTotal) {
+        this.tiempoTotal = tiempoTotal;
+    }
 
     public int getTransbordos() {
         return transbordos;
+    }
+    public void setTransbordos(int transbordos) {
+        this.transbordos = transbordos;
     }
     
     @Override 

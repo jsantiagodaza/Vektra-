@@ -20,5 +20,8 @@ public class Estacion {
         this.nombre = nombre;
         this.lineas = new ArrayList<>();
     }
-    
+
+    public String getNombre() {
+        return nombre;
+    }
 }
