@@ -17,4 +17,6 @@ public class Vehiculo {
         this.id = id;
         this.capacidad = capacidad;
 }
+    
+    
 }
