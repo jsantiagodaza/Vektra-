@@ -17,6 +17,34 @@ public class Vehiculo {
         this.id = id;
         this.capacidad = capacidad;
 }
+
+    public Vehiculo() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public int getCapacidad() {
+        return capacidad;
+    }
+
+    public void setCapacidad(int capacidad) {
+        this.capacidad = capacidad;
+    }
+
+    @Override
+    public String toString() {
+        return "Vehiculo{" +
+                "id='" + id + '\'' +
+                ", capacidad=" + capacidad +
+                '}';
+    }
     
+  
     
 }
