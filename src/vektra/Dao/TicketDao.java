@@ -27,5 +27,9 @@ public class TicketDao {
         return tickets;
     }
     
-    
+    public void mostrarTickets(){
+        for (Ticket t : tickets){
+            System.out.println(t);
+        }
+    }
 }
