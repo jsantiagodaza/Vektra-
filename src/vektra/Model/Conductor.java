@@ -15,6 +15,19 @@ public class Conductor extends Persona {
         super(id, nombre);
         this.licencia = licencia;
     }
+
+    public Conductor() {
+    }
+
+    public String getLicencia() {
+        return licencia;
+    }
+
+    public void setLicencia(String licencia) {
+        this.licencia = licencia;
+    }
+
+  
     
     
 }
