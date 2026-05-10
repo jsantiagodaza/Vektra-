@@ -26,6 +26,11 @@ public class RutaDao {
         construirConexion(ruta);
     }
     
+    public List<Ruta>ObtenerRutas(){
+        return rutas;
+    }
+            
+    
     private void construirConexion(Ruta ruta){
         
     }
