@@ -9,6 +9,7 @@ import java.util.List;
 import vektra.Model.Ruta;
 import java.util.Map;
 import java.util.HashMap;
+import vektra.Model.Estacion;
 /**
  *
  * @author santi
@@ -32,7 +33,25 @@ public class RutaDao {
             
     
     private void construirConexion(Ruta ruta){
+        List<String> estaciones = new ArrayList<>();
+        estaciones.add(ruta.getOrigen().getNombre());
         
+        for(Estacion e : ruta.getEstacionesIntermedias()){
+           estaciones.add(e.getNombre());
+        }
+        estaciones.add(ruta.getDestino().getNombre());
+        for (int i =0; i < estaciones.size()-1 ; i++){
+            String actual = estaciones.get(i);
+            String siguiente = estaciones.get(i+ 1);
+            agregarConexion (actual,siguiente);
+        }
     }
     
+    private void agregarConexion(String origen, String destino){
+        
+        conexiones.putIfAbsent(origen, new ArrayList<>());
+        conexiones.putIfAbsent(destino, new ArrayList<>());
+        
+    }
+        
 }
