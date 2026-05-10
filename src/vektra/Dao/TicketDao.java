@@ -13,22 +13,23 @@ import vektra.Model.Ticket;
  * @author santi
  */
 public class TicketDao {
+
     private List<Ticket> tickets;
-    
-    public TicketDao(){
+
+    public TicketDao() {
         tickets = new ArrayList<>();
     }
-    
-    public void guardarTicket(Ticket ticket){
+
+    public void guardarTicket(Ticket ticket) {
         tickets.add(ticket);
     }
-    
-    public List<Ticket> obtenerTickets(){
+
+    public List<Ticket> obtenerTickets() {
         return tickets;
     }
-    
-    public void mostrarTickets(){
-        for (Ticket t : tickets){
+
+    public void mostrarTickets() {
+        for (Ticket t : tickets) {
             System.out.println(t);
         }
     }
