@@ -18,42 +18,25 @@ import vektra.Model.Estacion;
 public class RutaDao {
 
     private List<Ruta> rutas;
-    private Map<String, List<String>> conexiones;
 
     public RutaDao() {
         rutas = new ArrayList<>();
-        conexiones = new HashMap<>();
     }
 
     public void GuardarRuta(Ruta ruta) {
         rutas.add(ruta);
-        construirConexion(ruta);
     }
 
     public List<Ruta> ObtenerRutas() {
         return rutas;
     }
 
-    private void construirConexion(Ruta ruta) {
-        List<String> estaciones = new ArrayList<>();
-        estaciones.add(ruta.getOrigen().getNombre());
-
-        for (Estacion e : ruta.getEstacionesIntermedias()) {
-            estaciones.add(e.getNombre());
+    public Ruta buscarRuta(String id){
+        for (Ruta r : rutas){
+            if (r.getId().equals(id)){
+                return r;
+            }
         }
-        estaciones.add(ruta.getDestino().getNombre());
-        for (int i = 0; i < estaciones.size() - 1; i++) {
-            String actual = estaciones.get(i);
-            String siguiente = estaciones.get(i + 1);
-            agregarConexion(actual, siguiente);
-        }
-    }
-
-    private void agregarConexion(String origen, String destino) {
-
-        conexiones.putIfAbsent(origen, new ArrayList<>());
-        conexiones.putIfAbsent(destino, new ArrayList<>());
-        conexiones.get(origen).add(destino);
-        conexiones.get(destino).add(origen);
-    }
+        return null;
+    }   
 }
