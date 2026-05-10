@@ -26,5 +26,8 @@ public class TicketService {
      Ticket ticket = new Ticket(  id, LocalDateTime.now(), precio, "QR-" + id, pasajero, origen, destino);
      ticketDao.guardarTicket(ticket);
  }
+ public void mostrarTickets(){
+     ticketDao.obtenerTickets();
+ }
  
 }
