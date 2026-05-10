@@ -23,5 +23,9 @@ public class TicketDao {
         tickets.add(ticket);
     }
     
+    public List<Ticket> obtenerTickets(){
+        return tickets;
+    }
+    
     
 }
