@@ -1,0 +1,38 @@
+CREATE TABLE usuarios (
+    id INT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    correo VARCHAR(50) NOT NULL UNIQUE,
+    contraseña VARCHAR(30) NOT NULL,
+    fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE estaciones (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(30) NOT NULL,
+    linea VARCHAR(30) NOT NULL,
+    orden INT NOT NULL
+);
+
+CREATE TABLE rutas (
+    id SERIAL PRIMARY KEY,
+    estacion_origen_id INT NOT NULL,
+    estacion_destino_id INT NOT NULL,
+    tiempo_minutos INT NOT NULL,
+
+    FOREIGN KEY (estacion_origen_id) REFERENCES estaciones(id),
+    FOREIGN KEY (estacion_destino_id) REFERENCES estaciones(id)
+);
+
+CREATE TABLE boletos (
+    id SERIAL PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    estacion_origen_id INT NOT NULL,
+    estacion_destino_id INT NOT NULL,
+    fecha_compra DATETIME DEFAULT CURRENT_TIMESTAMP,
+    precio DECIMAL(10,2) NOT NULL,
+    codigo_boleto VARCHAR(50) NOT NULL UNIQUE,
+
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+    FOREIGN KEY (estacion_origen_id) REFERENCES estaciones(id),
+    FOREIGN KEY (estacion_destino_id) REFERENCES estaciones(id)
+);
