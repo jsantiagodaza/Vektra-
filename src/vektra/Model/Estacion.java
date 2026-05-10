@@ -14,7 +14,10 @@ public class Estacion {
     private String id;
     private String nombre;
     private List<String> lineas; //Colores de las Líneas que pasan
-
+    
+    public Estacion(){
+    }
+    
     public Estacion(String id, String nombre) {
         this.id = id;
         this.nombre = nombre;
@@ -24,4 +27,14 @@ public class Estacion {
     public String getNombre() {
         return nombre;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public List<String> getLineas() {
+        return lineas;
+    }
+    
+    
 }
