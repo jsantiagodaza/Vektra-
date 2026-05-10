@@ -91,7 +91,15 @@ public class Ticket {
 
     @Override
     public String toString() {
-        return super.toString();
+        return "Ticket{"
+                + "id='" + id + '\''
+                + ", fecha=" + fecha
+                + ", precio=" + precio
+                + ", codigoQR='" + codigoQR + '\''
+                + ", pasajero=" + pasajero
+                + ", estacionOrigen=" + estacionOrigen
+                + ", estacionDestino=" + estacionDestino
+                + '}';
     }
 
 }
