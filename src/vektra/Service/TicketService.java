@@ -4,7 +4,6 @@
  */
 package vektra.Service;
 
-
 import java.time.LocalDateTime;
 import java.util.List;
 import vektra.Dao.TicketDao;
@@ -17,7 +16,6 @@ import vektra.Model.Ticket;
  * @author santi
  */
 public class TicketService {
-
 
     private TicketDao ticketDao;
 
@@ -38,6 +36,5 @@ public class TicketService {
     public List<Ticket> obtenerTickets() {
         return ticketDao.obtenerTickets();
     }
-
 
 }

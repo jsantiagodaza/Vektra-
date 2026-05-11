@@ -12,11 +12,11 @@ public class Vehiculo {
 
     private String id;
     private int capacidad;
- 
+
     public Vehiculo(String id, int capacidad) {
         this.id = id;
         this.capacidad = capacidad;
-}
+    }
 
     public Vehiculo() {
     }
@@ -39,11 +39,10 @@ public class Vehiculo {
 
     @Override
     public String toString() {
-        return "Vehiculo{" +
-                "id='" + id + '\'' +
-                ", capacidad=" + capacidad +
-                '}';
+        return "Vehiculo{"
+                + "id='" + id + '\''
+                + ", capacidad=" + capacidad
+                + '}';
     }
-    
 
 }

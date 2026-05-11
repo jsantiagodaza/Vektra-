@@ -17,7 +17,6 @@ import java.util.ArrayList;
  */
 public class RutaService {
 
-
     private RutaDao rutaDao;
 
     public RutaService() {
@@ -38,6 +37,5 @@ public class RutaService {
         Ruta ruta = new Ruta(id, estacionOrigen, estacionDestino, estacionesIntermedias, colorLinea, tiempoTotal, transbordos);
         rutaDao.GuardarRuta(ruta);
     }
-
 
 }
