@@ -4,6 +4,7 @@
  */
 package vektra.Model;
 
+
 import java.time.LocalDateTime;
 
 public class Pasajero extends Persona {
@@ -38,4 +39,14 @@ public class Pasajero extends Persona {
     public String toString() {
         return getNombre() + " <" + email + ">";
     }
+
+/**
+ *
+ * @author santi
+ */
+
+
+   
+    
+
 }

@@ -16,6 +16,7 @@ public class Conductor extends Persona {
         this.licencia = licencia;
     }
 
+
     public Conductor() {
     }
 
@@ -27,7 +28,5 @@ public class Conductor extends Persona {
         this.licencia = licencia;
     }
 
-  
-    
     
 }

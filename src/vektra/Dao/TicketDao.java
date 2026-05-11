@@ -4,10 +4,34 @@
  */
 package vektra.Dao;
 
+import java.util.ArrayList;
+import java.util.List;
+import vektra.Model.Ticket;
+
 /**
  *
  * @author santi
  */
 public class TicketDao {
-    
+
+    private List<Ticket> tickets;
+
+    public TicketDao() {
+        tickets = new ArrayList<>();
+    }
+
+    public void guardarTicket(Ticket ticket) {
+        tickets.add(ticket);
+    }
+
+    public List<Ticket> obtenerTickets() {
+        return tickets;
+    }
+
+    public void mostrarTickets() {
+        for (Ticket t : tickets) {
+            System.out.println(t);
+        }
+    }
+
 }
