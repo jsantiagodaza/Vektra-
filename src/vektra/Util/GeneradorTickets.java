@@ -4,6 +4,8 @@
  */
 package vektra.Util;
 
+import vektra.Model.Ticket;
+
 
 
 /**
@@ -12,5 +14,25 @@ package vektra.Util;
  */
 public class GeneradorTickets {
     
-   
+   public static void imprimirTicket(Ticket ticket) {
+
+        System.out.println("===== TICKET VEKTRA =====");
+
+        System.out.println("ID: "
+                + ticket.getId());
+
+        System.out.println("Pasajero: "
+                + ticket.getPasajero().getNombre());
+
+        System.out.println("Origen: "
+                + ticket.getEstacionOrigen().getNombre());
+
+        System.out.println("Destino: "
+                + ticket.getEstacionDestino().getNombre());
+
+        System.out.println("Precio: "
+                + ticket.getPrecio());
+
+        System.out.println("=========================");
+    }
 }
