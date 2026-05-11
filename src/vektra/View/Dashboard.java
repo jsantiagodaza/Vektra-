@@ -17,10 +17,15 @@ public class Dashboard extends javax.swing.JFrame {
         setSize(1200, 750);
         setLocationRelativeTo(null);
 
+        // Hacemos que el panel principal ocupe todo el JFrame
+        getContentPane().setLayout(new java.awt.BorderLayout());
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+
         panelContenido = new javax.swing.JPanel();
         panelContenido.setBackground(new java.awt.Color(18, 41, 71));
         panelContenido.setLayout(new java.awt.BorderLayout());
 
+        jPanel1.removeAll();
         jPanel1.setLayout(new java.awt.BorderLayout());
         jPanel1.add(jPanel2, java.awt.BorderLayout.WEST);
         jPanel1.add(panelContenido, java.awt.BorderLayout.CENTER);
@@ -160,31 +165,11 @@ public class Dashboard extends javax.swing.JFrame {
         panel.add(titulo);
         panel.add(javax.swing.Box.createVerticalStrut(12));
 
-        String[][] tickets = {
-                { "TKT-104", "27AE60" },
-                { "TKT-103", "27AE60" },
-                { "TKT-101", "F39C12" },
-                { "TKT-100", "E50822" }
-        };
+        javax.swing.JLabel sinDatos = new javax.swing.JLabel("Esperando conexión...");
+        sinDatos.setForeground(new java.awt.Color(150, 180, 210));
+        sinDatos.setFont(new java.awt.Font("Segoe UI", java.awt.Font.ITALIC, 13));
+        panel.add(sinDatos);
 
-        for (String[] tkt : tickets) {
-            javax.swing.JPanel fila = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 8, 3));
-            fila.setOpaque(false);
-            fila.setMaximumSize(new java.awt.Dimension(Integer.MAX_VALUE, 32));
-            fila.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
-
-            javax.swing.JLabel dot = new javax.swing.JLabel("●");
-            dot.setForeground(java.awt.Color.decode("#" + tkt[1]));
-            dot.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 16));
-
-            javax.swing.JLabel codigo = new javax.swing.JLabel(tkt[0]);
-            codigo.setForeground(java.awt.Color.WHITE);
-            codigo.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
-
-            fila.add(dot);
-            fila.add(codigo);
-            panel.add(fila);
-        }
         return panel;
     }
 
