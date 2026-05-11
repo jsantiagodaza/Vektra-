@@ -386,15 +386,15 @@ public class Dashboard extends javax.swing.JFrame {
         // cargarPanelMapa(); — próxima pantalla
     }// GEN-LAST:event_jButton3ActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton4ActionPerformed
+    private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton4ActionPerformed
         // cargarPanelEquipo(); — próxima pantalla
     }// GEN-LAST:event_jButton4ActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton5ActionPerformed
+    private void btnEquipoActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton5ActionPerformed
         // cargarPanelConductores(); — próxima pantalla
     }// GEN-LAST:event_jButton5ActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton6ActionPerformed
+    private void btnTicketsActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton6ActionPerformed
         // cargarPanelUbicacion(); — próxima pantalla
     }// GEN-LAST:event_jButton6ActionPerformed
 
