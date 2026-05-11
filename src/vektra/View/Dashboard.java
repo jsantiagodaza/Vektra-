@@ -97,11 +97,13 @@ public class Dashboard extends javax.swing.JFrame {
                     boolean repainted = false;
                     if (hovered && hoverAlpha < 1f) {
                         hoverAlpha += 0.1f;
-                        if (hoverAlpha > 1f) hoverAlpha = 1f;
+                        if (hoverAlpha > 1f)
+                            hoverAlpha = 1f;
                         repainted = true;
                     } else if (!hovered && hoverAlpha > 0f) {
                         hoverAlpha -= 0.1f;
-                        if (hoverAlpha < 0f) hoverAlpha = 0f;
+                        if (hoverAlpha < 0f)
+                            hoverAlpha = 0f;
                         repainted = true;
                     }
                     if (repainted) {
@@ -122,6 +124,7 @@ public class Dashboard extends javax.swing.JFrame {
                         hovered = true;
                         animTimer.start();
                     }
+
                     @Override
                     public void mouseExited(java.awt.event.MouseEvent e) {
                         hovered = false;
@@ -134,7 +137,8 @@ public class Dashboard extends javax.swing.JFrame {
             protected void paintComponent(java.awt.Graphics g) {
                 super.paintComponent(g);
                 java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
-                g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,
+                        java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
 
                 int shadowSize = 8;
                 int x = shadowSize;
@@ -147,7 +151,8 @@ public class Dashboard extends javax.swing.JFrame {
                 for (int i = 0; i < shadowSize; i++) {
                     float pct = 1.0f - ((float) i / shadowSize);
                     int alpha = (int) (255 * baseAlpha * pct * pct);
-                    g2.setColor(new java.awt.Color(colorBorde.getRed(), colorBorde.getGreen(), colorBorde.getBlue(), alpha));
+                    g2.setColor(new java.awt.Color(colorBorde.getRed(), colorBorde.getGreen(), colorBorde.getBlue(),
+                            alpha));
                     g2.fillRoundRect(x - i, y - i, w + i * 2, h + i * 2, 15, 15);
                 }
 
