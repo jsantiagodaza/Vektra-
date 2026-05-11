@@ -4,10 +4,13 @@
  */
 package vektra.Util;
 
+
+
 /**
  *
  * @author santi
  */
 public class GeneradorTickets {
     
+   
 }
