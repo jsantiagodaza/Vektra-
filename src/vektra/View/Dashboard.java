@@ -83,15 +83,92 @@ public class Dashboard extends javax.swing.JFrame {
     }
 
     private javax.swing.JPanel crearCard(String numero, String titulo, String subtitulo, java.awt.Color colorBorde) {
-        javax.swing.JPanel card = new javax.swing.JPanel(new java.awt.BorderLayout());
-        card.setBackground(new java.awt.Color(25, 50, 90));
-        card.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createMatteBorder(3, 0, 0, 0, colorBorde),
-                javax.swing.BorderFactory.createEmptyBorder(15, 15, 15, 15)));
-
-        javax.swing.JLabel lblNum = new javax.swing.JLabel(numero, javax.swing.SwingConstants.CENTER);
+        final javax.swing.JLabel lblNum = new javax.swing.JLabel(numero, javax.swing.SwingConstants.CENTER);
         lblNum.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 44));
         lblNum.setForeground(java.awt.Color.WHITE);
+
+        javax.swing.JPanel card = new javax.swing.JPanel(new java.awt.BorderLayout()) {
+            private float hoverAlpha = 0f;
+            private boolean hovered = false;
+            private javax.swing.Timer animTimer;
+
+            {
+                animTimer = new javax.swing.Timer(15, e -> {
+                    boolean repainted = false;
+                    if (hovered && hoverAlpha < 1f) {
+                        hoverAlpha += 0.1f;
+                        if (hoverAlpha > 1f) hoverAlpha = 1f;
+                        repainted = true;
+                    } else if (!hovered && hoverAlpha > 0f) {
+                        hoverAlpha -= 0.1f;
+                        if (hoverAlpha < 0f) hoverAlpha = 0f;
+                        repainted = true;
+                    }
+                    if (repainted) {
+                        // Transición del color del número
+                        int r = (int) (255 + (colorBorde.getRed() - 255) * hoverAlpha);
+                        int g = (int) (255 + (colorBorde.getGreen() - 255) * hoverAlpha);
+                        int b = (int) (255 + (colorBorde.getBlue() - 255) * hoverAlpha);
+                        lblNum.setForeground(new java.awt.Color(r, g, b));
+                        repaint();
+                    } else {
+                        animTimer.stop();
+                    }
+                });
+
+                addMouseListener(new java.awt.event.MouseAdapter() {
+                    @Override
+                    public void mouseEntered(java.awt.event.MouseEvent e) {
+                        hovered = true;
+                        animTimer.start();
+                    }
+                    @Override
+                    public void mouseExited(java.awt.event.MouseEvent e) {
+                        hovered = false;
+                        animTimer.start();
+                    }
+                });
+            }
+
+            @Override
+            protected void paintComponent(java.awt.Graphics g) {
+                super.paintComponent(g);
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+                g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+
+                int shadowSize = 8;
+                int x = shadowSize;
+                int y = shadowSize;
+                int w = getWidth() - shadowSize * 2;
+                int h = getHeight() - shadowSize * 2;
+
+                // Dibujar brillo ligero
+                float baseAlpha = 0.15f + (hoverAlpha * 0.20f);
+                for (int i = 0; i < shadowSize; i++) {
+                    float pct = 1.0f - ((float) i / shadowSize);
+                    int alpha = (int) (255 * baseAlpha * pct * pct);
+                    g2.setColor(new java.awt.Color(colorBorde.getRed(), colorBorde.getGreen(), colorBorde.getBlue(), alpha));
+                    g2.fillRoundRect(x - i, y - i, w + i * 2, h + i * 2, 15, 15);
+                }
+
+                // Fondo de la card
+                int bgR = (int) (25 + (8 * hoverAlpha));
+                int bgG = (int) (50 + (8 * hoverAlpha));
+                int bgB = (int) (90 + (8 * hoverAlpha));
+                g2.setColor(new java.awt.Color(bgR, bgG, bgB));
+                g2.fillRoundRect(x, y, w, h, 12, 12);
+
+                // Acento superior (border)
+                g2.setClip(new java.awt.geom.RoundRectangle2D.Float(x, y, w, h, 12, 12));
+                g2.setColor(colorBorde);
+                g2.fillRect(x, y, w, 4);
+
+                g2.dispose();
+            }
+        };
+
+        card.setOpaque(false);
+        card.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         javax.swing.JLabel lblTit = new javax.swing.JLabel(titulo, javax.swing.SwingConstants.CENTER);
         lblTit.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 16));
