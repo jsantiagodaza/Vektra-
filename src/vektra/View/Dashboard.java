@@ -412,6 +412,7 @@ private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {
     }
 
     // Variables declaration - do not modify
+    
     private javax.swing.JButton btnConductores;
     private javax.swing.JButton btnEquipo;
     private javax.swing.JButton btnInicio;
