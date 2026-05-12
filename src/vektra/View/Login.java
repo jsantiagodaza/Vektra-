@@ -17,6 +17,40 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        initCustom();
+    }
+
+    private void initCustom() {
+        // Configura las opciones del ComboBox
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pasajero Regular", "Administrador" }));
+        
+        // Listener para solicitar clave si se elige "Administrador"
+        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                if (evt.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
+                    if ("Administrador".equals(evt.getItem())) {
+                        String input = javax.swing.JOptionPane.showInputDialog(Login.this, "Ingrese la clave de Administrador:", "Autenticación", javax.swing.JOptionPane.QUESTION_MESSAGE);
+                        if (!"adminadmin".equals(input)) {
+                            javax.swing.JOptionPane.showMessageDialog(Login.this, "Clave incorrecta.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                            jComboBox1.setSelectedIndex(0); // Regresa a Pasajero Regular
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private void ingresar() {
+        // Validar que los campos no estén vacíos
+        if (jTextField2.getText().trim().isEmpty() || jTextField1.getText().trim().isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor llena tu ID y Nombre antes de ingresar.", "Campos incompletos", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Redirigir al Dashboard
+        Dashboard dashboard = new Dashboard();
+        dashboard.setVisible(true);
+        this.dispose(); // Cierra la ventana de Login
     }
 
     /**
@@ -148,11 +182,11 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
+        ingresar();
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
+        ingresar();
     }//GEN-LAST:event_jTextField2ActionPerformed
 
     /**
