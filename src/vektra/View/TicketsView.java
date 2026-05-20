@@ -8,14 +8,14 @@ package vektra.View;
  *
  * @author santi
  */
-public class Tickets extends javax.swing.JFrame {
+public class TicketsView extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Tickets.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TicketsView.class.getName());
 
     /**
      * Creates new form Tickets
      */
-    public Tickets() {
+    public TicketsView() {
         initComponents();
     }
 
@@ -264,7 +264,7 @@ public class Tickets extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Tickets().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new TicketsView().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
