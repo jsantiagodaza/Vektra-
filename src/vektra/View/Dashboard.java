@@ -19,8 +19,33 @@ public class Dashboard extends javax.swing.JFrame {
         cargarPanelInicio();
     }
 
+    private java.awt.Font fuenteDekatron;
+
+    private void inicializarFuente() {
+        try {
+            java.io.InputStream is = getClass().getResourceAsStream("/resources/Dekatron.otf");
+            if (is == null) {
+                is = getClass().getResourceAsStream("/resources/Dekatron-SemiBold.otf");
+            }
+            if (is != null) {
+                fuenteDekatron = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, is);
+                java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(fuenteDekatron);
+            }
+        } catch (Exception e) {
+            System.err.println("No se pudo cargar la fuente Dekatron desde /resources/. Se usará la fuente por defecto.");
+        }
+    }
+
+    private java.awt.Font obtenerFuente(int estilo, float tamano) {
+        if (fuenteDekatron != null) {
+            return fuenteDekatron.deriveFont(estilo, tamano);
+        }
+        return new java.awt.Font("Segoe UI", estilo, (int) tamano);
+    }
+
     public Dashboard() {
         initComponents();
+        inicializarFuente();
         configurarVentana();
         cargarPanelInicio();
     }
@@ -35,10 +60,11 @@ public class Dashboard extends javax.swing.JFrame {
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         panelContenido = new javax.swing.JPanel();
-        panelContenido.setBackground(new java.awt.Color(18, 41, 71));
+        panelContenido.setBackground(new java.awt.Color(245, 247, 250));
         panelContenido.setLayout(new java.awt.BorderLayout());
 
         jPanel1.removeAll();
+        jPanel1.setBackground(new java.awt.Color(245, 247, 250));
         jPanel1.setLayout(new java.awt.BorderLayout());
         jPanel1.add(jPanel2, java.awt.BorderLayout.WEST);
         jPanel1.add(panelContenido, java.awt.BorderLayout.CENTER);
@@ -56,14 +82,14 @@ public class Dashboard extends javax.swing.JFrame {
                 ? "Bienvenido a Vektra"
                 : "Bienvenido, " + nombreUsuario;
         javax.swing.JLabel lblTitulo = new javax.swing.JLabel(saludo);
-        lblTitulo.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 28));
-        lblTitulo.setForeground(java.awt.Color.WHITE);
+        lblTitulo.setFont(obtenerFuente(java.awt.Font.BOLD, 28f));
+        lblTitulo.setForeground(new java.awt.Color(30, 40, 50));
 
         javax.swing.JPanel barras = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 6, 0));
         barras.setOpaque(false);
         barras.setBorder(javax.swing.BorderFactory.createEmptyBorder(8, 0, 0, 0));
-        String[] coloresBarras = { "E50822", "F39C12", "27AE60", "2980B9" };
-        int[] anchos = { 90, 70, 60, 55 };
+        String[] coloresBarras = {"E50822", "F39C12", "27AE60", "2980B9"};
+        int[] anchos = {90, 70, 60, 55};
         for (int i = 0; i < coloresBarras.length; i++) {
             javax.swing.JPanel barra = new javax.swing.JPanel();
             barra.setBackground(java.awt.Color.decode("#" + coloresBarras[i]));
@@ -96,32 +122,46 @@ public class Dashboard extends javax.swing.JFrame {
     }
 
     private javax.swing.JPanel crearCard(String numero, String titulo, String subtitulo, java.awt.Color colorBorde) {
-        javax.swing.JPanel card = new javax.swing.JPanel(new java.awt.BorderLayout());
-        card.setBackground(new java.awt.Color(25, 50, 90));
-        
-        java.awt.Color contornoLuz = new java.awt.Color(colorBorde.getRed(), colorBorde.getGreen(), colorBorde.getBlue(), 150);
+        javax.swing.JPanel card = new javax.swing.JPanel(new java.awt.BorderLayout()) {
+            @Override
+            protected void paintComponent(java.awt.Graphics g) {
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+                g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                // Fondo redondeado
+                g2.setColor(getBackground());
+                g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
 
-        javax.swing.border.Border bordeNormal = javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createMatteBorder(3, 1, 1, 1, contornoLuz),
-                javax.swing.BorderFactory.createEmptyBorder(15, 15, 15, 15));
-                
-        javax.swing.border.Border bordeHover = javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createMatteBorder(3, 2, 2, 2, colorBorde),
-                javax.swing.BorderFactory.createEmptyBorder(10, 15, 20, 15));
-
-        card.setBorder(bordeNormal);
+                // Borde redondeado
+                java.awt.Color bordeActual = (java.awt.Color) getClientProperty("borderColor");
+                if (bordeActual != null) {
+                    Integer grosor = (Integer) getClientProperty("borderThickness");
+                    if (grosor == null) {
+                        grosor = 1;
+                    }
+                    g2.setColor(bordeActual);
+                    g2.setStroke(new java.awt.BasicStroke(grosor));
+                    g2.drawRoundRect(grosor / 2, grosor / 2, getWidth() - grosor - 1, getHeight() - grosor - 1, 20, 20);
+                }
+                g2.dispose();
+            }
+        };
+        card.setOpaque(false);
+        card.setBackground(java.awt.Color.WHITE);
+        card.putClientProperty("borderColor", new java.awt.Color(220, 225, 230));
+        card.putClientProperty("borderThickness", 1);
+        card.setBorder(javax.swing.BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
         javax.swing.JLabel lblNum = new javax.swing.JLabel(numero, javax.swing.SwingConstants.CENTER);
-        lblNum.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 44));
-        lblNum.setForeground(java.awt.Color.WHITE);
+        lblNum.setFont(obtenerFuente(java.awt.Font.BOLD, 44f));
+        lblNum.setForeground(new java.awt.Color(40, 50, 60));
 
         javax.swing.JLabel lblTit = new javax.swing.JLabel(titulo, javax.swing.SwingConstants.CENTER);
-        lblTit.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 16));
-        lblTit.setForeground(java.awt.Color.WHITE);
+        lblTit.setFont(obtenerFuente(java.awt.Font.BOLD, 16f));
+        lblTit.setForeground(new java.awt.Color(60, 70, 80));
 
         javax.swing.JLabel lblSub = new javax.swing.JLabel(subtitulo, javax.swing.SwingConstants.CENTER);
-        lblSub.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 11));
-        lblSub.setForeground(new java.awt.Color(150, 180, 210));
+        lblSub.setFont(obtenerFuente(java.awt.Font.PLAIN, 11f));
+        lblSub.setForeground(new java.awt.Color(120, 130, 140));
 
         javax.swing.JPanel centro = new javax.swing.JPanel(new java.awt.GridLayout(3, 1, 0, 4));
         centro.setOpaque(false);
@@ -134,20 +174,24 @@ public class Dashboard extends javax.swing.JFrame {
         card.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                card.setBorder(bordeHover);
-                card.setBackground(new java.awt.Color(30, 60, 105)); // Un poco más claro
+                card.putClientProperty("borderColor", colorBorde);
+                card.putClientProperty("borderThickness", 2);
+                card.setBackground(new java.awt.Color(248, 250, 255));
                 lblNum.setForeground(colorBorde);
                 lblTit.setForeground(colorBorde);
                 card.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                card.repaint();
             }
 
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                card.setBorder(bordeNormal);
-                card.setBackground(new java.awt.Color(25, 50, 90));
-                lblNum.setForeground(java.awt.Color.WHITE);
-                lblTit.setForeground(java.awt.Color.WHITE);
+                card.putClientProperty("borderColor", new java.awt.Color(220, 225, 230));
+                card.putClientProperty("borderThickness", 1);
+                card.setBackground(java.awt.Color.WHITE);
+                lblNum.setForeground(new java.awt.Color(40, 50, 60));
+                lblTit.setForeground(new java.awt.Color(60, 70, 80));
                 card.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+                card.repaint();
             }
         });
 
@@ -155,23 +199,35 @@ public class Dashboard extends javax.swing.JFrame {
     }
 
     private javax.swing.JPanel crearPanelLineas() {
-        javax.swing.JPanel panel = new javax.swing.JPanel();
+        javax.swing.JPanel panel = new javax.swing.JPanel() {
+            @Override
+            protected void paintComponent(java.awt.Graphics g) {
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+                g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(getBackground());
+                g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
+                g2.setColor(new java.awt.Color(220, 225, 230));
+                g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
+                g2.dispose();
+            }
+        };
+        panel.setOpaque(false);
         panel.setLayout(new javax.swing.BoxLayout(panel, javax.swing.BoxLayout.Y_AXIS));
-        panel.setBackground(new java.awt.Color(25, 50, 90));
+        panel.setBackground(java.awt.Color.WHITE);
         panel.setBorder(javax.swing.BorderFactory.createEmptyBorder(15, 18, 15, 18));
 
         javax.swing.JLabel titulo = new javax.swing.JLabel("Líneas Activas");
-        titulo.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 15));
-        titulo.setForeground(java.awt.Color.WHITE);
+        titulo.setFont(obtenerFuente(java.awt.Font.BOLD, 15f));
+        titulo.setForeground(new java.awt.Color(40, 50, 60));
         titulo.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
         panel.add(titulo);
         panel.add(javax.swing.Box.createVerticalStrut(12));
 
         String[][] lineas = {
-                { "Línea Roja Activa...", "E50822" },
-                { "Línea Amarilla Activa...", "F39C12" },
-                { "Línea Verde Activa...", "27AE60" },
-                { "Línea Azul Activa...", "2980B9" }
+            {"Línea Roja Activa...", "E50822"},
+            {"Línea Amarilla Activa...", "F39C12"},
+            {"Línea Verde Activa...", "27AE60"},
+            {"Línea Azul Activa...", "2980B9"}
         };
 
         for (String[] linea : lineas) {
@@ -185,8 +241,8 @@ public class Dashboard extends javax.swing.JFrame {
             dot.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 16));
 
             javax.swing.JLabel nombre = new javax.swing.JLabel(linea[0]);
-            nombre.setForeground(java.awt.Color.WHITE);
-            nombre.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
+            nombre.setForeground(new java.awt.Color(70, 80, 90));
+            nombre.setFont(obtenerFuente(java.awt.Font.PLAIN, 13f));
 
             fila.add(dot);
             fila.add(nombre);
@@ -196,21 +252,33 @@ public class Dashboard extends javax.swing.JFrame {
     }
 
     private javax.swing.JPanel crearPanelTickets() {
-        javax.swing.JPanel panel = new javax.swing.JPanel();
+        javax.swing.JPanel panel = new javax.swing.JPanel() {
+            @Override
+            protected void paintComponent(java.awt.Graphics g) {
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+                g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(getBackground());
+                g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
+                g2.setColor(new java.awt.Color(220, 225, 230));
+                g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
+                g2.dispose();
+            }
+        };
+        panel.setOpaque(false);
         panel.setLayout(new javax.swing.BoxLayout(panel, javax.swing.BoxLayout.Y_AXIS));
-        panel.setBackground(new java.awt.Color(25, 50, 90));
+        panel.setBackground(java.awt.Color.WHITE);
         panel.setBorder(javax.swing.BorderFactory.createEmptyBorder(15, 18, 15, 18));
 
         javax.swing.JLabel titulo = new javax.swing.JLabel("Tickets Vendidos Hoy");
-        titulo.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 15));
-        titulo.setForeground(java.awt.Color.WHITE);
+        titulo.setFont(obtenerFuente(java.awt.Font.BOLD, 15f));
+        titulo.setForeground(new java.awt.Color(40, 50, 60));
         titulo.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
         panel.add(titulo);
         panel.add(javax.swing.Box.createVerticalStrut(12));
 
         javax.swing.JLabel sinDatos = new javax.swing.JLabel("Esperando conexión a BD...");
-        sinDatos.setForeground(new java.awt.Color(150, 180, 210));
-        sinDatos.setFont(new java.awt.Font("Segoe UI", java.awt.Font.ITALIC, 13));
+        sinDatos.setForeground(new java.awt.Color(130, 140, 150));
+        sinDatos.setFont(obtenerFuente(java.awt.Font.ITALIC, 13f));
         sinDatos.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
         panel.add(sinDatos);
 
@@ -362,18 +430,11 @@ public class Dashboard extends javax.swing.JFrame {
 
         pack();
     }
-    // cargarPanelEquipo(); — próxima pantalla
-    // </editor-fold>
-    // cargarPanelEquipo(); — próxima pantalla
-    // </editor-fold>
-    // cargarPanelEquipo(); — próxima pantalla
-    // </editor-fold>
-    // cargarPanelEquipo(); — próxima pantalla
-    // </editor-fold>
 
-private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {
-    // cargarPanelMapa(); — próxima pantalla
-}
+
+    private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {
+        // cargarPanelMapa(); — próxima pantalla
+    }
     // cargarPanelUbicacion(); — próxima pantalla
     // cargarPanelConductores(); — próxima pantalla
 
@@ -385,7 +446,7 @@ private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {
         // Inicializar el entorno de JavaFX de forma segura para Swing
         new javafx.embed.swing.JFXPanel();
         javafx.application.Platform.setImplicitExit(false); // Evita que JavaFX muera al cerrar la ventana
-        
+
         javafx.application.Platform.runLater(() -> {
             try {
                 MapaView mapaView = new MapaView();
@@ -424,7 +485,6 @@ private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {
     }
 
     // Variables declaration - do not modify
-    
     private javax.swing.JButton btnConductores;
     private javax.swing.JButton btnEquipo;
     private javax.swing.JButton btnInicio;
