@@ -431,7 +431,6 @@ public class Dashboard extends javax.swing.JFrame {
         pack();
     }
 
-
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {
         cargarPanelInicio();
     }
@@ -441,7 +440,7 @@ public class Dashboard extends javax.swing.JFrame {
     private void btnTicketsActionPerformed(java.awt.event.ActionEvent evt) {
         cargarPanelTickets();
     }
-    
+
     private void cargarPanelTickets() {
         panelContenido.removeAll();
 
@@ -475,7 +474,7 @@ public class Dashboard extends javax.swing.JFrame {
     private void btnEquipoActionPerformed(java.awt.event.ActionEvent evt) {
         cargarPanelEquipo();
     }
-    
+
     private void cargarPanelEquipo() {
         panelContenido.removeAll();
 
@@ -490,7 +489,20 @@ public class Dashboard extends javax.swing.JFrame {
     }
 
     private void btnConductoresActionPerformed(java.awt.event.ActionEvent evt) {
-        // cargarPanelConductores(); — próxima pantalla
+        cargarPanelConductores();
+    }
+
+    private void cargarPanelConductores() {
+        panelContenido.removeAll();
+
+        // Extraemos el panel principal de ConductoresView
+        ConductoresView conductoresView = new ConductoresView();
+        java.awt.Container contenidoConductores = conductoresView.getContentPane();
+
+        panelContenido.add(contenidoConductores, java.awt.BorderLayout.CENTER);
+
+        panelContenido.revalidate();
+        panelContenido.repaint();
     }
 
     private void btnUbicacionesActionPerformed(java.awt.event.ActionEvent evt) {
