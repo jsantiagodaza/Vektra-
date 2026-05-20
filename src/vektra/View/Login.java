@@ -221,7 +221,7 @@ public class Login extends javax.swing.JFrame {
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jTextField1ActionPerformed
         ingresar();
     }// GEN-LAST:event_jTextField1ActionPerformed
-
+ 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jTextField2ActionPerformed
         ingresar();
     }// GEN-LAST:event_jTextField2ActionPerformed
