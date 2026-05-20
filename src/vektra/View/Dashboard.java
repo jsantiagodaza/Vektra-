@@ -433,13 +433,27 @@ public class Dashboard extends javax.swing.JFrame {
 
 
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {
-        // cargarPanelMapa(); — próxima pantalla
+        cargarPanelInicio();
     }
     // cargarPanelUbicacion(); — próxima pantalla
     // cargarPanelConductores(); — próxima pantalla
 
     private void btnTicketsActionPerformed(java.awt.event.ActionEvent evt) {
-        // cargarPanelTickets(); — próxima pantalla
+        cargarPanelTickets();
+    }
+    
+    private void cargarPanelTickets() {
+        panelContenido.removeAll();
+
+        // Instanciamos la ventana TicketsView pero en lugar de mostrarla, 
+        // extraemos su panel principal y lo incrustamos en el Dashboard.
+        TicketsView ticketsView = new TicketsView();
+        java.awt.Container contenidoTickets = ticketsView.getContentPane();
+
+        panelContenido.add(contenidoTickets, java.awt.BorderLayout.CENTER);
+
+        panelContenido.revalidate();
+        panelContenido.repaint();
     }
 
     private void btnMapaActionPerformed(java.awt.event.ActionEvent evt) {
