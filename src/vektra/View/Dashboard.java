@@ -382,7 +382,19 @@ private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {
     }
 
     private void btnMapaActionPerformed(java.awt.event.ActionEvent evt) {
-        // cargarPanelMapa(); — próxima pantalla
+        // Inicializar el entorno de JavaFX de forma segura para Swing
+        new javafx.embed.swing.JFXPanel();
+        javafx.application.Platform.setImplicitExit(false); // Evita que JavaFX muera al cerrar la ventana
+        
+        javafx.application.Platform.runLater(() -> {
+            try {
+                MapaView mapaView = new MapaView();
+                javafx.stage.Stage stage = new javafx.stage.Stage();
+                mapaView.start(stage);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 
     private void btnEquipoActionPerformed(java.awt.event.ActionEvent evt) {
