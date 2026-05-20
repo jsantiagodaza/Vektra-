@@ -3,11 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/Util/GeneradorTickets.java</file>
-            <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/Service/EmailService.java</file>
+            <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/View/TicketsView.java</file>
             <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/View/Dashboard.java</file>
             <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/View/Login.java</file>
-            <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/Model/Ticket.java</file>
+            <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/View/MapaView.java</file>
         </group>
     </open-files>
 </project-private>
