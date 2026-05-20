@@ -473,7 +473,20 @@ public class Dashboard extends javax.swing.JFrame {
     }
 
     private void btnEquipoActionPerformed(java.awt.event.ActionEvent evt) {
-        // cargarPanelEquipo(); — próxima pantalla
+        cargarPanelEquipo();
+    }
+    
+    private void cargarPanelEquipo() {
+        panelContenido.removeAll();
+
+        // Extraemos el panel principal de TicketsActivosView
+        TicketsActivosView ticketsActivosView = new TicketsActivosView();
+        java.awt.Container contenidoEquipo = ticketsActivosView.getContentPane();
+
+        panelContenido.add(contenidoEquipo, java.awt.BorderLayout.CENTER);
+
+        panelContenido.revalidate();
+        panelContenido.repaint();
     }
 
     private void btnConductoresActionPerformed(java.awt.event.ActionEvent evt) {
