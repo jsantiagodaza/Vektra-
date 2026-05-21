@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import vektra.Util.Sesion;
 
 /**
  *
@@ -99,10 +100,10 @@ public class TicketDao {
         return tickets;
     }
     
-    public List<Ticket> obtenerTicketsDelPasajeroActivo() {
-    String usuarioId = Sesion.getPasajeroActivo().getId();
-    return obtenerTicketsPorUsuario(usuarioId);
-}
+     public List<Ticket> obtenerTicketsDelPasajeroActivo() {
+        String usuarioId = Sesion.getPasajeroActivo().getId();
+        return obtenerTicketsPorUsuario(usuarioId);
+    }
 }
 
 
