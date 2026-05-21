@@ -98,6 +98,11 @@ public class TicketDao {
 
         return tickets;
     }
+    
+    public List<Ticket> obtenerTicketsDelPasajeroActivo() {
+    String usuarioId = Sesion.getPasajeroActivo().getId();
+    return obtenerTicketsPorUsuario(usuarioId);
+}
 }
 
 
