@@ -13,6 +13,7 @@ module Vektra {
     requires javafx.swing;
     requires javafx.web;
     requires java.logging;
+    requires java.sql;
 
     requires java.mail;
 }
