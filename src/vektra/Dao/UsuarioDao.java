@@ -1,0 +1,15 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package vektra.Dao;
+
+/**
+ *
+ * @author Usuario
+ */
+public class UsuarioDao {
+   public boolean validarCredenciales( String id, String password){
+       return ;
+   }
+}
