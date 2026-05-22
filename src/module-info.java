@@ -12,4 +12,7 @@ module Vektra {
     requires javafx.media;
     requires javafx.swing;
     requires javafx.web;
+    requires java.logging;
+
+    requires java.mail;
 }
