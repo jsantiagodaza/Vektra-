@@ -3,12 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/vektra/Model/Ticket.java</file>
             <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/vektra/Util/GeneradorTickets.java</file>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/vektra/Model/Persona.java</file>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/vektra/Model/Pasajero.java</file>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/vektra/View/PruebaFX.java</file>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/nbproject/project.properties</file>
+            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/resources/mapa.html</file>
+            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/vektra/View/MapaView.java</file>
+            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/module-info.java</file>
+            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/vektra/Model/Ruta.java</file>
+            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/vektra/Dao/RutaDao.java</file>
+            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/vektra/Model/Estacion.java</file>
+            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/vektra/Service/RutaService.java</file>
+            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/vektra/Service/TicketService.java</file>
         </group>
     </open-files>
 </project-private>
