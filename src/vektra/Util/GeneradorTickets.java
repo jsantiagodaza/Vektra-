@@ -7,13 +7,12 @@ package vektra.Util;
 import vektra.Model.Ticket;
 
 
-
 /**
  *
  * @author santi
  */
 public class GeneradorTickets {
-    
+
    public static void imprimirTicket(Ticket ticket) {
 
         System.out.println("===== TICKET VEKTRA =====");
@@ -35,4 +34,5 @@ public class GeneradorTickets {
 
         System.out.println("=========================");
     }
+
 }

@@ -1,18 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package vektra.Model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-/**
- *
- * @author santi
- */
 public class Ticket {
 
     private String id;
+    private String codigo;
     private LocalDateTime fecha;
     private double precio;
     private String codigoQR;
@@ -23,8 +17,15 @@ public class Ticket {
     public Ticket() {
     }
 
-    public Ticket(String id, LocalDateTime fecha, double precio, String codigoQR, Pasajero pasajero, Estacion estacionOrigen, Estacion estacionDestino) {
+    public Ticket(String id) {
         this.id = id;
+        this.codigo = "TKT-" + id;
+    }
+
+    public Ticket(String id, LocalDateTime fecha, double precio, String codigoQR,
+            Pasajero pasajero, Estacion estacionOrigen, Estacion estacionDestino) {
+        this.id = id;
+        this.codigo = "TKT-" + id;
         this.fecha = fecha;
         this.precio = precio;
         this.codigoQR = codigoQR;
@@ -33,6 +34,25 @@ public class Ticket {
         this.estacionDestino = estacionDestino;
     }
 
+    // Getters que necesita EmailService
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public String getRuta() {
+        if (estacionOrigen != null && estacionDestino != null) {
+            return estacionOrigen.getNombre() + " → " + estacionDestino.getNombre();
+        }
+        return "N/A";
+    }
+
+    public String getFecha() {
+        return fecha != null
+                ? fecha.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+                : "N/A";
+    }
+
+    // Getters y setters completos
     public String getId() {
         return id;
     }
@@ -41,7 +61,11 @@ public class Ticket {
         this.id = id;
     }
 
-    public LocalDateTime getFecha() {
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public LocalDateTime getFechaCompleta() {
         return fecha;
     }
 
@@ -77,29 +101,20 @@ public class Ticket {
         return estacionOrigen;
     }
 
-    public void setEstacionOrigen(Estacion estacionOrigen) {
-        this.estacionOrigen = estacionOrigen;
+    public void setEstacionOrigen(Estacion e) {
+        this.estacionOrigen = e;
     }
 
     public Estacion getEstacionDestino() {
         return estacionDestino;
     }
 
-    public void setEstacionDestino(Estacion estacionDestino) {
-        this.estacionDestino = estacionDestino;
+    public void setEstacionDestino(Estacion e) {
+        this.estacionDestino = e;
     }
 
     @Override
     public String toString() {
-        return "Ticket{"
-                + "id='" + id + '\''
-                + ", fecha=" + fecha
-                + ", precio=" + precio
-                + ", codigoQR='" + codigoQR + '\''
-                + ", pasajero=" + pasajero
-                + ", estacionOrigen=" + estacionOrigen
-                + ", estacionDestino=" + estacionDestino
-                + '}';
+        return "Ticket{id='" + id + "', ruta='" + getRuta() + "', precio=" + precio + "}";
     }
-
 }

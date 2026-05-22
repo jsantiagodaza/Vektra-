@@ -13,6 +13,10 @@ public abstract class Persona {
     protected String id;
     protected String nombre;
 
+
+    public Persona() {
+    }
+
     public Persona(String id, String nombre) {
         this.id = id;
         this.nombre = nombre;
@@ -22,6 +26,11 @@ public abstract class Persona {
         return id;
     }
 
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getNombre() {
         return nombre;
     }
@@ -29,4 +38,5 @@ public abstract class Persona {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
 }

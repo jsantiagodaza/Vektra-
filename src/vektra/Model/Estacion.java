@@ -26,6 +26,7 @@ public class Estacion {
         this.lineas = new ArrayList<>();
     }
 
+
     public String getNombre() {
         return nombre;
     }
@@ -58,4 +59,5 @@ public class Estacion {
                 + ", color linea='" + lineas + '\''
                 + '}';
     }
+
 }
