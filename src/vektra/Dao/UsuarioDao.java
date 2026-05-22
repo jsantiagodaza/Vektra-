@@ -4,7 +4,7 @@
  */
 package vektra.Dao;
 
-import Conexion.Conexion;
+import vektra.Conexion.Conexion;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
