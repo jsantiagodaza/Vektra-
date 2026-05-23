@@ -21,8 +21,9 @@ public class Conexion {
         Connection con = null;
 
         try {
-            Class.forName("com.mysql.cj.jdbc.driver");
+
             con = DriverManager.getConnection(URL, USER, PASSWORD);
+            System.out.println("Conexion Exitosa");
 
         } catch (Exception e) {
             System.out.println("Error conexion:" + e.getMessage());

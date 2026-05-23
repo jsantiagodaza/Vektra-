@@ -456,19 +456,19 @@ public class Dashboard extends javax.swing.JFrame {
     }
 
     private void btnMapaActionPerformed(java.awt.event.ActionEvent evt) {
-      try {
-          MapaView mapaView= new MapaView();
-          javax.swing.JFrame ventana = new javax.swing.JFrame(" MAPA METRO ");
-          ventana.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
-          
-          ventana.setSize(1200, 700);
-          ventana.setLocationRelativeTo(null);
-          ventana.add(mapaView);
-          ventana.setVisible(true);
-          
-      }catch (Exception ex){
-          ex.printStackTrace();
-      }
+        try {
+            MapaView mapaView = new MapaView();
+            javax.swing.JFrame ventana = new javax.swing.JFrame(" MAPA METRO ");
+            ventana.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
+
+            ventana.setSize(1200, 700);
+            ventana.setLocationRelativeTo(null);
+            ventana.add(mapaView);
+            ventana.setVisible(true);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void btnEquipoActionPerformed(java.awt.event.ActionEvent evt) {
