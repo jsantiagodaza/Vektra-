@@ -15,7 +15,7 @@ public class UsuarioDao {
     public boolean validarCredenciales(String id, String password) {
         boolean valido = false;
         try {
-            Connection con = Conexion.getConnection();
+            Connection con = Conexion.conectar();
             String sql = """
                          SELECT *
                          FROM usuarios
