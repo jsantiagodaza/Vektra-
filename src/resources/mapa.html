@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Mapa Metro</title>
+
+    <style>
+
+        html, body, #map {
+
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div id="map"></div>
+
+<script>
+
+    let map;
+
+    function initMap() {
+
+        const centro = {
+
+            lat: 10.4631,
+            lng: -73.2532
+        };
+
+        map = new google.maps.Map(
+
+            document.getElementById("map"),
+
+            {
+                zoom: 13,
+                center: centro
+            }
+        );
+
+        // ESTACIONES
+        const estaciones = [
+
+            {
+                nombre: "Portal Norte",
+                lat: 10.4800,
+                lng: -73.2500
+            },
+
+            {
+                nombre: "Calle 72",
+                lat: 10.4700,
+                lng: -73.2400
+            },
+
+            {
+                nombre: "Portal Sur",
+                lat: 10.4500,
+                lng: -73.2300
+            }
+        ];
+
+        estaciones.forEach(estacion => {
+
+            const marker =
+
+                new google.maps.Marker({
+
+                    position: {
+
+                        lat: estacion.lat,
+                        lng: estacion.lng
+                    },
+
+                    map: map,
+
+                    title: estacion.nombre
+                });
+
+            const infoWindow =
+
+                new google.maps.InfoWindow({
+
+                    content:
+                    `<h3>${estacion.nombre}</h3>`
+                });
+
+            marker.addListener("click", () => {
+
+                infoWindow.open(map, marker);
+            });
+        });
+    }
+
+</script>
+
+<script async defer
+
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCYPJ9ru5CjrLRHUmOTlvfLDPLBCYYChLA">
+
+</script>
+
+</body>
+</html>

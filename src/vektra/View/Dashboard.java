@@ -456,19 +456,19 @@ public class Dashboard extends javax.swing.JFrame {
     }
 
     private void btnMapaActionPerformed(java.awt.event.ActionEvent evt) {
-        // Inicializar el entorno de JavaFX de forma segura para Swing
-        new javafx.embed.swing.JFXPanel();
-        javafx.application.Platform.setImplicitExit(false); // Evita que JavaFX muera al cerrar la ventana
+        try {
+            MapaView mapaView = new MapaView();
+            javax.swing.JFrame ventana = new javax.swing.JFrame(" MAPA METRO ");
+            ventana.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
 
-        javafx.application.Platform.runLater(() -> {
-            try {
-                MapaView mapaView = new MapaView();
-                javafx.stage.Stage stage = new javafx.stage.Stage();
-                mapaView.start(stage);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
+            ventana.setSize(1200, 700);
+            ventana.setLocationRelativeTo(null);
+            ventana.add(mapaView);
+            ventana.setVisible(true);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void btnEquipoActionPerformed(java.awt.event.ActionEvent evt) {
