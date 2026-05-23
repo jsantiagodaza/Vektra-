@@ -3,22 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/vektra/Util/GeneradorTickets.java</file>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/resources/mapa.html</file>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/vektra/View/MapaView.java</file>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/module-info.java</file>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/vektra/Model/Ruta.java</file>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/vektra/Dao/RutaDao.java</file>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/vektra/Model/Estacion.java</file>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/vektra/Service/RutaService.java</file>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/vektra/Service/TicketService.java</file>
-=======
-            <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/View/TicketsView.java</file>
-            <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/View/Dashboard.java</file>
-            <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/View/Login.java</file>
-            <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/View/MapaView.java</file>
->>>>>>> 1da181adf2d130faf836f839942fdfecd52a8bb5
+            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/vektra/View/Login.java</file>
+            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/Vektra-/src/vektra/Conexion/Conexion.java</file>
         </group>
     </open-files>
 </project-private>
