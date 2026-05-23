@@ -14,6 +14,7 @@ module Vektra {
     requires javafx.web;
     requires java.logging;
     requires java.sql;
+    requires mysql.connector.j;
 
     requires java.mail;
 }

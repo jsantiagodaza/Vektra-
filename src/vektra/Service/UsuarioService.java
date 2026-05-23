@@ -15,7 +15,7 @@ public class UsuarioService {
             return "El ID debe contener solo números";
         }
         
-        if (id.length()< 7){
+        if (id.length()< 3){
             return "El ID debe tener minimo 7 digitos";
         }
         
