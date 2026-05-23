@@ -4,6 +4,8 @@
  */
 package vektra.View;
 
+import vektra.Service.UsuarioService;
+
 /**
  *
  * @author santi
@@ -49,19 +51,16 @@ public class Login extends javax.swing.JFrame {
         String id = jTextField2.getText().trim();
         String nombre = jTextField1.getText().trim();
         String rol = (String) jComboBox1.getSelectedItem();
+        UsuarioService service = new UsuarioService();
+        String resultado = service.validarLogin(id,rol);
 
-        if (id.isEmpty() || nombre.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "Por favor llena tu ID y Nombre antes de ingresar.",
-                    "Campos incompletos",
-                    javax.swing.JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        if (resultado.equals("ok")){
 
         Dashboard dashboard = new Dashboard();
         dashboard.setUsuario(nombre, rol); // le pasamos el nombre y rol
         dashboard.setVisible(true);
         this.dispose();
+        }
     }
 
     /**
