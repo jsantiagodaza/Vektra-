@@ -3,10 +3,23 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+            <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/View/TicketsView.java</file>
+>>>>>>> f510caaaecc60301201f2a4ec2f70d72dc498e1f
             <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/View/Dashboard.java</file>
             <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/Dao/ConductorDao.java</file>
             <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/Service/EmailService.java</file>
             <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/View/Login.java</file>
+<<<<<<< HEAD
+=======
+            <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/View/MapaView.java</file>
+=======
+            <file>file:/C:/Users/User/Documents/NetBeansProjects/Vektra-/src/vektra/Util/Sesion.java</file>
+            <file>file:/C:/Users/User/Documents/NetBeansProjects/Vektra-/src/vektra/Dao/TicketDao.java</file>
+>>>>>>> origin/feature/Dev1
+>>>>>>> f510caaaecc60301201f2a4ec2f70d72dc498e1f
         </group>
     </open-files>
 </project-private>
