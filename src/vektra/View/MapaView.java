@@ -16,7 +16,7 @@ public class MapaView extends JPanel  {
          setLayout(new BorderLayout());
          jfxPanel = new JFXPanel();
          add (jfxPanel, BorderLayout.CENTER);
-         Platform.runLater(()-> { initFX();});
+         Platform.runLater(this::initFX);
      }
 
     private void initFX(){

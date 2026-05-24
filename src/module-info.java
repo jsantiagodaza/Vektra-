@@ -4,7 +4,7 @@
  */
 
 module Vektra {
-    requires javafx.swt;
+    
     requires javafx.base;
     requires javafx.controls;
     requires javafx.fxml;
@@ -12,10 +12,10 @@ module Vektra {
     requires javafx.media;
     requires javafx.swing;
     requires javafx.web;
+    
     requires java.logging;
     requires java.sql;
-    requires mysql.connector.j;
+    requires org.postgresql.jdbc;   
     requires java.desktop;
-
     requires java.mail;
 }
