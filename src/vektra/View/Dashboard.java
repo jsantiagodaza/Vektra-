@@ -120,15 +120,15 @@ public class Dashboard extends javax.swing.JFrame {
         panelContenido.revalidate();
         panelContenido.repaint();
     }
-    
-    private void cargarPanelMapa(){
-        
+
+    private void cargarPanelMapa() {
+
         panelContenido.removeAll();
         MapaView mapa = new MapaView();
-        
+
         panelContenido.setLayout(new java.awt.BorderLayout());
         panelContenido.add(mapa, java.awt.BorderLayout.CENTER);
-        
+
         panelContenido.revalidate();
         panelContenido.repaint();
     }
