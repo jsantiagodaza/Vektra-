@@ -17,10 +17,10 @@ public class Conexion {
     public static Connection conectar(){
       
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            String URL = "jdbc:mysql://localhost:3306/vektra";
-            String USER = "root";
-            String PASSWORD = "";
+            Class.forName("org.postgresql.Driver");
+            String URL = "jdbc:postgresql://localhost:3003/Vektra-";
+            String USER = "postgres";
+            String PASSWORD = "1234";
             
             con = DriverManager.getConnection(URL, USER, PASSWORD);
             System.out.println("Conexion Exitosa");

@@ -15,6 +15,7 @@ module Vektra {
     requires java.logging;
     requires java.sql;
     requires mysql.connector.j;
+    requires java.desktop;
 
     requires java.mail;
 }
