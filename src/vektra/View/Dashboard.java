@@ -19,33 +19,12 @@ public class Dashboard extends javax.swing.JFrame {
         cargarPanelInicio();
     }
 
-    private java.awt.Font fuenteDekatron;
-
-    private void inicializarFuente() {
-        try {
-            java.io.InputStream is = getClass().getResourceAsStream("/resources/Dekatron.otf");
-            if (is == null) {
-                is = getClass().getResourceAsStream("/resources/Dekatron-SemiBold.otf");
-            }
-            if (is != null) {
-                fuenteDekatron = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, is);
-                java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(fuenteDekatron);
-            }
-        } catch (Exception e) {
-            System.err.println("No se pudo cargar la fuente Dekatron desde /resources/. Se usará la fuente por defecto.");
-        }
-    }
-
     private java.awt.Font obtenerFuente(int estilo, float tamano) {
-        if (fuenteDekatron != null) {
-            return fuenteDekatron.deriveFont(estilo, tamano);
-        }
         return new java.awt.Font("Segoe UI", estilo, (int) tamano);
     }
 
     public Dashboard() {
         initComponents();
-        inicializarFuente();
         configurarVentana();
         cargarPanelInicio();
     }
