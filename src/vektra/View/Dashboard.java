@@ -492,7 +492,7 @@ public class Dashboard extends javax.swing.JFrame {
         cargarPanelConductores();
     }
 
-    private void cargarPanelConductores() {
+    public void cargarPanelConductores() {
         panelContenido.removeAll();
 
         // Extraemos el panel principal de ConductoresView
@@ -500,6 +500,19 @@ public class Dashboard extends javax.swing.JFrame {
         java.awt.Container contenidoConductores = conductoresView.getContentPane();
 
         panelContenido.add(contenidoConductores, java.awt.BorderLayout.CENTER);
+
+        panelContenido.revalidate();
+        panelContenido.repaint();
+    }
+
+    public void cargarPanelEditarConductores() {
+        panelContenido.removeAll();
+
+        // Extraemos el panel principal de EditarConductoresView
+        EditarConductoresView editarConductoresView = new EditarConductoresView();
+        java.awt.Container contenidoEditar = editarConductoresView.getContentPane();
+
+        panelContenido.add(contenidoEditar, java.awt.BorderLayout.CENTER);
 
         panelContenido.revalidate();
         panelContenido.repaint();
