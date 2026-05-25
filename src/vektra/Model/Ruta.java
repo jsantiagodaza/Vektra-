@@ -7,7 +7,6 @@ package vektra.Model;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Ruta {
 
     //static String getOrigen;
@@ -32,8 +31,8 @@ public class Ruta {
         this.colorLinea = colorLinea;
         this.tiempoTotal = tiempoTotal;
         this.transbordos = transbordos;
-        
-                this.estacionesIntermedias = new ArrayList<>();
+
+        this.estacionesIntermedias = new ArrayList<>();
     }
 
     public void agregarEstacionIntermedia(Estacion estacion) {
@@ -96,17 +95,14 @@ public class Ruta {
         this.transbordos = transbordos;
     }
 
-    @Override
-    public String toString() {
-        return "Ruta{"
-                + "id=" + id
-                + ", origen='" + origen + " -> "
-                + ", destino='" + destino + "|"
-                + ", estacion intermedias=" + estacionesIntermedias +"| Linea"
-                + ", color='" + colorLinea + "|" 
-                + ", tiempoViaje=" + tiempoTotal +"min |" 
-                + ", trasbordos=" + transbordos
-                + '}';
+    public String formatoUI() {
+        return id
+                + " | " + origen.getNombre() + " → "
+                + destino.getNombre()
+                + " | " + estacionesIntermedias
+                + " | " + tiempoTotal + " min"
+                + " | Línea " + colorLinea
+                + " | " + transbordos;
     }
 
 }
