@@ -13,11 +13,8 @@ import vektra.Model.Ruta;
  */
 public class RutaService {
 
-    private RutaDao rutaDao;
+    private RutaDao rutaDao= new RutaDao();
 
-    public RutaService() {
-        rutaDao = new RutaDao();
-    }
     public List<Ruta>loadRoutesFromDB(){
         return rutaDao.TodasLasRutas();
     }
