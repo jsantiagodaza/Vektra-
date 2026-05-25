@@ -135,5 +135,35 @@ public class ConductorDao {
     return actualizado;
 }
     
+    public boolean eliminarConductor(String id) {
+
+    boolean eliminado = false;
+
+    try {
+        con = Conexion.conectar();
+
+        String sql = "DELETE FROM conductores WHERE id = ?";
+        ps = con.prepareStatement(sql);
+
+        ps.setString(1, id); 
+
+        int filas = ps.executeUpdate();
+
+        eliminado = (filas > 0);
+
+    } catch (SQLException e) {
+        System.out.println("Error al eliminar conductor: " + e.getMessage());
+    } finally {
+        try {
+            if (ps != null) ps.close();
+            if (con != null) con.close();
+        } catch (SQLException e) {
+            System.out.println("Error cerrando recursos: " + e.getMessage());
+        }
+    }
+
+    return eliminado;
+}
+    
     
 }
