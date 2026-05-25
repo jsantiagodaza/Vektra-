@@ -96,4 +96,44 @@ public class ConductorDao {
 
     return lista;
 }
+    
+    public boolean editarConductor(Conductor c) {
+
+    boolean actualizado = false;
+
+    try {
+        con = Conexion.conectar();
+
+        String sql = """
+                     UPDATE conductores
+                     SET nombre = ?, licencia = ?
+                     WHERE id = ?
+                     """;
+
+        ps = con.prepareStatement(sql);
+
+   
+        ps.setString(1, c.getNombre());
+        ps.setString(2, c.getLicencia());
+        ps.setString(3, c.getId());
+
+        int filas = ps.executeUpdate();
+
+        actualizado = (filas > 0);
+
+    } catch (SQLException e) {
+        System.out.println("Error al editar conductor: " + e.getMessage());
+    } finally {
+        try {
+            if (ps != null) ps.close();
+            if (con != null) con.close();
+        } catch (SQLException e) {
+            System.out.println("Error cerrando recursos: " + e.getMessage());
+        }
+    }
+
+    return actualizado;
+}
+    
+    
 }
