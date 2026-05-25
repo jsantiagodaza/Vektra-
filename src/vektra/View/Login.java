@@ -1,4 +1,4 @@
- /*
+/*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
@@ -14,7 +14,6 @@ public class Login extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());
 
-    
     /**
      * Creates new form Login
      */
@@ -52,14 +51,14 @@ public class Login extends javax.swing.JFrame {
         String nombre = jTextField1.getText().trim();
         String rol = (String) jComboBox1.getSelectedItem();
         UsuarioService service = new UsuarioService();
-        String resultado = service.validarLogin(id,rol);
+        String resultado = service.validarLogin(id, rol);
 
-        if (resultado.equals("ok")){
+        if (resultado.equals("ok")) {
 
-        Dashboard dashboard = new Dashboard();
-        dashboard.setUsuario(nombre, rol); // le pasamos el nombre y rol
-        dashboard.setVisible(true);
-        this.dispose();
+            Dashboard dashboard = new Dashboard();
+            dashboard.setUsuario(nombre, rol); // le pasamos el nombre y rol
+            dashboard.setVisible(true);
+            this.dispose();
         }
     }
 

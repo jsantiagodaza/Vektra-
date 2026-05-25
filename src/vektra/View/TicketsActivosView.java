@@ -9,7 +9,7 @@ package vektra.View;
  * @author santi
  */
 public class TicketsActivosView extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TicketsActivosView.class.getName());
 
     /**
