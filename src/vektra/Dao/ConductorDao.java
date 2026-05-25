@@ -164,6 +164,40 @@ public class ConductorDao {
 
     return eliminado;
 }
-    
+    public boolean asignarARuta(String conductorId, int rutaId) {
+
+    boolean asignado = false;
+
+
+    try {
+        con = Conexion.conectar();
+
+        String sql = """
+                     INSERT INTO conductor_ruta (conductor_id, ruta_id)
+                     VALUES (?, ?)
+                     """;
+
+        ps = con.prepareStatement(sql);
+
+        ps.setString(1, conductorId); 
+        ps.setInt(2, rutaId);        
+
+        int filas = ps.executeUpdate();
+
+        asignado = (filas > 0);
+
+    } catch (SQLException e) {
+        System.out.println("Error al asignar ruta: " + e.getMessage());
+    } finally {
+        try {
+            if (ps != null) ps.close();
+            if (con != null) con.close();
+        } catch (SQLException e) {
+            System.out.println("Error cerrando recursos: " + e.getMessage());
+        }
+    }
+
+    return asignado;
+}
     
 }
