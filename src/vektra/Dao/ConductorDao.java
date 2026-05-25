@@ -9,15 +9,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import vektra.Conexion.Conexion;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConductorDao {
+     Connection con = null;
+      PreparedStatement ps = null;
 
     public boolean agregarConductor(Conductor c) {
+        
         boolean registrado = false;
-
-        Connection con = null;
-        PreparedStatement ps = null;
-
+        
+       
         try {
             con = Conexion.conectar();
 
@@ -51,4 +55,45 @@ public class ConductorDao {
 
         return registrado;
     }
+    
+    public List<Conductor> obtenerTodos() {
+
+    List<Conductor> lista = new ArrayList<>();
+
+    ResultSet rs = null;
+
+    try {
+        con = Conexion.conectar();
+
+        String sql = "SELECT id, nombre, licencia FROM conductores";
+        ps = con.prepareStatement(sql);
+
+        rs = ps.executeQuery();
+
+        while (rs.next()) {
+
+        
+            Conductor c = new Conductor(
+                rs.getString("licencia"),
+                rs.getString("id"),
+                rs.getString("nombre")
+            );
+
+            lista.add(c);
+        }
+
+    } catch (SQLException e) {
+        System.out.println("Error al listar conductores: " + e.getMessage());
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            if (con != null) con.close();
+        } catch (SQLException e) {
+            System.out.println("Error cerrando recursos: " + e.getMessage());
+        }
+    }
+
+    return lista;
+}
 }
