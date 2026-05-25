@@ -12,25 +12,28 @@ import java.sql.ResultSet;
 
 public class UsuarioDao {
 
-    public boolean validarCredenciales(String id, String password) {
-        boolean valido = false;
-        try {
-            Connection con = Conexion.conectar();
-            String sql = """
-                         SELECT *
-                         FROM usuarios
-                         WHERE id_usuario = ?
-                         AND password = ?
-                         """;
+   public boolean validarCredenciales(String id, String password) {
+    boolean valido = false;
+    try {
+        Connection con = Conexion.conectar();
 
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, id);
-            ps.setString(2, password);
-            ResultSet rs = ps.executeQuery();
-            valido = rs.next();
-        } catch (Exception e) {
-            System.out.println("Error login: " + e.getMessage());
-        }
-        return valido;
+        String sql = """
+                     SELECT *
+                     FROM usuarios
+                     WHERE id = ?
+                     AND contraseña = ?
+                     """;
+
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, Integer.parseInt(id));
+        ps.setString(2, password);
+
+        ResultSet rs = ps.executeQuery();
+        valido = rs.next();
+
+    } catch (Exception e) {
+        System.out.println("Error login: " + e.getMessage());
     }
+    return valido;
+}
 }

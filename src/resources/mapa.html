@@ -1,66 +1,57 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
     <meta charset="UTF-8">
-
     <title>Mapa Metro</title>
-
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-
         html, body, #map {
-
             height: 100%;
+            width: 100%;
             margin: 0;
             padding: 0;
         }
-
     </style>
-
 </head>
-
 <body>
 
-<div id="map"></div>
+    <div id="map"></div>
 
-<script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Coordenadas del centro de Valledupar
+        const lat = 10.4631;
+        const lng = -73.2532;
 
-    let map;
+        // Inicializar el mapa de Leaflet
+        const map = L.map('map').setView([lat, lng], 13);
 
-    function initMap() {
+        // Corregir problemas de carga de cuadrículas grises en WebViews de JavaFX
+        setTimeout(() => { map.invalidateSize(); }, 100);
+        setTimeout(() => { map.invalidateSize(); }, 500);
+        setTimeout(() => { map.invalidateSize(); }, 1000);
+        window.addEventListener('resize', () => { map.invalidateSize(); });
 
-        const centro = {
-
-            lat: 10.4631,
-            lng: -73.2532
-        };
-
-        map = new google.maps.Map(
-
-            document.getElementById("map"),
-
-            {
-                zoom: 13,
-                center: centro
-            }
-        );
+        // Añadir capa de mapas de OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
 
         // ESTACIONES
         const estaciones = [
-
             {
                 nombre: "Portal Norte",
                 lat: 10.4800,
                 lng: -73.2500
             },
-
             {
                 nombre: "Calle 72",
                 lat: 10.4700,
                 lng: -73.2400
             },
-
             {
                 nombre: "Portal Sur",
                 lat: 10.4500,
@@ -68,45 +59,12 @@
             }
         ];
 
+        // Añadir los marcadores en el mapa
         estaciones.forEach(estacion => {
-
-            const marker =
-
-                new google.maps.Marker({
-
-                    position: {
-
-                        lat: estacion.lat,
-                        lng: estacion.lng
-                    },
-
-                    map: map,
-
-                    title: estacion.nombre
-                });
-
-            const infoWindow =
-
-                new google.maps.InfoWindow({
-
-                    content:
-                    `<h3>${estacion.nombre}</h3>`
-                });
-
-            marker.addListener("click", () => {
-
-                infoWindow.open(map, marker);
-            });
+            const marker = L.marker([estacion.lat, estacion.lng]).addTo(map);
+            marker.bindPopup(`<h3>${estacion.nombre}</h3>`);
         });
-    }
-
-</script>
-
-<script async defer
-
-src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCYPJ9ru5CjrLRHUmOTlvfLDPLBCYYChLA">
-
-</script>
+    </script>
 
 </body>
 </html>

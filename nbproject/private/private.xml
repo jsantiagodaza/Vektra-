@@ -3,9 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/View/EditarConductoresView.java</file>
             <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/View/AnadirConductorView.java</file>
             <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/Model/Conductor.java</file>
+=======
+            <file>file:/C:/Users/User/Documents/NetBeansProjects/Vektra-/src/vektra/Dao/ConductorDao.java</file>
+>>>>>>> 7e4d87c7e9cdf1cddd4342af451f08456e734116
         </group>
     </open-files>
 </project-private>
