@@ -26,7 +26,17 @@ public class MapaValleduparView extends javax.swing.JFrame {
         // Configuramos PanelMapa para que ocupe todo el espacio con BorderLayout
         PanelMapa.setLayout(new java.awt.BorderLayout());
         
-        jfxPanel = new javafx.embed.swing.JFXPanel();
+        // Suprimimos temporalmente los warnings de la terminal que escupe JavaFX al inicializarse
+        java.io.PrintStream originalErr = System.err;
+        try {
+            System.setErr(new java.io.PrintStream(new java.io.OutputStream() {
+                @Override
+                public void write(int b) {}
+            }));
+            jfxPanel = new javafx.embed.swing.JFXPanel();
+        } finally {
+            System.setErr(originalErr);
+        }
         PanelMapa.add(jfxPanel, java.awt.BorderLayout.CENTER);
         
         // Ejecutamos la inicialización de JavaFX en su propio hilo

@@ -33,6 +33,11 @@
             map.invalidateSize();
         });
         resizeObserver.observe(document.getElementById('map'));
+        
+        // Hack definitivo para WebEngine: forzar actualización periódica
+        setInterval(() => {
+            map.invalidateSize();
+        }, 500);
 
         // Añadir capa de mapas de OpenStreetMap
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

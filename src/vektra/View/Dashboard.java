@@ -104,6 +104,7 @@ public class Dashboard extends javax.swing.JFrame {
         panelContenido.removeAll();
 
         // Instanciamos MapaValleduparView y extraemos su panel principal
+        
         MapaValleduparView mapaValleduparView = new MapaValleduparView();
         java.awt.Container contenidoMapa = mapaValleduparView.getContentPane();
 
