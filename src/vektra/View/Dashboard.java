@@ -101,12 +101,13 @@ public class Dashboard extends javax.swing.JFrame {
     }
 
     private void cargarPanelMapa() {
-
         panelContenido.removeAll();
-        MapaView mapa = new MapaView();
 
-        panelContenido.setLayout(new java.awt.BorderLayout());
-        panelContenido.add(mapa, java.awt.BorderLayout.CENTER);
+        // Instanciamos MapaValleduparView y extraemos su panel principal
+        MapaValleduparView mapaValleduparView = new MapaValleduparView();
+        java.awt.Container contenidoMapa = mapaValleduparView.getContentPane();
+
+        panelContenido.add(contenidoMapa, java.awt.BorderLayout.CENTER);
 
         panelContenido.revalidate();
         panelContenido.repaint();

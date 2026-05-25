@@ -12,11 +12,34 @@ public class MapaValleduparView extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MapaValleduparView.class.getName());
 
+    private javafx.embed.swing.JFXPanel jfxPanel;
+
     /**
      * Creates new form MapaValleduparView
      */
     public MapaValleduparView() {
         initComponents();
+        initMap();
+    }
+
+    private void initMap() {
+        // Configuramos PanelMapa para que ocupe todo el espacio con BorderLayout
+        PanelMapa.setLayout(new java.awt.BorderLayout());
+        
+        jfxPanel = new javafx.embed.swing.JFXPanel();
+        PanelMapa.add(jfxPanel, java.awt.BorderLayout.CENTER);
+        
+        // Ejecutamos la inicialización de JavaFX en su propio hilo
+        javafx.application.Platform.runLater(() -> {
+            javafx.scene.web.WebView webView = new javafx.scene.web.WebView();
+            javafx.scene.web.WebEngine engine = webView.getEngine();
+            
+            String url = getClass().getResource("/resources/mapa.html").toExternalForm();
+            engine.load(url);
+            
+            javafx.scene.Scene scene = new javafx.scene.Scene(webView);
+            jfxPanel.setScene(scene);
+        });
     }
 
     /**

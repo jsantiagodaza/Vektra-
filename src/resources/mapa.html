@@ -29,10 +29,10 @@
         const map = L.map('map').setView([lat, lng], 13);
 
         // Corregir problemas de carga de cuadrículas grises en WebViews de JavaFX
-        setTimeout(() => { map.invalidateSize(); }, 100);
-        setTimeout(() => { map.invalidateSize(); }, 500);
-        setTimeout(() => { map.invalidateSize(); }, 1000);
-        window.addEventListener('resize', () => { map.invalidateSize(); });
+        const resizeObserver = new ResizeObserver(() => {
+            map.invalidateSize();
+        });
+        resizeObserver.observe(document.getElementById('map'));
 
         // Añadir capa de mapas de OpenStreetMap
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
