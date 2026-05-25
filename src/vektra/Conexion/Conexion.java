@@ -21,9 +21,11 @@ public class Conexion {
         try {
             Class.forName("org.postgresql.Driver");
 
+
             String URL = "jdbc:postgresql://localhost:5432/Vetkra";
             String USER = "postgres";
             String PASSWORD = "admin123";
+
 
             con = DriverManager.getConnection(URL, USER, PASSWORD);
             System.out.println("Conexion Exitosa");

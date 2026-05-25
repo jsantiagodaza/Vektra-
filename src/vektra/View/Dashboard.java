@@ -121,6 +121,18 @@ public class Dashboard extends javax.swing.JFrame {
         panelContenido.repaint();
     }
 
+    private void cargarPanelMapa() {
+
+        panelContenido.removeAll();
+        MapaView mapa = new MapaView();
+
+        panelContenido.setLayout(new java.awt.BorderLayout());
+        panelContenido.add(mapa, java.awt.BorderLayout.CENTER);
+
+        panelContenido.revalidate();
+        panelContenido.repaint();
+    }
+
     private javax.swing.JPanel crearCard(String numero, String titulo, String subtitulo, java.awt.Color colorBorde) {
         javax.swing.JPanel card = new javax.swing.JPanel(new java.awt.BorderLayout()) {
             @Override
@@ -456,19 +468,7 @@ public class Dashboard extends javax.swing.JFrame {
     }
 
     private void btnMapaActionPerformed(java.awt.event.ActionEvent evt) {
-        try {
-            MapaView mapaView = new MapaView();
-            javax.swing.JFrame ventana = new javax.swing.JFrame(" MAPA METRO ");
-            ventana.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
-
-            ventana.setSize(1200, 700);
-            ventana.setLocationRelativeTo(null);
-            ventana.add(mapaView);
-            ventana.setVisible(true);
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        cargarPanelMapa();
     }
 
     private void btnEquipoActionPerformed(java.awt.event.ActionEvent evt) {
@@ -519,7 +519,7 @@ public class Dashboard extends javax.swing.JFrame {
     }
 
     private void btnUbicacionesActionPerformed(java.awt.event.ActionEvent evt) {
-        // cargarPanelUbicacion(); — próxima pantalla
+        cargarPanelMapa();
     }
 
     public static void main(String args[]) {
