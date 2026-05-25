@@ -17,6 +17,8 @@ public class ConductoresView extends javax.swing.JFrame {
      */
     public ConductoresView() {
         initComponents();
+        setResizable(false);
+        setLocationRelativeTo(null);
     }
 
     /**

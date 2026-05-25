@@ -19,6 +19,8 @@ public class MapaValleduparView extends javax.swing.JFrame {
      */
     public MapaValleduparView() {
         initComponents();
+        setResizable(false);
+        setLocationRelativeTo(null);
         initMap();
     }
 

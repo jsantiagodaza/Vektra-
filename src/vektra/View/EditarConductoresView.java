@@ -17,6 +17,8 @@ public class EditarConductoresView extends javax.swing.JFrame {
      */
     public EditarConductoresView() {
         initComponents();
+        setResizable(false);
+        setLocationRelativeTo(null);
     }
 
     /**

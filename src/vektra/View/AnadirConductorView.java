@@ -17,6 +17,8 @@ public class AnadirConductorView extends javax.swing.JFrame {
      */
     public AnadirConductorView() {
         initComponents();
+        setResizable(false);
+        setLocationRelativeTo(null);
     }
 
     /**

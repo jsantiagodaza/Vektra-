@@ -17,6 +17,8 @@ public class TicketsView extends javax.swing.JFrame {
      */
     public TicketsView() {
         initComponents();
+        setResizable(false);
+        setLocationRelativeTo(null);
     }
 
     /**

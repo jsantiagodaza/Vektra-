@@ -31,7 +31,7 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void configurarVentana() {
         setTitle("Vektra — Sistema de Metro");
-        setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        setResizable(false);
         setLocationRelativeTo(null);
 
         // Asegurar que jPanel1 ocupe todo el espacio de la ventana
