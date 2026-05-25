@@ -16,6 +16,8 @@ public class Ruta {
     private List<Estacion> estacionesIntermedias;
     private String colorLinea;
     private double tiempoTotal;
+    private double kilometros;
+
     private int transbordos;
 
     public Ruta() {
@@ -23,13 +25,14 @@ public class Ruta {
     }
 
     public Ruta(String id, Estacion origen, Estacion destino, List<Estacion> estacionesIntermedias,
-            String colorLinea, double tiempoTotal, int transbordos) {
+            String colorLinea, double tiempoTotal, double kilometros, int transbordos) {
 
         this.id = id;
         this.origen = origen;
         this.destino = destino;
         this.colorLinea = colorLinea;
         this.tiempoTotal = tiempoTotal;
+        this.kilometros = kilometros;
         this.transbordos = transbordos;
 
         this.estacionesIntermedias = new ArrayList<>();
@@ -87,6 +90,14 @@ public class Ruta {
         this.tiempoTotal = tiempoTotal;
     }
 
+    public double getKilometros() {
+        return kilometros;
+    }
+
+    public void setKilometros(double kilometros) {
+        this.kilometros = kilometros;
+    }
+
     public int getTransbordos() {
         return transbordos;
     }
@@ -96,13 +107,18 @@ public class Ruta {
     }
 
     public String formatoUI() {
-        return id
-                + " | " + origen.getNombre() + " → "
+
+        return origen.getNombre()
+                + " → "
                 + destino.getNombre()
-                + " | " + estacionesIntermedias
-                + " | " + tiempoTotal + " min"
-                + " | Línea " + colorLinea
-                + " | " + transbordos;
+                + " | "
+                + kilometros + " km"
+                + " | "
+                + tiempoTotal + " min"
+                + " | Línea "
+                + colorLinea
+                + " | Transbordos: "
+                + transbordos;
     }
 
 }

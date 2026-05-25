@@ -26,14 +26,16 @@ public class RutaDao {
     String sql = """
          SELECT
              r.id,
-             e1.nombre AS origen,
-             e2.nombre AS destino,
+             r.kilometros,
              r.color_linea,
              r.tiempo_total,
              r.transbordos
+             e1.nombre AS origen,
+             e2.nombre AS destino,    
+             
          FROM rutas r
-         JOIN estaciones e1 ON r.origen_id = e1.id
-         JOIN estaciones e2 ON r.destino_id = e2.id
+         JOIN estaciones e1 ON r.estacion_origen_id = e1.id
+         JOIN estaciones e2 ON r.estacion_destino_id = e2.id
                  """;
     try {
         Connection con = Conexion.conectar();
