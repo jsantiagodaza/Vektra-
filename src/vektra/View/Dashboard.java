@@ -1,5 +1,9 @@
 package vektra.View;
 
+import java.util.List;
+import vektra.Model.Ruta;
+import vektra.Service.RutaService;
+
 public class Dashboard extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger
@@ -124,6 +128,13 @@ public class Dashboard extends javax.swing.JFrame {
     private void cargarPanelMapa() {
 
         panelContenido.removeAll();
+        RutaService service = new RutaService();
+        List<Ruta> rutas = service.loadRoutesFromDB();
+        for (Ruta r : rutas) {
+
+            System.out.println(r);
+
+        }
         MapaView mapa = new MapaView();
 
         panelContenido.setLayout(new java.awt.BorderLayout());
