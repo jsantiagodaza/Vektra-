@@ -1,6 +1,7 @@
 package vektra.View;
 
 import java.util.List;
+import javax.swing.DefaultListModel;
 import vektra.Model.Ruta;
 import vektra.Service.RutaService;
 
@@ -130,10 +131,11 @@ public class Dashboard extends javax.swing.JFrame {
         panelContenido.removeAll();
         RutaService service = new RutaService();
         List<Ruta> rutas = service.loadRoutesFromDB();
+        DefaultListModel<String> modeloLista = new DefaultListModel<>();
+
         for (Ruta r : rutas) {
-
-            System.out.println(r);
-
+            
+            modeloLista.addElement(r.formatoUI());
         }
         MapaView mapa = new MapaView();
 

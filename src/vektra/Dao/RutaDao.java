@@ -37,6 +37,11 @@ public class RutaDao {
                  """;
     try {
         Connection con = Conexion.conectar();
+         if (con == null) {
+            System.out.println("Error: conexión nula");
+            return rutas;
+        }
+         
         PreparedStatement ps = con.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
         
