@@ -51,7 +51,7 @@ public class AnadirConductorView extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(207, 234, 242));
 
-        jPanel3.setBackground(new java.awt.Color(0, 51, 255));
+        jPanel3.setBackground(new java.awt.Color(0, 153, 51));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -91,7 +91,7 @@ public class AnadirConductorView extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel5.setText("NÚMERO DE LICENCIA:");
 
-        jButton1.setBackground(new java.awt.Color(0, 51, 204));
+        jButton1.setBackground(new java.awt.Color(0, 153, 102));
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("REGISTRAR CONDUCTOR");
