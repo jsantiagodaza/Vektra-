@@ -9,15 +9,23 @@ package vektra.Model;
  * @author santi
  */
 public class Conductor extends Persona {
+    private String cedula;
     private String licencia;
+    private String estado; 
 
-    public Conductor(String licencia, String id, String nombre) {
+    public Conductor(String cedula, String licencia, String estado, String id, String nombre) {
         super(id, nombre);
+        this.cedula = cedula;
         this.licencia = licencia;
+        this.estado = estado;
     }
 
+    public String getCedula() {
+        return cedula;
+    }
 
-    public Conductor() {
+    public void setCedula(String cedula) {
+        this.cedula = cedula;
     }
 
     public String getLicencia() {
@@ -27,6 +35,16 @@ public class Conductor extends Persona {
     public void setLicencia(String licencia) {
         this.licencia = licencia;
     }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+  
 
     
 }

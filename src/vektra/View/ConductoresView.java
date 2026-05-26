@@ -9,7 +9,7 @@ package vektra.View;
  * @author santi
  */
 public class ConductoresView extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ConductoresView.class.getName());
 
     /**
@@ -17,6 +17,8 @@ public class ConductoresView extends javax.swing.JFrame {
      */
     public ConductoresView() {
         initComponents();
+        setResizable(false);
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -173,7 +175,11 @@ public class ConductoresView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAnadirConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnadirConductorActionPerformed
-        // TODO add your handling code here:
+        // Obtener la ventana principal (Dashboard) a través de este botón y cambiar el panel
+        java.awt.Window window = javax.swing.SwingUtilities.getWindowAncestor(btnAnadirConductor);
+        if (window instanceof Dashboard) {
+            ((Dashboard) window).cargarPanelEditarConductores();
+        }
     }//GEN-LAST:event_btnAnadirConductorActionPerformed
 
     /**

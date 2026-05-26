@@ -13,34 +13,40 @@ import java.sql.SQLException;
  */
 public class Conexion {
 
+
     private static Connection con;
+
     public static Connection conectar(){
-      
+
         try {
             Class.forName("org.postgresql.Driver");
+
             String URL = "jdbc:postgresql://localhost:3003/postgres";
             String USER = "postgres";
-            String PASSWORD = "1234";
-            
+            String PASSWORD = "admin123";
+
+
             con = DriverManager.getConnection(URL, USER, PASSWORD);
             System.out.println("Conexion Exitosa");
+
         } catch (ClassNotFoundException e){
-             System.out.println("Error Driver:" + e.getMessage());
+            System.out.println("Error Driver:" + e.getMessage());
+
         } catch (SQLException e) {
             System.out.println("Error conexion:" + e.getMessage());
         }
+
         return con;
     }
-    
+
     public static void cerrarConexion (){
         try {
             if (con != null){
                 con.close();
                 System.out.println("Conexion Cerrada");
             }
-        }catch (SQLException e){
-              System.out.println( "Error cerrando conexion: " + e.getMessage());
+        } catch (SQLException e){
+            System.out.println("Error cerrando conexion: " + e.getMessage());
         }
-        
     }
 }

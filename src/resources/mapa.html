@@ -1,277 +1,223 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Mapa Metro</title>
-        <!-- Leaflet CSS -->
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-        <style>
-            html, body, #map {
-                height: 100%;
-                width: 100%;
-                margin: 0;
-                padding: 0;
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mapa Metro</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        html, body, #map {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="map"></div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+
+    // ================================
+    // INICIALIZAR MAPA
+    // ================================
+
+    const map = L.map('map').setView(
+        [10.4631, -73.2532],
+        13
+    );
+
+    // OpenStreetMap
+    L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {
+            maxZoom: 19,
+            attribution:
+                '&copy; OpenStreetMap contributors'
+        }
+    ).addTo(map);
+
+    // Corregir render en JavaFX
+    setTimeout(() => map.invalidateSize(), 200);
+    setTimeout(() => map.invalidateSize(), 800);
+
+    window.addEventListener('resize', () => {
+        map.invalidateSize();
+    });
+
+    // ================================
+    // LISTAS DINÁMICAS
+    // ================================
+
+    let marcadores = [];
+    let polilineas = [];
+
+    // ================================
+    // FUNCIÓN PRINCIPAL
+    // Java -> HTML
+    // ================================
+
+    function cargarDatos(estaciones, rutas) {
+
+        console.log("Estaciones:", estaciones);
+        console.log("Rutas:", rutas);
+
+        // Limpiar mapa
+        marcadores.forEach(m => map.removeLayer(m));
+        polilineas.forEach(p => map.removeLayer(p));
+
+        marcadores = [];
+        polilineas = [];
+
+        // Map rápido por ID
+        const estacionesMap = {};
+
+        estaciones.forEach(estacion => {
+
+            estacionesMap[estacion.id] = estacion;
+
+        });
+
+        // ================================
+        // DIBUJAR ESTACIONES
+        // ================================
+
+        estaciones.forEach(estacion => {
+
+            const marker = L.marker([
+                estacion.lat,
+                estacion.lng
+            ]).addTo(map);
+
+            marker.bindPopup(`
+                <div style="font-family:Segoe UI;">
+                    <h3>${estacion.nombre}</h3>
+
+                    <p>
+                        <b>Línea:</b>
+                        ${estacion.linea}
+                    </p>
+                </div>
+            `);
+
+            marcadores.push(marker);
+
+        });
+
+        // ================================
+        // DIBUJAR RUTAS
+        // ================================
+
+        rutas.forEach(ruta => {
+
+            const origen =
+                estacionesMap[ruta.origen_id];
+
+            const destino =
+                estacionesMap[ruta.destino_id];
+
+            if (origen && destino) {
+
+                const color =
+                    getHexColor(ruta.color_linea);
+
+                const polyline = L.polyline(
+                    [
+                        [origen.lat, origen.lng],
+                        [destino.lat, destino.lng]
+                    ],
+                    {
+                        color: color,
+                        weight: 6,
+                        opacity: 0.9
+                    }
+                ).addTo(map);
+
+                polyline.bindPopup(`
+                    <div style="font-family:Segoe UI;">
+
+                        <h3>Ruta</h3>
+
+                        <p>
+                            <b>${origen.nombre}</b>
+                            →
+                            <b>${destino.nombre}</b>
+                        </p>
+
+                        <p>
+                            Tiempo:
+                            ${ruta.tiempo} min
+                        </p>
+
+                    </div>
+                `);
+
+                polilineas.push(polyline);
+
             }
-        </style>
-    </head>
-    <body>
 
-        <div id="map"></div>
+        });
 
-        <!-- Leaflet JS -->
-        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-        <script>
-            // Coordenadas del centro de Valledupar
-            const lat = 10.4631;
-            const lng = -73.2532;
+        // ================================
+        // AJUSTAR ZOOM
+        // ================================
 
-            // Inicializar el mapa de Leaflet
-            const map = L.map('map').setView([lat, lng], 13);
+        if (estaciones.length > 0) {
 
-            // Corregir problemas de carga de cuadrículas grises en WebViews de JavaFX
-            setTimeout(() => {
-                map.invalidateSize();
-            }, 100);
-            setTimeout(() => {
-                map.invalidateSize();
-            }, 500);
-            setTimeout(() => {
-                map.invalidateSize();
-            }, 1000);
-            window.addEventListener('resize', () => {
-                map.invalidateSize();
+            const bounds = L.latLngBounds(
+                estaciones.map(e => [e.lat, e.lng])
+            );
+
+            map.fitBounds(bounds, {
+                padding: [40, 40]
             });
 
-            // Añadir capa de mapas de OpenStreetMap
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
+        }
 
-            // Arreglo de capas agregadas dinámicamente para poder limpiarlas
-            let marcadores = [];
-            let polilineas = [];
+    }
 
-            // Función llamada desde JavaFX para cargar estaciones y rutas dinámicamente
-            function cargarDatos(estaciones, rutas) {
-                // 1. Limpiar elementos existentes del mapa
-                marcadores.forEach(m => map.removeLayer(m));
-                polilineas.forEach(p => map.removeLayer(p));
-                marcadores = [];
-                polilineas = [];
+    // ================================
+    // COLORES DE LÍNEAS
+    // ================================
 
-                // 2. Mapear estaciones por su ID para búsquedas rápidas
-                const estacionesMap = {};
-                estaciones.forEach(e => {
-                    estacionesMap[e.id] = e;
-                });
+    function getHexColor(linea) {
 
-                // 3. Dibujar marcadores de estaciones
-                estaciones.forEach(estacion => {
-                    let infoRutas = "";
+        if (!linea)
+            return "#7f8c8d";
 
-                    rutas.forEach(r => {
+        const l = linea.toLowerCase();
 
-                        if (
-                                r.origen_id === estacion.id
-                                ||
-                                r.destino_id === estacion.id
-                                ) {
+        if (l.includes("roja"))
+            return "#E50822";
 
-                            const origenName =
-                                    estacionesMap[r.origen_id]
-                                    ? estacionesMap[r.origen_id].nombre
-                                    : "?";
+        if (l.includes("azul"))
+            return "#2980B9";
 
-                            const destinoName =
-                                    estacionesMap[r.destino_id]
-                                    ? estacionesMap[r.destino_id].nombre
-                                    : "?";
+        if (l.includes("verde"))
+            return "#27AE60";
 
-                            const km =
-                                    r.kilometros
-                                    ? r.kilometros.toFixed(1)
-                                    : (r.tiempo * 1.2).toFixed(1);
+        if (l.includes("amarilla"))
+            return "#F39C12";
 
-                            infoRutas += `
-                    <li>
-                        <b>Conexión:</b>
-                        ${origenName}
-                        →
-                        ${destinoName}
+        return "#7f8c8d";
+    }
 
-                        <br>
+    // Mantener render correcto en JavaFX
+    setInterval(() => {
+        map.invalidateSize();
+    }, 1500);
 
-                        <b>Tiempo:</b>
-                        ${r.tiempo} min
+</script>
 
-                        |
-
-                        <b>Distancia:</b>
-                        ${km} km
-                    </li>
-                `;
-                        }
-                    });
-
-                    if (infoRutas !== "") {
-
-                        infoRutas = `
-                <ul
-                    style="
-                        margin:5px 0;
-                        padding-left:15px;
-                        font-size:11px;
-                        max-height:100px;
-                        overflow-y:auto;
-                    "
-                >
-                    ${infoRutas}
-                </ul>
-            `;
-
-                    } else {
-
-                        infoRutas = `
-                <p
-                    style="
-                        margin:5px 0;
-                        font-size:11px;
-                        color:#7f8c8d;
-                    "
-                >
-                    Esta estación no tiene
-                    rutas conectadas actualmente.
-                </p>
-            `;
-                    }
-                    const colorHex =
-                            getHexColor(estacion.linea);
-
-                    const marker = L.marker([
-                        estacion.lat,
-                        estacion.lng
-                    ]).addTo(map);
-
-                    marker.bindPopup(`
-
-            <div
-                style="
-                    font-family:'Segoe UI', Arial;
-                    width:220px;
-                    line-height:1.4;
-                "
-            >
-
-                <h3
-                    style="
-                        margin:0 0 4px 0;
-                        color:#2c3e50;
-                        font-size:14px;
-                        border-bottom:1px solid #eee;
-                        padding-bottom:3px;
-                    "
-                >
-                    ${estacion.nombre}
-                </h3>
-
-                <p
-                    style="
-                        margin:4px 0 8px 0;
-                        font-size:11px;
-                    "
-                >
-                    <b>Línea:</b>
-
-                    <span
-                        style="
-                            background-color:${colorHex};
-                            color:white;
-                            padding:1px 5px;
-                            border-radius:3px;
-                            font-weight:bold;
-                            font-size:10px;
-                        "
-                    >
-                        ${estacion.linea}
-                    </span>
-                </p>
-
-                <h4
-                    style="
-                        margin:4px 0;
-                        color:#34495e;
-                        font-size:11px;
-                        font-weight:bold;
-                    "
-                >
-                    Rutas en esta Estación:
-                </h4>
-
-                ${infoRutas}
-
-            </div>
-        `);
-
-                    marcadores.push(marker);
-                });
-
-                // 4. Dibujar líneas de rutas (polilíneas)
-                rutas.forEach(ruta => {
-                    const origen = estacionesMap[ruta.origen_id];
-                    const destino = estacionesMap[ruta.destino_id];
-                    if (origen && destino) {
-                        const color = getHexColor(origen.linea);
-                        const km = (ruta.tiempo * 1.2).toFixed(1);
-
-                        const polyline = L.polyline([[origen.lat, origen.lng], [destino.lat, destino.lng]], {
-                            color: color,
-                            weight: 6,
-                            opacity: 0.85
-                        }).addTo(map);
-
-                        polyline.bindPopup(`
-                            <div style="font-family: 'Segoe UI', Arial, sans-serif; width: 180px; line-height: 1.4;">
-                                <h3 style="margin:0 0 4px 0; color:#2c3e50; font-size:13px; font-weight:bold; border-bottom:1px solid #eee; padding-bottom:3px;">Tramo de Ruta</h3>
-                                <p style="margin:3px 0; font-size:11px;"><b>Origen:</b> ${origen.nombre}</p>
-                                <p style="margin:3px 0; font-size:11px;"><b>Destino:</b> ${destino.nombre}</p>
-                                <p style="margin:3px 0; font-size:11px;"><b>Tiempo de viaje:</b> ${ruta.tiempo} min</p>
-                                <p style="margin:3px 0; font-size:11px;"><b>Distancia:</b> ${km} km</p>
-                            </div>
-                        `);
-                        polilineas.push(polyline);
-                    }
-                });
-
-                // 5. Ajustar el zoom automáticamente para ver todas las estaciones
-                if (estaciones.length > 0) {
-                    const latlngs = estaciones.map(e => [e.lat, e.lng]);
-                    const bounds = L.latLngBounds(latlngs);
-                    map.fitBounds(bounds, {padding: [40, 40]});
-                }
-            }
-
-            // Helper para resolver colores de las líneas
-            function getHexColor(lineaName) {
-                if (!lineaName)
-                    return "#7f8c8d";
-                const name = lineaName.toLowerCase();
-                if (name.includes("roja") || name.includes("rojo") || name.includes("red") || name.includes("e50"))
-                    return "#E50822";
-                if (name.includes("amarilla") || name.includes("amarillo") || name.includes("yellow") || name.includes("f39") || name.includes("ffc"))
-                    return "#F39C12";
-                if (name.includes("verde") || name.includes("green") || name.includes("27a"))
-                    return "#27AE60";
-                if (name.includes("azul") || name.includes("blue") || name.includes("298") || name.includes("00b"))
-                    return "#2980B9";
-                return name.startsWith("#") ? lineaName : "#7f8c8d";
-            }
-
-            // Bucle periódico para asegurar el redibujado si la interfaz Swing se estira o maximiza
-            setInterval(() => {
-                map.invalidateSize();
-            }, 1500);
-        </script>
-
-    </body>
+</body>
 </html>
