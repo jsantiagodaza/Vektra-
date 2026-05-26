@@ -17,6 +17,8 @@ public class AsignarVehiculo extends javax.swing.JFrame {
      */
     public AsignarVehiculo() {
         initComponents();
+        setResizable(false);
+        setLocationRelativeTo(null);
     }
 
     /**

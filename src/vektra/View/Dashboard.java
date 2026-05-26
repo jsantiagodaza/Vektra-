@@ -499,6 +499,30 @@ public class Dashboard extends javax.swing.JFrame {
         panelContenido.repaint();
     }
 
+    public void cargarPanelAnadirConductor() {
+        panelContenido.removeAll();
+        AnadirConductorView vista = new AnadirConductorView();
+        panelContenido.add(vista.getContentPane(), java.awt.BorderLayout.CENTER);
+        panelContenido.revalidate();
+        panelContenido.repaint();
+    }
+
+    public void cargarPanelAsignarVehiculo() {
+        panelContenido.removeAll();
+        AsignarVehiculo vista = new AsignarVehiculo();
+        panelContenido.add(vista.getContentPane(), java.awt.BorderLayout.CENTER);
+        panelContenido.revalidate();
+        panelContenido.repaint();
+    }
+
+    public void cargarPanelBorrarConductor() {
+        panelContenido.removeAll();
+        BorrarConductor vista = new BorrarConductor();
+        panelContenido.add(vista.getContentPane(), java.awt.BorderLayout.CENTER);
+        panelContenido.revalidate();
+        panelContenido.repaint();
+    }
+
     private void btnUbicacionesActionPerformed(java.awt.event.ActionEvent evt) {
         cargarPanelMapa();
     }

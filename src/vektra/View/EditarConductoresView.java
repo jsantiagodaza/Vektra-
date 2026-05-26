@@ -19,6 +19,17 @@ public class EditarConductoresView extends javax.swing.JFrame {
         initComponents();
         setResizable(false);
         setLocationRelativeTo(null);
+        
+        // Agregar el evento al botón rojo de BORRAR CONDUCTOR
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                java.awt.Window window = javax.swing.SwingUtilities.getWindowAncestor((java.awt.Component) evt.getSource());
+                if (window instanceof vektra.View.Dashboard) {
+                    ((vektra.View.Dashboard) window).cargarPanelBorrarConductor();
+                }
+            }
+        });
     }
 
     /**
@@ -215,11 +226,17 @@ public class EditarConductoresView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarConductorActionPerformed
-        // TODO add your handling code here:
+        java.awt.Window window = javax.swing.SwingUtilities.getWindowAncestor((java.awt.Component) evt.getSource());
+        if (window instanceof vektra.View.Dashboard) {
+            ((vektra.View.Dashboard) window).cargarPanelAnadirConductor();
+        }
     }//GEN-LAST:event_btnAgregarConductorActionPerformed
 
     private void btnAsignarConductoraVehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarConductoraVehiculoActionPerformed
-        // TODO add your handling code here:
+        java.awt.Window window = javax.swing.SwingUtilities.getWindowAncestor((java.awt.Component) evt.getSource());
+        if (window instanceof vektra.View.Dashboard) {
+            ((vektra.View.Dashboard) window).cargarPanelAsignarVehiculo();
+        }
     }//GEN-LAST:event_btnAsignarConductoraVehiculoActionPerformed
 
     /**

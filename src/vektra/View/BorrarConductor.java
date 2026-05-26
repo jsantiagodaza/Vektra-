@@ -17,6 +17,8 @@ public class BorrarConductor extends javax.swing.JFrame {
      */
     public BorrarConductor() {
         initComponents();
+        setResizable(false);
+        setLocationRelativeTo(null);
     }
 
     /**
