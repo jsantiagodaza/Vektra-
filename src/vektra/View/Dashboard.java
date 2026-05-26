@@ -134,7 +134,7 @@ public class Dashboard extends javax.swing.JFrame {
         DefaultListModel<String> modeloLista = new DefaultListModel<>();
 
         for (Ruta r : rutas) {
-            
+
             modeloLista.addElement(r.formatoUI());
         }
         MapaView mapa = new MapaView();
