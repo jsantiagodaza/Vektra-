@@ -74,6 +74,8 @@ public class AnadirConductorView extends javax.swing.JFrame {
                 .addGap(24, 24, 24))
         );
 
+        jPanel4.setBackground(new java.awt.Color(156, 242, 190));
+
         txtIDConductor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtIDConductorActionPerformed(evt);
@@ -94,6 +96,7 @@ public class AnadirConductorView extends javax.swing.JFrame {
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("REGISTRAR CONDUCTOR");
 
+        jLabel7.setBackground(new java.awt.Color(200, 242, 225));
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/VIKTORañadirconductorGRANDE (1).png"))); // NOI18N
         jLabel7.setText("jLabel7");
 
