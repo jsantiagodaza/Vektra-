@@ -137,7 +137,7 @@ public class MapaView extends JPanel {
          StringBuilder json = new StringBuilder("[");
          try (Connection con = Conexion.conectar();
               Statement stmt = con.createStatement();
-              ResultSet rs = stmt.executeQuery("SELECT id, estacion_origen_id, estacion_destino_id, tiempo_minutos FROM rutas")) {
+              ResultSet rs = stmt.executeQuery("SELECT id, estacion_origen_id, estacion_destino_id, tiempo_minutos, kilometro, color_linea, transbordo FROM rutas")) {
              boolean first = true;
              while (rs.next()) {
                  if (!first) {
@@ -148,7 +148,9 @@ public class MapaView extends JPanel {
                      .append("\"id\":").append(rs.getInt("id")).append(",")
                      .append("\"origen_id\":").append(rs.getInt("estacion_origen_id")).append(",")
                      .append("\"destino_id\":").append(rs.getInt("estacion_destino_id")).append(",")
-                     .append("\"tiempo\":").append(rs.getDouble("tiempo_minutos"))
+                     .append("\"tiempo\":").append(rs.getDouble("tiempo_minutos")).append(",")
+                     .append("\"color\":\"") .append(rs.getString("color_linea").replace("\"", "\\\"")).append(",")
+                     .append("\"transbordos\":") .append(rs.getInt("transbordos"))
                      .append("}");
              }
          } catch (Exception e) {
