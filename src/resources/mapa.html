@@ -40,30 +40,113 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // ESTACIONES
-        const estaciones = [
-            {
-                nombre: "Portal Norte",
-                lat: 10.4800,
-                lng: -73.2500
-            },
-            {
-                nombre: "Calle 72",
-                lat: 10.4700,
-                lng: -73.2400
-            },
-            {
-                nombre: "Portal Sur",
-                lat: 10.4500,
-                lng: -73.2300
-            }
-        ];
+        // Arreglo de capas agregadas dinámicamente para poder limpiarlas
+        let marcadores = [];
+        let polilineas = [];
 
-        // Añadir los marcadores en el mapa
-        estaciones.forEach(estacion => {
-            const marker = L.marker([estacion.lat, estacion.lng]).addTo(map);
-            marker.bindPopup(`<h3>${estacion.nombre}</h3>`);
-        });
+        // Función llamada desde JavaFX para cargar estaciones y rutas dinámicamente
+        function cargarDatos(estaciones, rutas) {
+            // 1. Limpiar elementos existentes del mapa
+            marcadores.forEach(m => map.removeLayer(m));
+            polilineas.forEach(p => map.removeLayer(p));
+            marcadores = [];
+            polilineas = [];
+
+            // 2. Mapear estaciones por su ID para búsquedas rápidas
+            const estacionesMap = {};
+            estaciones.forEach(e => {
+                estacionesMap[e.id] = e;
+            });
+
+            // 3. Dibujar marcadores de estaciones
+            estaciones.forEach(estacion => {
+                // Generar información detallada de conexiones para el popup de la estación
+                let infoRutas = "";
+                rutas.forEach(r => {
+                    if (r.origen_id === estacion.id || r.destino_id === estacion.id) {
+                        const origenName = estacionesMap[r.origen_id] ? estacionesMap[r.origen_id].nombre : "?";
+                        const destinoName = estacionesMap[r.destino_id] ? estacionesMap[r.destino_id].nombre : "?";
+                        const km = (r.tiempo * 1.2).toFixed(1);
+                        infoRutas += `<li><b>Conexión:</b> ${origenName} &rarr; ${destinoName}<br><b>Tiempo:</b> ${r.tiempo} min | <b>Distancia:</b> ${km} km</li>`;
+                    }
+                });
+
+                if (infoRutas !== "") {
+                    infoRutas = `<ul style="margin:5px 0; padding-left:15px; font-size:11px; max-height:100px; overflow-y:auto;">${infoRutas}</ul>`;
+                } else {
+                    infoRutas = "<p style='margin:5px 0; font-size:11px; color:#7f8c8d;'>Esta estación no tiene rutas conectadas actualmente.</p>";
+                }
+
+                const colorHex = getHexColor(estacion.linea);
+
+                // Crear el marcador en el mapa
+                const marker = L.marker([estacion.lat, estacion.lng]).addTo(map);
+                marker.bindPopup(`
+                    <div style="font-family: 'Segoe UI', Arial, sans-serif; width: 220px; line-height: 1.4;">
+                        <h3 style="margin:0 0 4px 0; color:#2c3e50; font-size:14px; border-bottom:1px solid #eee; padding-bottom:3px;">${estacion.nombre}</h3>
+                        <p style="margin:4px 0 8px 0; font-size:11px;">
+                            <b>Línea:</b> 
+                            <span style="background-color:${colorHex}; color:white; padding:1px 5px; border-radius:3px; font-weight:bold; font-size:10px;">
+                                ${estacion.linea}
+                            </span>
+                        </p>
+                        <h4 style="margin:4px 0; color:#34495e; font-size:11px; font-weight:bold;">Rutas en esta Estación:</h4>
+                        ${infoRutas}
+                    </div>
+                `);
+                marcadores.push(marker);
+            });
+
+            // 4. Dibujar líneas de rutas (polilíneas)
+            rutas.forEach(ruta => {
+                const origen = estacionesMap[ruta.origen_id];
+                const destino = estacionesMap[ruta.destino_id];
+                if (origen && destino) {
+                    const color = getHexColor(origen.linea);
+                    const km = (ruta.tiempo * 1.2).toFixed(1);
+                    
+                    const polyline = L.polyline([[origen.lat, origen.lng], [destino.lat, destino.lng]], {
+                        color: color,
+                        weight: 6,
+                        opacity: 0.85
+                    }).addTo(map);
+
+                    polyline.bindPopup(`
+                        <div style="font-family: 'Segoe UI', Arial, sans-serif; width: 180px; line-height: 1.4;">
+                            <h3 style="margin:0 0 4px 0; color:#2c3e50; font-size:13px; font-weight:bold; border-bottom:1px solid #eee; padding-bottom:3px;">Tramo de Ruta</h3>
+                            <p style="margin:3px 0; font-size:11px;"><b>Origen:</b> ${origen.nombre}</p>
+                            <p style="margin:3px 0; font-size:11px;"><b>Destino:</b> ${destino.nombre}</p>
+                            <p style="margin:3px 0; font-size:11px;"><b>Tiempo de viaje:</b> ${ruta.tiempo} min</p>
+                            <p style="margin:3px 0; font-size:11px;"><b>Distancia:</b> ${km} km</p>
+                        </div>
+                    `);
+                    polilineas.push(polyline);
+                }
+            });
+
+            // 5. Ajustar el zoom automáticamente para ver todas las estaciones
+            if (estaciones.length > 0) {
+                const latlngs = estaciones.map(e => [e.lat, e.lng]);
+                const bounds = L.latLngBounds(latlngs);
+                map.fitBounds(bounds, { padding: [40, 40] });
+            }
+        }
+
+        // Helper para resolver colores de las líneas
+        function getHexColor(lineaName) {
+            if (!lineaName) return "#7f8c8d";
+            const name = lineaName.toLowerCase();
+            if (name.includes("roja") || name.includes("rojo") || name.includes("red") || name.includes("e50")) return "#E50822";
+            if (name.includes("amarilla") || name.includes("amarillo") || name.includes("yellow") || name.includes("f39") || name.includes("ffc")) return "#F39C12";
+            if (name.includes("verde") || name.includes("green") || name.includes("27a")) return "#27AE60";
+            if (name.includes("azul") || name.includes("blue") || name.includes("298") || name.includes("00b")) return "#2980B9";
+            return name.startsWith("#") ? lineaName : "#7f8c8d";
+        }
+
+        // Bucle periódico para asegurar el redibujado si la interfaz Swing se estira o maximiza
+        setInterval(() => {
+            map.invalidateSize();
+        }, 1500);
     </script>
 
 </body>
