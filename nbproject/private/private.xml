@@ -5,10 +5,12 @@
         <group>
             <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/View/EditarConductoresView.java</file>
             <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/View/Dashboard.java</file>
-            <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/resources/mapa.html</file>
-            <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/View/MapaValleduparView.java</file>
             <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/View/Login.java</file>
-            <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/Dao/ConexionBD.java</file>
+            <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/View/TicketsActivosView.java</file>
+            <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/View/AnadirConductorView.java</file>
+            <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/View/ConductoresView.java</file>
+            <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/vektra/View/BorrarConductor.java</file>
+            <file>file:/C:/Users/santi/OneDrive/Documents/NetBeansProjects/Vektra-/src/resources/mapa.html</file>
         </group>
     </open-files>
 </project-private>
