@@ -45,7 +45,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="939" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="937" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -107,14 +107,14 @@
             <Component class="javax.swing.JButton" name="btnDashboardInicial">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/vektra/View/Imagenes/ICONS CANVA/HUB.png"/>
+                  <Image iconType="3" name="/vektra/View/Imagenes/ICONS CANVA/HUBico.png"/>
                 </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btnGenerarticket">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/vektra/View/Imagenes/ICONS CANVA/TICKET.png"/>
+                  <Image iconType="3" name="/vektra/View/Imagenes/ICONS CANVA/ticketsico (1) (1).png"/>
                 </Property>
               </Properties>
               <Events>
@@ -124,21 +124,21 @@
             <Component class="javax.swing.JButton" name="btnMapadeValledupar">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/vektra/View/Imagenes/ICONS CANVA/RUTAS.png"/>
+                  <Image iconType="3" name="/vektra/View/Imagenes/ICONS CANVA/MAPAico.png"/>
                 </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btnEditarConductoresdelaEmpresa">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/vektra/View/Imagenes/ICONS CANVA/USUARIOS.png"/>
+                  <Image iconType="3" name="/vektra/View/Imagenes/ICONS CANVA/USUARIOico.png"/>
                 </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btnGestionRutas">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/vektra/View/Imagenes/ICONS CANVA/MAPA.png"/>
+                  <Image iconType="3" name="/vektra/View/Imagenes/ICONS CANVA/RUTASico.png"/>
                 </Property>
               </Properties>
               <Events>
@@ -148,14 +148,14 @@
             <Component class="javax.swing.JButton" name="btnCerrar">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/vektra/View/Imagenes/ICONS CANVA/SALIR Y CERRAR.png"/>
+                  <Image iconType="3" name="/vektra/View/Imagenes/ICONS CANVA/salirico.png"/>
                 </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btnTustickets">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/vektra/View/Imagenes/ICONS CANVA/DOCS.png"/>
+                  <Image iconType="3" name="/vektra/View/Imagenes/ICONS CANVA/TUSTICKETSico.png"/>
                 </Property>
               </Properties>
             </Component>

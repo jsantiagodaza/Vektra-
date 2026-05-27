@@ -17,6 +17,71 @@ public class MainFrameView extends javax.swing.JFrame {
      */
     public MainFrameView() {
         initComponents();
+        initStyles(); // Llama al método para aplicar los estilos minimalistas
+    }
+
+    private void initStyles() {
+        // Color oscuro cuando el botón es seleccionado
+        java.awt.Color colorSeleccionado = new java.awt.Color(40, 44, 52); // Negro/gris oscuro
+        java.awt.Color colorHover = new java.awt.Color(240, 240, 240); // Gris claro
+
+        // Lista de todos los botones del sidebar
+        javax.swing.JButton[] botones = {
+            btnDashboardInicial, btnGenerarticket, btnTustickets, 
+            btnMapadeValledupar, btnEditarConductoresdelaEmpresa, 
+            btnGestionRutas, btnCerrar
+        };
+
+        for (javax.swing.JButton btn : botones) {
+            // Quitar bordes y fondo por defecto
+            btn.setBorderPainted(false);
+            btn.setFocusPainted(false);
+            btn.setContentAreaFilled(false);
+            btn.setOpaque(false); // Debe ser false para dibujar nuestros bordes redondeados
+            btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            btn.putClientProperty("seleccionado", false);
+
+            // Reemplazar la forma de dibujarse del botón para lograr bordes redondeados
+            btn.setUI(new javax.swing.plaf.basic.BasicButtonUI() {
+                @Override
+                public void paint(java.awt.Graphics g, javax.swing.JComponent c) {
+                    java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+                    // Antialiasing para que los bordes redondeados se vean suaves y no pixelados
+                    g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+
+                    Boolean seleccionado = (Boolean) c.getClientProperty("seleccionado");
+                    javax.swing.ButtonModel modelo = ((javax.swing.JButton) c).getModel();
+
+                    // Dibujar el fondo redondeado según el estado
+                    if (seleccionado != null && seleccionado) {
+                        g2.setColor(colorSeleccionado);
+                        // fillRoundRect(x, y, width, height, arcWidth, arcHeight)
+                        // Dejamos 10px de margen horizontal y 5px vertical para que no ocupe todo el ancho
+                        g2.fillRoundRect(10, 5, c.getWidth() - 20, c.getHeight() - 10, 15, 15);
+                    } else if (modelo.isRollover()) {
+                        g2.setColor(colorHover);
+                        g2.fillRoundRect(10, 5, c.getWidth() - 20, c.getHeight() - 10, 15, 15);
+                    }
+
+                    super.paint(g2, c); // Dibuja el icono encima
+                    g2.dispose();
+                }
+            });
+
+            // Evento para cambiar el estado al hacer clic
+            btn.addActionListener(e -> {
+                for (javax.swing.JButton b : botones) {
+                    b.putClientProperty("seleccionado", false);
+                    b.repaint();
+                }
+                btn.putClientProperty("seleccionado", true);
+                btn.repaint();
+            });
+        }
+        
+        // Seleccionar el primer botón por defecto
+        btnDashboardInicial.putClientProperty("seleccionado", true);
+        btnDashboardInicial.repaint();
     }
 
     /**
@@ -44,29 +109,29 @@ public class MainFrameView extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        btnDashboardInicial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/HUB.png"))); // NOI18N
+        btnDashboardInicial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/HUBico.png"))); // NOI18N
 
-        btnGenerarticket.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/TICKET.png"))); // NOI18N
+        btnGenerarticket.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/ticketsico (1) (1).png"))); // NOI18N
         btnGenerarticket.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGenerarticketActionPerformed(evt);
             }
         });
 
-        btnMapadeValledupar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/RUTAS.png"))); // NOI18N
+        btnMapadeValledupar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/MAPAico.png"))); // NOI18N
 
-        btnEditarConductoresdelaEmpresa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/USUARIOS.png"))); // NOI18N
+        btnEditarConductoresdelaEmpresa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/USUARIOico.png"))); // NOI18N
 
-        btnGestionRutas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/MAPA.png"))); // NOI18N
+        btnGestionRutas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/RUTASico.png"))); // NOI18N
         btnGestionRutas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGestionRutasActionPerformed(evt);
             }
         });
 
-        btnCerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/SALIR Y CERRAR.png"))); // NOI18N
+        btnCerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/salirico.png"))); // NOI18N
 
-        btnTustickets.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/DOCS.png"))); // NOI18N
+        btnTustickets.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/TUSTICKETSico.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -110,7 +175,7 @@ public class MainFrameView extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 939, Short.MAX_VALUE))
+                .addGap(0, 937, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
