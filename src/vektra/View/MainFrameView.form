@@ -45,7 +45,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="941" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="939" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -69,13 +69,13 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btnDashboardInicial" min="-2" max="-2" attributes="0"/>
                           <Component id="btnMapadeValledupar" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="btnEditarConductoresdelaEmpresa" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnConductoresdelaempresa" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="btnGenerarticket" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="btnGestionRutas" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="btnCerrar" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnDashboardInicial" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnTustickets" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="9" max="32767" attributes="0"/>
                   </Group>
@@ -84,48 +84,80 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace pref="80" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
                       <Component id="btnDashboardInicial" min="-2" pref="57" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace pref="32" max="32767" attributes="0"/>
                       <Component id="btnGenerarticket" min="-2" pref="57" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                      <Component id="btnTustickets" min="-2" pref="57" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                       <Component id="btnMapadeValledupar" min="-2" pref="57" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                       <Component id="btnEditarConductoresdelaEmpresa" min="-2" pref="57" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="btnConductoresdelaempresa" min="-2" pref="57" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="btnGestionRutas" min="-2" pref="57" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="btnCerrar" min="-2" pref="57" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                      <Component id="btnGestionRutas" min="-2" pref="57" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                      <Component id="btnCerrar" min="-2" pref="57" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
             <Component class="javax.swing.JButton" name="btnDashboardInicial">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/vektra/View/Imagenes/ICONS CANVA/HUB.png"/>
+                </Property>
+              </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btnGenerarticket">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/vektra/View/Imagenes/ICONS CANVA/TICKET.png"/>
+                </Property>
+              </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGenerarticketActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnMapadeValledupar">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/vektra/View/Imagenes/ICONS CANVA/RUTAS.png"/>
+                </Property>
+              </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btnEditarConductoresdelaEmpresa">
-            </Component>
-            <Component class="javax.swing.JButton" name="btnConductoresdelaempresa">
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnConductoresdelaempresaActionPerformed"/>
-              </Events>
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/vektra/View/Imagenes/ICONS CANVA/USUARIOS.png"/>
+                </Property>
+              </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btnGestionRutas">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/vektra/View/Imagenes/ICONS CANVA/MAPA.png"/>
+                </Property>
+              </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGestionRutasActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnCerrar">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/vektra/View/Imagenes/ICONS CANVA/SALIR Y CERRAR.png"/>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnTustickets">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/vektra/View/Imagenes/ICONS CANVA/DOCS.png"/>
+                </Property>
+              </Properties>
             </Component>
           </SubComponents>
         </Container>

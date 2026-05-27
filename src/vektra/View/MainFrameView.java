@@ -34,9 +34,9 @@ public class MainFrameView extends javax.swing.JFrame {
         btnGenerarticket = new javax.swing.JButton();
         btnMapadeValledupar = new javax.swing.JButton();
         btnEditarConductoresdelaEmpresa = new javax.swing.JButton();
-        btnConductoresdelaempresa = new javax.swing.JButton();
         btnGestionRutas = new javax.swing.JButton();
         btnCerrar = new javax.swing.JButton();
+        btnTustickets = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -44,23 +44,29 @@ public class MainFrameView extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
+        btnDashboardInicial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/HUB.png"))); // NOI18N
+
+        btnGenerarticket.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/TICKET.png"))); // NOI18N
         btnGenerarticket.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGenerarticketActionPerformed(evt);
             }
         });
 
-        btnConductoresdelaempresa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnConductoresdelaempresaActionPerformed(evt);
-            }
-        });
+        btnMapadeValledupar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/RUTAS.png"))); // NOI18N
 
+        btnEditarConductoresdelaEmpresa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/USUARIOS.png"))); // NOI18N
+
+        btnGestionRutas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/MAPA.png"))); // NOI18N
         btnGestionRutas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGestionRutasActionPerformed(evt);
             }
         });
+
+        btnCerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/SALIR Y CERRAR.png"))); // NOI18N
+
+        btnTustickets.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/DOCS.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -69,33 +75,33 @@ public class MainFrameView extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnDashboardInicial)
                     .addComponent(btnMapadeValledupar)
                     .addComponent(btnEditarConductoresdelaEmpresa)
-                    .addComponent(btnConductoresdelaempresa)
                     .addComponent(btnGenerarticket)
                     .addComponent(btnGestionRutas)
-                    .addComponent(btnCerrar))
+                    .addComponent(btnCerrar)
+                    .addComponent(btnDashboardInicial)
+                    .addComponent(btnTustickets))
                 .addContainerGap(9, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(80, Short.MAX_VALUE)
+                .addGap(29, 29, 29)
                 .addComponent(btnDashboardInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addComponent(btnGenerarticket, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(35, 35, 35)
+                .addComponent(btnTustickets, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
                 .addComponent(btnMapadeValledupar, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(30, 30, 30)
                 .addComponent(btnEditarConductoresdelaEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnConductoresdelaempresa, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(28, 28, 28)
                 .addComponent(btnGestionRutas, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(29, 29, 29)
                 .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -104,7 +110,7 @@ public class MainFrameView extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 941, Short.MAX_VALUE))
+                .addGap(0, 939, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,10 +134,6 @@ public class MainFrameView extends javax.swing.JFrame {
     private void btnGenerarticketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarticketActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnGenerarticketActionPerformed
-
-    private void btnConductoresdelaempresaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConductoresdelaempresaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnConductoresdelaempresaActionPerformed
 
     private void btnGestionRutasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionRutasActionPerformed
         // TODO add your handling code here:
@@ -164,12 +166,12 @@ public class MainFrameView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCerrar;
-    private javax.swing.JButton btnConductoresdelaempresa;
     private javax.swing.JButton btnDashboardInicial;
     private javax.swing.JButton btnEditarConductoresdelaEmpresa;
     private javax.swing.JButton btnGenerarticket;
     private javax.swing.JButton btnGestionRutas;
     private javax.swing.JButton btnMapadeValledupar;
+    private javax.swing.JButton btnTustickets;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
