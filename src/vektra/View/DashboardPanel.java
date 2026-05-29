@@ -15,6 +15,8 @@ public class DashboardPanel extends javax.swing.JPanel {
      */
     public DashboardPanel() {
         initComponents();
+        // Aplicar la fuente personalizada a todo el panel y sus hijos
+        vektra.Util.FontUtil.applyCustomFont(this);
     }
 
     /**
