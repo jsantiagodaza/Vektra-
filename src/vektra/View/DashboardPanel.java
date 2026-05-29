@@ -17,6 +17,40 @@ public class DashboardPanel extends javax.swing.JPanel {
         initComponents();
         // Aplicar la fuente personalizada a todo el panel y sus hijos
         vektra.Util.FontUtil.applyCustomFont(this);
+        // Aplicar los estilos de bordes redondeados a las tarjetas
+        initStyles();
+    }
+
+    private void initStyles() {
+        // Lista de las tarjetas (paneles) que queremos redondear
+        javax.swing.JPanel[] tarjetas = {
+            PanelEstacionesActivas, PanelPasajerosenCirculacion, 
+            PanelTicketsActivos, PanelLineasActivas, PanelTicketsHoy
+        };
+
+        for (javax.swing.JPanel tarjeta : tarjetas) {
+            // Hacemos que el fondo cuadrado por defecto no se dibuje
+            tarjeta.setOpaque(false);
+            
+            // Le inyectamos una forma de dibujarse personalizada (redondeada)
+            tarjeta.setUI(new javax.swing.plaf.basic.BasicPanelUI() {
+                @Override
+                public void paint(java.awt.Graphics g, javax.swing.JComponent c) {
+                    java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+                    // Antialiasing para que los bordes se vean suaves
+                    g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                    
+                    // Tomamos el color de fondo gris claro que configuraste en NetBeans
+                    g2.setColor(c.getBackground());
+                    
+                    // Dibujamos el fondo redondeado (radio de 25 píxeles)
+                    g2.fillRoundRect(0, 0, c.getWidth(), c.getHeight(), 25, 25);
+                    
+                    super.paint(g2, c); // Dibuja los textos encima
+                    g2.dispose();
+                }
+            });
+        }
     }
 
     /**
