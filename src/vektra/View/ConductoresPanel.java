@@ -4,6 +4,8 @@
  */
 package vektra.View;
 
+
+
 /**
  *
  * @author santi
@@ -13,6 +15,8 @@ public class ConductoresPanel extends javax.swing.JPanel {
     /**
      * Creates new form ConductoresPanel
      */
+  
+    
     public ConductoresPanel() {
         initComponents();
     }
@@ -135,9 +139,15 @@ public class ConductoresPanel extends javax.swing.JPanel {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+    private MainFrameView mainFrame; 
+    public ConductoresPanel(MainFrameView frame) {
+    this.mainFrame = frame;
+    initComponents();
+}
 
     private void btnAnadirConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnadirConductorActionPerformed
-        // TODO add your handling code here:
+        
+        
     }//GEN-LAST:event_btnAnadirConductorActionPerformed
 
     private void btnEliminarConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarConductorActionPerformed
@@ -148,6 +158,7 @@ public class ConductoresPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAsignaraMetroActionPerformed
 
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PaneldeConductores;
