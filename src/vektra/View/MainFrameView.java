@@ -10,7 +10,7 @@ package vektra.View;
  */
 public class MainFrameView extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainFrameView.class.getName());
+
 
     /**
      * Creates new form MainFrameView
@@ -22,7 +22,7 @@ public class MainFrameView extends javax.swing.JFrame {
     }
 private javax.swing.JPanel panelContenido;
 
-private void mostrarPanel(javax.swing.JPanel panel) {
+public void mostrarPanel(javax.swing.JPanel panel) {
     panelContenido.removeAll();
     panelContenido.add(panel, java.awt.BorderLayout.CENTER);
     panelContenido.revalidate();
@@ -30,6 +30,8 @@ private void mostrarPanel(javax.swing.JPanel panel) {
 }
 
 private void initContenido() {
+    btnEditarConductoresdelaEmpresa.addActionListener(e -> mostrarPanel(new ConductoresPanel(this)));
+    
     // Panel contenedor que ocupa todo el espacio derecho
     panelContenido = new javax.swing.JPanel(new java.awt.BorderLayout());
     panelContenido.setBackground(new java.awt.Color(255, 255, 255));
@@ -44,7 +46,6 @@ private void initContenido() {
      btnDashboardInicial.addActionListener(e -> mostrarPanel(new DashboardPanel()));
      btnGenerarticket.addActionListener(e -> mostrarPanel(new ComprarTicketPanel()));
     btnTustickets.addActionListener(e -> mostrarPanel(new TicketsActivosPanel()));
-    btnEditarConductoresdelaEmpresa.addActionListener(e -> mostrarPanel(new ConductoresPanel()));
     btnGestionRutas.addActionListener(e -> mostrarPanel(new MapaPanel()));
     btnCerrar.addActionListener(e -> {
         int confirm = javax.swing.JOptionPane.showConfirmDialog(
@@ -260,7 +261,7 @@ private void initContenido() {
                 }
             }
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
+            //logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 

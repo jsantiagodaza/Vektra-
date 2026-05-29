@@ -16,10 +16,12 @@ public class ConductoresPanel extends javax.swing.JPanel {
      * Creates new form ConductoresPanel
      */
   
+    private MainFrameView mainFrame;
     
-    public ConductoresPanel() {
-        initComponents();
-    }
+    public ConductoresPanel(MainFrameView frame) {
+    this.mainFrame = frame;
+    initComponents();
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -139,23 +141,21 @@ public class ConductoresPanel extends javax.swing.JPanel {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
-    private MainFrameView mainFrame; 
-    public ConductoresPanel(MainFrameView frame) {
-    this.mainFrame = frame;
-    initComponents();
-}
+    
 
     private void btnAnadirConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnadirConductorActionPerformed
         
-        
+        mainFrame.mostrarPanel(new AnadirConductorPanel());
     }//GEN-LAST:event_btnAnadirConductorActionPerformed
 
     private void btnEliminarConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarConductorActionPerformed
         // TODO add your handling code here:
+        mainFrame.mostrarPanel(new BorrarConductorPanel());
     }//GEN-LAST:event_btnEliminarConductorActionPerformed
 
     private void btnAsignaraMetroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignaraMetroActionPerformed
         // TODO add your handling code here:
+        mainFrame.mostrarPanel(new AsignaraVehiculoPanel());
     }//GEN-LAST:event_btnAsignaraMetroActionPerformed
 
     
