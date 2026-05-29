@@ -18,7 +18,30 @@ public class MainFrameView extends javax.swing.JFrame {
     public MainFrameView() {
         initComponents();
         initStyles(); // Llama al método para aplicar los estilos minimalistas
+        initContenido();
     }
+private javax.swing.JPanel panelContenido;
+
+private void mostrarPanel(javax.swing.JPanel panel) {
+    panelContenido.removeAll();
+    panelContenido.add(panel, java.awt.BorderLayout.CENTER);
+    panelContenido.revalidate();
+    panelContenido.repaint();
+}
+
+private void initContenido() {
+    // Panel contenedor que ocupa todo el espacio derecho
+    panelContenido = new javax.swing.JPanel(new java.awt.BorderLayout());
+    panelContenido.setBackground(new java.awt.Color(255, 255, 255));
+    
+    // Agregar al lado derecho del sidebar
+    jPanel1.setLayout(new java.awt.BorderLayout());
+    jPanel1.add(jPanel2, java.awt.BorderLayout.WEST);
+    jPanel1.add(panelContenido, java.awt.BorderLayout.CENTER);
+    
+    // Cargar dashboard por defecto
+    mostrarPanel(new DashboardPanel());
+}
 
     private void initStyles() {
         // Color oscuro cuando el botón es seleccionado
@@ -199,7 +222,9 @@ public class MainFrameView extends javax.swing.JFrame {
     private void btnGenerarticketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarticketActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnGenerarticketActionPerformed
-
+private void btnDashboardInicial(java.awt.event.ActionEvent evt) {
+btnDashboardInicial.addActionListener(e -> mostrarPanel(new DashboardPanel()));
+}
     private void btnGestionRutasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionRutasActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnGestionRutasActionPerformed
