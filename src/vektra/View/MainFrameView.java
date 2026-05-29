@@ -41,6 +41,7 @@ private void initContenido() {
     
     // Cargar dashboard por defecto
     mostrarPanel(new DashboardPanel());
+     btnDashboardInicial.addActionListener(e -> mostrarPanel(new DashboardPanel()));
 }
 
     private void initStyles() {
