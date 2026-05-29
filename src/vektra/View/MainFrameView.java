@@ -42,6 +42,21 @@ private void initContenido() {
     // Cargar dashboard por defecto
     mostrarPanel(new DashboardPanel());
      btnDashboardInicial.addActionListener(e -> mostrarPanel(new DashboardPanel()));
+     btnGenerarticket.addActionListener(e -> mostrarPanel(new ComprarTicketPanel()));
+    btnTustickets.addActionListener(e -> mostrarPanel(new TicketsActivosPanel()));
+    btnEditarConductoresdelaEmpresa.addActionListener(e -> mostrarPanel(new ConductoresPanel()));
+    btnGestionRutas.addActionListener(e -> mostrarPanel(new RutasPanel()));
+    btnCerrar.addActionListener(e -> {
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(
+            this, 
+            "¿Estás seguro que deseas salir?", 
+            "Cerrar Vektra", 
+            javax.swing.JOptionPane.YES_NO_OPTION
+        );
+        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+    });
 }
 
     private void initStyles() {
@@ -223,9 +238,7 @@ private void initContenido() {
     private void btnGenerarticketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarticketActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnGenerarticketActionPerformed
-private void btnDashboardInicial(java.awt.event.ActionEvent evt) {
-btnDashboardInicial.addActionListener(e -> mostrarPanel(new DashboardPanel()));
-}
+
     private void btnGestionRutasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionRutasActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnGestionRutasActionPerformed
