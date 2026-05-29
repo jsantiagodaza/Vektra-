@@ -45,7 +45,7 @@ private void initContenido() {
      btnGenerarticket.addActionListener(e -> mostrarPanel(new ComprarTicketPanel()));
     btnTustickets.addActionListener(e -> mostrarPanel(new TicketsActivosPanel()));
     btnEditarConductoresdelaEmpresa.addActionListener(e -> mostrarPanel(new ConductoresPanel()));
-    btnGestionRutas.addActionListener(e -> mostrarPanel(new RutasPanel()));
+    btnGestionRutas.addActionListener(e -> mostrarPanel(new MapaPanel()));
     btnCerrar.addActionListener(e -> {
         int confirm = javax.swing.JOptionPane.showConfirmDialog(
             this, 
