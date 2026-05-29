@@ -9,66 +9,64 @@ package vektra.View;
  * @author santi
  */
 public class MainFrameView extends javax.swing.JFrame {
-    
-
 
     /**
      * Creates new form MainFrameView
      */
     public MainFrameView() {
         initComponents();
-        initStyles(); // Llama al método para aplicar los estilos minimalistas
-        initContenido();
+        iniciarEstilos(); // Llama al método para aplicar los estilos minimalistas
+        iniciarContenido();
     }
-private javax.swing.JPanel panelContenido;
+    private javax.swing.JPanel panelContenido;
 
-public void mostrarPanel(javax.swing.JPanel panel) {
-    panelContenido.removeAll();
-    panelContenido.add(panel, java.awt.BorderLayout.CENTER);
-    panelContenido.revalidate();
-    panelContenido.repaint();
-}
+    public void mostrarPanel(javax.swing.JPanel panel) {
+        panelContenido.removeAll();
+        panelContenido.add(panel, java.awt.BorderLayout.CENTER);
+        panelContenido.revalidate();
+        panelContenido.repaint();
+    }
 
-private void initContenido() {
-    btnEditarConductoresdelaEmpresa.addActionListener(e -> mostrarPanel(new ConductoresPanel(this)));
-    
-    // Panel contenedor que ocupa todo el espacio derecho
-    panelContenido = new javax.swing.JPanel(new java.awt.BorderLayout());
-    panelContenido.setBackground(new java.awt.Color(255, 255, 255));
-    
-    // Agregar al lado derecho del sidebar
-    jPanel1.setLayout(new java.awt.BorderLayout());
-    jPanel1.add(jPanel2, java.awt.BorderLayout.WEST);
-    jPanel1.add(panelContenido, java.awt.BorderLayout.CENTER);
-    
-    // Cargar dashboard por defecto
-    mostrarPanel(new DashboardPanel());
-     btnDashboardInicial.addActionListener(e -> mostrarPanel(new DashboardPanel()));
-     btnGenerarticket.addActionListener(e -> mostrarPanel(new ComprarTicketPanel()));
-    btnTustickets.addActionListener(e -> mostrarPanel(new TicketsActivosPanel()));
-    btnGestionRutas.addActionListener(e -> mostrarPanel(new MapaPanel()));
-    btnCerrar.addActionListener(e -> {
-        int confirm = javax.swing.JOptionPane.showConfirmDialog(
-            this, 
-            "¿Estás seguro que deseas salir?", 
-            "Cerrar Vektra", 
-            javax.swing.JOptionPane.YES_NO_OPTION
-        );
-        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
-            System.exit(0);
-        }
-    });
-}
+    private void iniciarContenido() {
+        btnEditarConductoresdelaEmpresa.addActionListener(e -> mostrarPanel(new ConductoresPanel(this)));
 
-    private void initStyles() {
+        // Panel contenedor que ocupa todo el espacio derecho
+        panelContenido = new javax.swing.JPanel(new java.awt.BorderLayout());
+        panelContenido.setBackground(new java.awt.Color(255, 255, 255));
+
+        // Agregar al lado derecho del sidebar
+        jPanel1.setLayout(new java.awt.BorderLayout());
+        jPanel1.add(jPanel2, java.awt.BorderLayout.WEST);
+        jPanel1.add(panelContenido, java.awt.BorderLayout.CENTER);
+
+        // Cargar dashboard por defecto
+        mostrarPanel(new DashboardPanel());
+        btnDashboardInicial.addActionListener(e -> mostrarPanel(new DashboardPanel()));
+        btnGenerarticket.addActionListener(e -> mostrarPanel(new ComprarTicketPanel()));
+        btnTustickets.addActionListener(e -> mostrarPanel(new TicketsActivosPanel()));
+        btnGestionRutas.addActionListener(e -> mostrarPanel(new MapaPanel()));
+        btnCerrar.addActionListener(e -> {
+            int confirm = javax.swing.JOptionPane.showConfirmDialog(
+                    this,
+                    "¿Estás seguro que deseas salir?",
+                    "Cerrar Vektra",
+                    javax.swing.JOptionPane.YES_NO_OPTION
+            );
+            if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+                System.exit(0);
+            }
+        });
+    }
+
+    private void iniciarEstilos() {
         // Color oscuro cuando el botón es seleccionado
         java.awt.Color colorSeleccionado = new java.awt.Color(40, 44, 52); // Negro/gris oscuro
         java.awt.Color colorHover = new java.awt.Color(240, 240, 240); // Gris claro
 
         // Lista de todos los botones del sidebar
         javax.swing.JButton[] botones = {
-            btnDashboardInicial, btnGenerarticket, btnTustickets, 
-            btnMapadeValledupar, btnEditarConductoresdelaEmpresa, 
+            btnDashboardInicial, btnGenerarticket, btnTustickets,
+            btnMapadeValledupar, btnEditarConductoresdelaEmpresa,
             btnGestionRutas, btnCerrar
         };
 
@@ -118,7 +116,7 @@ private void initContenido() {
                 btn.repaint();
             });
         }
-        
+
         // Seleccionar el primer botón por defecto
         btnDashboardInicial.putClientProperty("seleccionado", true);
         btnDashboardInicial.repaint();
