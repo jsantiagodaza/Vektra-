@@ -36,7 +36,7 @@ public class AsignaraVehiculoPanel extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        textareaConductoresDisponibles = new javax.swing.JTextArea();
         jLabel5 = new javax.swing.JLabel();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -73,9 +73,9 @@ public class AsignaraVehiculoPanel extends javax.swing.JPanel {
             }
         });
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        textareaConductoresDisponibles.setColumns(20);
+        textareaConductoresDisponibles.setRows(5);
+        jScrollPane1.setViewportView(textareaConductoresDisponibles);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -180,6 +180,6 @@ public class AsignaraVehiculoPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea textareaConductoresDisponibles;
     // End of variables declaration//GEN-END:variables
 }
