@@ -138,9 +138,9 @@ private void initContenido() {
         btnGenerarticket = new javax.swing.JButton();
         btnMapadeValledupar = new javax.swing.JButton();
         btnEditarConductoresdelaEmpresa = new javax.swing.JButton();
-        btnGestionRutas = new javax.swing.JButton();
         btnCerrar = new javax.swing.JButton();
         btnTustickets = new javax.swing.JButton();
+        btnGestionRutas = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -161,16 +161,16 @@ private void initContenido() {
 
         btnEditarConductoresdelaEmpresa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/USUARIOico.png"))); // NOI18N
 
+        btnCerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/salirico.png"))); // NOI18N
+
+        btnTustickets.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/TUSTICKETSico.png"))); // NOI18N
+
         btnGestionRutas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/RUTASico.png"))); // NOI18N
         btnGestionRutas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGestionRutasActionPerformed(evt);
             }
         });
-
-        btnCerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/salirico.png"))); // NOI18N
-
-        btnTustickets.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/TUSTICKETSico.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -182,10 +182,10 @@ private void initContenido() {
                     .addComponent(btnMapadeValledupar)
                     .addComponent(btnEditarConductoresdelaEmpresa)
                     .addComponent(btnGenerarticket)
-                    .addComponent(btnGestionRutas)
                     .addComponent(btnCerrar)
                     .addComponent(btnDashboardInicial)
-                    .addComponent(btnTustickets))
+                    .addComponent(btnTustickets)
+                    .addComponent(btnGestionRutas))
                 .addContainerGap(9, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -196,13 +196,13 @@ private void initContenido() {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addComponent(btnGenerarticket, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35)
+                .addComponent(btnGestionRutas, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
                 .addComponent(btnTustickets, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addComponent(btnMapadeValledupar, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addGap(28, 28, 28)
                 .addComponent(btnEditarConductoresdelaEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28)
-                .addComponent(btnGestionRutas, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnMapadeValledupar, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29)
                 .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
