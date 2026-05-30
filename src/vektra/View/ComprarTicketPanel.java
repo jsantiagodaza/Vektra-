@@ -33,10 +33,10 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
+        nombreClientetxt = new javax.swing.JTextField();
+        idClientetxt = new javax.swing.JTextField();
+        emailClientetxt = new javax.swing.JTextField();
+        EdadporFechadeNacimientoClientetxt = new javax.swing.JTextField();
         btnGenerarTicket = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -64,30 +64,30 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
         jLabel6.setForeground(new java.awt.Color(153, 153, 153));
         jLabel6.setText("Fecha de Nacimiento:");
 
-        jTextField1.setBackground(new java.awt.Color(51, 51, 51));
-        jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField1.setForeground(new java.awt.Color(153, 153, 153));
-        jTextField1.setText("Ej. Juan Pérez");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        nombreClientetxt.setBackground(new java.awt.Color(51, 51, 51));
+        nombreClientetxt.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        nombreClientetxt.setForeground(new java.awt.Color(153, 153, 153));
+        nombreClientetxt.setText("Ej. Juan Pérez");
+        nombreClientetxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                nombreClientetxtActionPerformed(evt);
             }
         });
 
-        jTextField2.setBackground(new java.awt.Color(51, 51, 51));
-        jTextField2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField2.setForeground(new java.awt.Color(204, 204, 204));
-        jTextField2.setText("Ej. 1234567");
+        idClientetxt.setBackground(new java.awt.Color(51, 51, 51));
+        idClientetxt.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        idClientetxt.setForeground(new java.awt.Color(204, 204, 204));
+        idClientetxt.setText("Ej. 1234567");
 
-        jTextField3.setBackground(new java.awt.Color(51, 51, 51));
-        jTextField3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField3.setForeground(new java.awt.Color(153, 153, 153));
-        jTextField3.setText("tuincreiblecorreo123@ejemplo.com");
+        emailClientetxt.setBackground(new java.awt.Color(51, 51, 51));
+        emailClientetxt.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        emailClientetxt.setForeground(new java.awt.Color(153, 153, 153));
+        emailClientetxt.setText("tuincreiblecorreo123@ejemplo.com");
 
-        jTextField4.setBackground(new java.awt.Color(51, 51, 51));
-        jTextField4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField4.setForeground(new java.awt.Color(153, 153, 153));
-        jTextField4.setText("DD/MM/AAAA");
+        EdadporFechadeNacimientoClientetxt.setBackground(new java.awt.Color(51, 51, 51));
+        EdadporFechadeNacimientoClientetxt.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        EdadporFechadeNacimientoClientetxt.setForeground(new java.awt.Color(153, 153, 153));
+        EdadporFechadeNacimientoClientetxt.setText("DD/MM/AAAA");
 
         btnGenerarTicket.setBackground(new java.awt.Color(51, 51, 51));
         btnGenerarTicket.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -108,10 +108,10 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextField1)
-                        .addComponent(jTextField2)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 553, Short.MAX_VALUE)
-                        .addComponent(jTextField4))
+                        .addComponent(nombreClientetxt)
+                        .addComponent(idClientetxt)
+                        .addComponent(emailClientetxt, javax.swing.GroupLayout.DEFAULT_SIZE, 553, Short.MAX_VALUE)
+                        .addComponent(EdadporFechadeNacimientoClientetxt))
                     .addComponent(btnGenerarTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(344, Short.MAX_VALUE))
         );
@@ -125,19 +125,19 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
                 .addGap(45, 45, 45)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(nombreClientetxt, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(idClientetxt, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(emailClientetxt, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(EdadporFechadeNacimientoClientetxt, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addComponent(btnGenerarTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(18, Short.MAX_VALUE))
@@ -155,13 +155,16 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void nombreClientetxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreClientetxtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_nombreClientetxtActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField EdadporFechadeNacimientoClientetxt;
     private javax.swing.JButton btnGenerarTicket;
+    private javax.swing.JTextField emailClientetxt;
+    private javax.swing.JTextField idClientetxt;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -169,9 +172,6 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField nombreClientetxt;
     // End of variables declaration//GEN-END:variables
 }
