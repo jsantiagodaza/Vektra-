@@ -22,7 +22,7 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
         initValidaciones();
         btnGenerarTicket.addActionListener(e -> btnGenerarTicketActionPerformed(e));
     }
-
+ 
     private static final java.awt.Color COLOR_CAMPO = new java.awt.Color(51, 51, 51);
     private static final java.awt.Color COLOR_ERROR = new java.awt.Color(200, 50, 50);
     private static final java.awt.Color COLOR_OK    = new java.awt.Color(39, 174, 96);
@@ -47,6 +47,15 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
         configurarPlaceholder(idClientetxt, "Ej. 1234567");
         configurarPlaceholder(emailClientetxt, "tuincreiblecorreo123@ejemplo.com");
         configurarPlaceholder(EdadporFechadeNacimientoClientetxt, "DD/MM/AAAA");
+        // Añadir filtro para formatear la fecha automáticamente a dd/MM/aaaa
+        try {
+            javax.swing.text.Document d = EdadporFechadeNacimientoClientetxt.getDocument();
+            if (d instanceof javax.swing.text.AbstractDocument) {
+                ((javax.swing.text.AbstractDocument) d).setDocumentFilter(new DateDocumentFilter());
+            }
+        } catch (Exception ex) {
+            // no crítico
+        }
     }
 
     private void configurarPlaceholder(javax.swing.JTextField campo, String placeholder) {
@@ -94,9 +103,14 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
         EdadporFechadeNacimientoClientetxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
             String v = EdadporFechadeNacimientoClientetxt.getText().trim();
             if (v.isEmpty() || v.equals("DD/MM/AAAA")) { marcarCampo(EdadporFechadeNacimientoClientetxt, false); return; }
-            java.time.format.DateTimeFormatter fmt = java.time.format.DateTimeFormatter.ofPattern("d/M/uuuu");
+            // Extraer solo dígitos
+            String digits = v.replaceAll("\\D", "");
+            if (digits.length() != 8) { marcarCampo(EdadporFechadeNacimientoClientetxt, false); return; }
             try {
-                java.time.LocalDate dob = java.time.LocalDate.parse(v, fmt);
+                int day = Integer.parseInt(digits.substring(0, 2));
+                int month = Integer.parseInt(digits.substring(2, 4));
+                int year = Integer.parseInt(digits.substring(4, 8));
+                java.time.LocalDate dob = java.time.LocalDate.of(year, month, day);
                 java.time.LocalDate today = java.time.LocalDate.now();
                 int edad = java.time.Period.between(dob, today).getYears();
                 boolean valido = !dob.isAfter(today) && edad >= 0 && edad < 150;
@@ -158,6 +172,60 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
         @Override public void insertUpdate(javax.swing.event.DocumentEvent e)  { accion.run(); }
         @Override public void removeUpdate(javax.swing.event.DocumentEvent e)  { accion.run(); }
         @Override public void changedUpdate(javax.swing.event.DocumentEvent e) { accion.run(); }
+    }
+
+    // DocumentFilter para formatear la fecha a dd/MM/aaaa mientras se escribe
+    private static class DateDocumentFilter extends javax.swing.text.DocumentFilter {
+        @Override
+        public void insertString(FilterBypass fb, int offset, String string, javax.swing.text.AttributeSet attr) throws javax.swing.text.BadLocationException {
+            replace(fb, offset, 0, string, attr);
+        }
+
+        @Override
+        public void remove(FilterBypass fb, int offset, int length) throws javax.swing.text.BadLocationException {
+            javax.swing.text.Document doc = fb.getDocument();
+            String current = doc.getText(0, doc.getLength());
+            // eliminar y reformat
+            StringBuilder sb = new StringBuilder(current);
+            sb.delete(offset, offset + length);
+            String digits = sb.toString().replaceAll("\\D", "");
+            String formatted = formatDigits(digits);
+            fb.remove(0, doc.getLength());
+            if (!formatted.isEmpty()) fb.insertString(0, formatted, null);
+        }
+
+        @Override
+        public void replace(FilterBypass fb, int offset, int length, String text, javax.swing.text.AttributeSet attrs) throws javax.swing.text.BadLocationException {
+            javax.swing.text.Document doc = fb.getDocument();
+            String current = doc.getText(0, doc.getLength());
+            // construir nuevo texto
+            StringBuilder sb = new StringBuilder(current);
+            // tratar cuando placeholder está presente (letras)
+            if (sb.toString().matches(".*[A-Za-z].*")) {
+                sb = new StringBuilder();
+            }
+            if (length > 0) {
+                int end = Math.min(offset + length, sb.length());
+                if (end > offset) sb.delete(offset, end);
+            }
+            if (text != null) sb.insert(offset, text);
+            String digits = sb.toString().replaceAll("\\D", "");
+            if (digits.length() > 8) digits = digits.substring(0, 8);
+            String formatted = formatDigits(digits);
+            fb.remove(0, doc.getLength());
+            if (!formatted.isEmpty()) fb.insertString(0, formatted, attrs);
+        }
+
+        private static String formatDigits(String d) {
+            StringBuilder out = new StringBuilder();
+            int len = d.length();
+            for (int i = 0; i < len; i++) {
+                out.append(d.charAt(i));
+                if (i == 1 && len > 2) out.append('/');
+                if (i == 3 && len > 4) out.append('/');
+            }
+            return out.toString();
+        }
     }
 
     /**
