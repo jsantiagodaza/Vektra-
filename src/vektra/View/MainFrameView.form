@@ -69,7 +69,6 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btnMapadeValledupar" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="btnEditarConductoresdelaEmpresa" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="btnGenerarticket" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="btnCerrar" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -94,11 +93,9 @@
                       <Component id="btnTustickets" min="-2" pref="57" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                       <Component id="btnEditarConductoresdelaEmpresa" min="-2" pref="57" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                      <Component id="btnMapadeValledupar" min="-2" pref="57" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                       <Component id="btnCerrar" min="-2" pref="57" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="93" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -120,13 +117,6 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGenerarticketActionPerformed"/>
               </Events>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnMapadeValledupar">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/vektra/View/Imagenes/ICONS CANVA/MAPAico.png"/>
-                </Property>
-              </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btnEditarConductoresdelaEmpresa">
               <Properties>

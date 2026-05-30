@@ -66,7 +66,7 @@ public class MainFrameView extends javax.swing.JFrame {
         // Lista de todos los botones del sidebar
         javax.swing.JButton[] botones = {
             btnDashboardInicial, btnGenerarticket, btnTustickets,
-            btnMapadeValledupar, btnEditarConductoresdelaEmpresa,
+            btnEditarConductoresdelaEmpresa,
             btnGestionRutas, btnCerrar
         };
 
@@ -135,7 +135,6 @@ public class MainFrameView extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         btnDashboardInicial = new javax.swing.JButton();
         btnGenerarticket = new javax.swing.JButton();
-        btnMapadeValledupar = new javax.swing.JButton();
         btnEditarConductoresdelaEmpresa = new javax.swing.JButton();
         btnCerrar = new javax.swing.JButton();
         btnTustickets = new javax.swing.JButton();
@@ -155,8 +154,6 @@ public class MainFrameView extends javax.swing.JFrame {
                 btnGenerarticketActionPerformed(evt);
             }
         });
-
-        btnMapadeValledupar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/MAPAico.png"))); // NOI18N
 
         btnEditarConductoresdelaEmpresa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/USUARIOico.png"))); // NOI18N
 
@@ -178,7 +175,6 @@ public class MainFrameView extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnMapadeValledupar)
                     .addComponent(btnEditarConductoresdelaEmpresa)
                     .addComponent(btnGenerarticket)
                     .addComponent(btnCerrar)
@@ -200,11 +196,9 @@ public class MainFrameView extends javax.swing.JFrame {
                 .addComponent(btnTustickets, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28)
                 .addComponent(btnEditarConductoresdelaEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
-                .addComponent(btnMapadeValledupar, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
+                .addGap(27, 27, 27)
                 .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(93, 93, 93))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -273,7 +267,6 @@ public class MainFrameView extends javax.swing.JFrame {
     private javax.swing.JButton btnEditarConductoresdelaEmpresa;
     private javax.swing.JButton btnGenerarticket;
     private javax.swing.JButton btnGestionRutas;
-    private javax.swing.JButton btnMapadeValledupar;
     private javax.swing.JButton btnTustickets;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
