@@ -15,8 +15,16 @@ public class LoginFrame extends javax.swing.JFrame {
     /**
      * Creates new form LoginFrame
      */
+    private static final java.awt.Color COLOR_CAMPO = new java.awt.Color(51, 51, 51);
+    private static final java.awt.Color COLOR_ERROR = new java.awt.Color(200, 50, 50);
+    private static final java.awt.Color COLOR_OK    = new java.awt.Color(39, 174, 96);
+    private static final java.awt.Color COLOR_TEXTO = new java.awt.Color(255, 255, 255);
+
     public LoginFrame() {
         initComponents();
+        initColors();
+        initPlaceholders();
+        initValidaciones();
     }
 
     /**
@@ -137,7 +145,6 @@ public class LoginFrame extends javax.swing.JFrame {
 
         contrasenatxt.setBackground(new java.awt.Color(51, 51, 51));
         contrasenatxt.setForeground(new java.awt.Color(255, 255, 255));
-        contrasenatxt.setText("Ingresa tu Contraseña");
         contrasenatxt.setToolTipText("");
         contrasenatxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -213,8 +220,94 @@ public class LoginFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void initColors() {
+        cmbTipoUsuario.setBackground(COLOR_CAMPO);
+        cmbTipoUsuario.setForeground(COLOR_TEXTO);
+        logincorreotxt.setBackground(COLOR_CAMPO);
+        logincorreotxt.setForeground(COLOR_TEXTO);
+        contrasenatxt.setBackground(COLOR_CAMPO);
+        contrasenatxt.setForeground(COLOR_TEXTO);
+        jButton1.setBackground(new java.awt.Color(51, 51, 51));
+        jButton1.setForeground(COLOR_TEXTO);
+    }
+
+    private void initPlaceholders() {
+        configurarPlaceholder(logincorreotxt, "tuincreiblecorreo@gmail.com");
+        configurarPlaceholder(contrasenatxt, "Ingresa tu Contrase                                                                                         ña" );
+    }
+
+    private void configurarPlaceholder(javax.swing.JTextField campo, String placeholder) {
+        campo.setText(placeholder);
+        campo.setForeground(new java.awt.Color(150, 150, 150));
+        campo.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                if (campo.getText().equals(placeholder)) {
+                    campo.setText("");
+                    campo.setForeground(COLOR_TEXTO);
+                }
+            }
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (campo.getText().trim().isEmpty()) {
+                    campo.setText(placeholder);
+                    campo.setForeground(new java.awt.Color(150, 150, 150));
+                    marcarCampo(campo, false);
+                }
+            }
+        });
+    }
+
+    private void initValidaciones() {
+        logincorreotxt.getDocument().addDocumentListener(new SimpleDocListener(this::validarCampos));
+        contrasenatxt.getDocument().addDocumentListener(new SimpleDocListener(this::validarCampos));
+        validarCampos();
+    }
+
+    private void validarCampos() {
+        String email = logincorreotxt.getText().trim();
+        String password = contrasenatxt.getText().trim();
+        boolean emailValido = !email.isEmpty() && !email.equals("tuincreiblecorreo@gmail.com")
+            && email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
+        boolean passwordValido = !password.isEmpty() && !password.equals("Ingresa tu Contraseña") && password.length() >= 4;
+        marcarCampo(logincorreotxt, emailValido);
+        marcarCampo(contrasenatxt, passwordValido);
+    }
+
+    private void marcarCampo(javax.swing.JTextField campo, boolean valido) {
+        java.awt.Color color = valido ? COLOR_OK : COLOR_ERROR;
+        campo.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createLineBorder(color, 2, true),
+            javax.swing.BorderFactory.createEmptyBorder(4, 8, 4, 8)
+        ));
+        campo.putClientProperty("valido", valido);
+    }
+
+    private boolean todosValidos() {
+        Object email = logincorreotxt.getClientProperty("valido");
+        Object pass = contrasenatxt.getClientProperty("valido");
+        return email instanceof Boolean && (Boolean) email
+            && pass instanceof Boolean && (Boolean) pass;
+    }
+
+    private static class SimpleDocListener implements javax.swing.event.DocumentListener {
+        private final Runnable accion;
+        SimpleDocListener(Runnable accion) { this.accion = accion; }
+        @Override public void insertUpdate(javax.swing.event.DocumentEvent e) { accion.run(); }
+        @Override public void removeUpdate(javax.swing.event.DocumentEvent e) { accion.run(); }
+        @Override public void changedUpdate(javax.swing.event.DocumentEvent e) { accion.run(); }
+    }
+
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        validarCampos();
+        if (!todosValidos()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Por favor ingresa un correo válido y contraseña.",
+                "Campos inválidos",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        // TODO: autenticar el usuario aquí.
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
