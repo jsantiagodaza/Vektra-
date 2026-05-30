@@ -203,6 +203,7 @@ public class ConductoresPanel extends javax.swing.JPanel {
         }
     }
 
+
     private void btnAnadirConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnadirConductorActionPerformed
 
         mainFrame.mostrarPanel(new AnadirConductorPanel());
