@@ -233,7 +233,7 @@ public class LoginFrame extends javax.swing.JFrame {
 
     private void initPlaceholders() {
         configurarPlaceholder(logincorreotxt, "tuincreiblecorreo@gmail.com");
-        configurarPlaceholder(contrasenatxt, "Ingresa tu Contrase                                                                                         ña" );
+        configurarPlaceholder(contrasenatxt, "Ingresa tu Contraseña");
     }
 
     private void configurarPlaceholder(javax.swing.JTextField campo, String placeholder) {
@@ -290,6 +290,24 @@ public class LoginFrame extends javax.swing.JFrame {
             && pass instanceof Boolean && (Boolean) pass;
     }
 
+
+    private boolean esAdministrador() {
+        return cmbTipoUsuario.getSelectedItem() != null
+            && cmbTipoUsuario.getSelectedItem().toString().equals("Administrador");
+    }
+
+    private boolean esAdminValido() {
+        String email = logincorreotxt.getText().trim();
+        String password = contrasenatxt.getText().trim();
+        return email.equals("admin@admin.com") && password.equals("adminadmin");
+    }
+
+    private void abrirMainFrame() {
+        MainFrameView main = new MainFrameView();
+        main.setLocationRelativeTo(null);
+        main.setVisible(true);
+        this.dispose();
+    }
     private static class SimpleDocListener implements javax.swing.event.DocumentListener {
         private final Runnable accion;
         SimpleDocListener(Runnable accion) { this.accion = accion; }
@@ -307,7 +325,15 @@ public class LoginFrame extends javax.swing.JFrame {
                 javax.swing.JOptionPane.WARNING_MESSAGE);
             return;
         }
-        // TODO: autenticar el usuario aquí.
+
+        if (esAdministrador() && esAdminValido()) {
+            abrirMainFrame();
+            return;
+        }
+
+        javax.swing.JOptionPane.showMessageDialog(this,
+            "Acceso restringido. Solo administradores con credenciales válidas pueden iniciar sesión.",
+            "Acceso denegado", javax.swing.JOptionPane.WARNING_MESSAGE);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
