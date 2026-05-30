@@ -4,7 +4,13 @@
  */
 package vektra.View;
 
-
+import java.awt.BorderLayout;
+import java.util.List;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import vektra.Dao.ConductorDao;
+import vektra.Model.Conductor;
 
 /**
  *
@@ -15,13 +21,16 @@ public class ConductoresPanel extends javax.swing.JPanel {
     /**
      * Creates new form ConductoresPanel
      */
-  
+    private JScrollPane scrollTabla;
+    private JTable tablaConductores;
     private MainFrameView mainFrame;
-    
+
     public ConductoresPanel(MainFrameView frame) {
-    this.mainFrame = frame;
-    initComponents();
-}
+        this.mainFrame = frame;
+        initComponents();
+        crearTabla();
+        cargarConductores();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -141,10 +150,61 @@ public class ConductoresPanel extends javax.swing.JPanel {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
-    
+
+    private void crearTabla() {
+
+        String columnas[] = {
+            "ID",
+            "Nombre",
+            "Apellido",
+            "Cedula",
+            "Telefono",
+            "Licencia",
+            "Ruta"
+        };
+
+        DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
+        tablaConductores = new JTable(modelo);
+        scrollTabla = new JScrollPane(tablaConductores);
+        PaneldeConductores.setLayout(new BorderLayout());
+        PaneldeConductores.removeAll();
+        PaneldeConductores.add(scrollTabla, BorderLayout.CENTER);
+        PaneldeConductores.revalidate();
+        PaneldeConductores.repaint();
+    }
+
+    private void cargarConductores() {
+
+        try {
+            ConductorDao dao = new ConductorDao();
+            List<Conductor> lista = dao.obtenerTodos();
+            DefaultTableModel modelo = (DefaultTableModel) tablaConductores.getModel();
+
+            modelo.setRowCount(0);
+
+            for (Conductor c : lista) {
+                modelo.addRow(new Object[]{
+                    c.getId(),
+                    c.getNombre(),
+                    c.getApellido(),
+                    c.getCedula(),
+                    c.getTelefono(),
+                    c.getLicencia(),
+                    c.getRutaAsignada()
+                });
+            }
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "Error cargando conductores: "
+                    + e.getMessage()
+            );
+        }
+    }
 
     private void btnAnadirConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnadirConductorActionPerformed
-        
+
         mainFrame.mostrarPanel(new AnadirConductorPanel());
     }//GEN-LAST:event_btnAnadirConductorActionPerformed
 
@@ -158,7 +218,6 @@ public class ConductoresPanel extends javax.swing.JPanel {
         mainFrame.mostrarPanel(new AsignaraVehiculoPanel());
     }//GEN-LAST:event_btnAsignaraMetroActionPerformed
 
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PaneldeConductores;

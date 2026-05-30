@@ -4,6 +4,9 @@
  */
 package vektra.View;
 
+import javax.swing.JOptionPane;
+import vektra.Dao.ConductorDao;
+import vektra.Model.Conductor;
 
 /**
  *
@@ -238,7 +241,7 @@ public class AnadirConductorPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    
+
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
@@ -256,7 +259,34 @@ public class AnadirConductorPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jTextField4ActionPerformed
 
     private void btnAnadirConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnadirConductorActionPerformed
-        // TODO add your handling code here:
+        try {
+            Conductor c = new Conductor();
+            c.setNombre(jTextField1.getText().trim());
+            c.setApellido(jTextField2.getText().trim());
+            c.setCedula(jTextField3.getText().trim());
+            c.setTelefono(jTextField4.getText().trim());
+            c.setLicencia(jTextField5.getText().trim());
+            c.setRutaAsignada(jComboBox1.getSelectedItem().toString());
+            
+            ConductorDao dao= new ConductorDao();
+            boolean registrado= dao.agregarConductor(c);   
+            
+            if (registrado){
+                JOptionPane.showMessageDialog(this, "Conductor registrado correctamente");
+                
+                jTextField1.setText("");
+                jTextField2.setText("");
+                jTextField3.setText("");
+                jTextField4.setText("");
+                jTextField5.setText("");
+                
+                jComboBox1.setSelectedIndex(0);            
+            }else{
+                JOptionPane.showMessageDialog(this, "No fue posible registrar el conductor");
+            }           
+        }catch (Exception e){
+              JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
     }//GEN-LAST:event_btnAnadirConductorActionPerformed
 
 
