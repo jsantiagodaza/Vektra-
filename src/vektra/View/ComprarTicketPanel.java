@@ -13,8 +13,151 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
     /**
      * Creates new form ComprarTicketPanel
      */
+    
     public ComprarTicketPanel() {
         initComponents();
+        // Colores y comportamiento
+        initColors();
+        initPlaceholders();
+        initValidaciones();
+        btnGenerarTicket.addActionListener(e -> btnGenerarTicketActionPerformed(e));
+    }
+
+    private static final java.awt.Color COLOR_CAMPO = new java.awt.Color(51, 51, 51);
+    private static final java.awt.Color COLOR_ERROR = new java.awt.Color(200, 50, 50);
+    private static final java.awt.Color COLOR_OK    = new java.awt.Color(39, 174, 96);
+    private static final java.awt.Color COLOR_TEXTO = new java.awt.Color(204, 204, 204);
+
+    private void initColors() {
+        nombreClientetxt.setBackground(COLOR_CAMPO);
+        nombreClientetxt.setForeground(COLOR_TEXTO);
+        idClientetxt.setBackground(COLOR_CAMPO);
+        idClientetxt.setForeground(COLOR_TEXTO);
+        emailClientetxt.setBackground(COLOR_CAMPO);
+        emailClientetxt.setForeground(COLOR_TEXTO);
+        EdadporFechadeNacimientoClientetxt.setBackground(COLOR_CAMPO);
+        EdadporFechadeNacimientoClientetxt.setForeground(COLOR_TEXTO);
+        btnGenerarTicket.setBackground(new java.awt.Color(51, 153, 255));
+        btnGenerarTicket.setForeground(java.awt.Color.WHITE);
+    }
+
+    // PLACEHOLDERS
+    private void initPlaceholders() {
+        configurarPlaceholder(nombreClientetxt, "Ej. Juan Pérez");
+        configurarPlaceholder(idClientetxt, "Ej. 1234567");
+        configurarPlaceholder(emailClientetxt, "tuincreiblecorreo123@ejemplo.com");
+        configurarPlaceholder(EdadporFechadeNacimientoClientetxt, "DD/MM/AAAA");
+    }
+
+    private void configurarPlaceholder(javax.swing.JTextField campo, String placeholder) {
+        campo.setText(placeholder);
+        campo.setForeground(new java.awt.Color(120, 120, 120));
+        campo.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                if (campo.getText().equals(placeholder)) {
+                    campo.setText("");
+                    campo.setForeground(COLOR_TEXTO);
+                }
+            }
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (campo.getText().trim().isEmpty()) {
+                    campo.setText(placeholder);
+                    campo.setForeground(new java.awt.Color(120, 120, 120));
+                    marcarCampo(campo, false);
+                }
+            }
+        });
+    }
+
+    // VALIDACIONES
+    private void initValidaciones() {
+        nombreClientetxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = nombreClientetxt.getText().trim();
+            marcarCampo(nombreClientetxt,
+                !v.isEmpty() && !v.equals("Ej. Juan Pérez") && v.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+"));
+        }));
+
+        idClientetxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = idClientetxt.getText().trim();
+            marcarCampo(idClientetxt,
+                !v.isEmpty() && !v.equals("Ej. 1234567") && v.matches("\\d{6,12}"));
+        }));
+
+        emailClientetxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = emailClientetxt.getText().trim();
+            marcarCampo(emailClientetxt,
+                !v.isEmpty() && !v.equals("tuincreiblecorreo123@ejemplo.com") && v.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$"));
+        }));
+
+        EdadporFechadeNacimientoClientetxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = EdadporFechadeNacimientoClientetxt.getText().trim();
+            if (v.isEmpty() || v.equals("DD/MM/AAAA")) { marcarCampo(EdadporFechadeNacimientoClientetxt, false); return; }
+            java.time.format.DateTimeFormatter fmt = java.time.format.DateTimeFormatter.ofPattern("d/M/uuuu");
+            try {
+                java.time.LocalDate dob = java.time.LocalDate.parse(v, fmt);
+                java.time.LocalDate today = java.time.LocalDate.now();
+                int edad = java.time.Period.between(dob, today).getYears();
+                boolean valido = !dob.isAfter(today) && edad >= 0 && edad < 150;
+                marcarCampo(EdadporFechadeNacimientoClientetxt, valido);
+                if (valido) EdadporFechadeNacimientoClientetxt.putClientProperty("edad", edad);
+            } catch (Exception ex) {
+                marcarCampo(EdadporFechadeNacimientoClientetxt, false);
+            }
+        }));
+    }
+
+    private void btnGenerarTicketActionPerformed(java.awt.event.ActionEvent evt) {
+        if (!todosValidos()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Por favor corrige los campos marcados en rojo.",
+                "Campos incompletos",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Aquí iría la lógica de generación de ticket / DAO
+        javax.swing.JOptionPane.showMessageDialog(this,
+            "✓ Ticket generado correctamente.",
+            "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+        // Limpiar campos
+        javax.swing.JTextField[] campos = { nombreClientetxt, idClientetxt, emailClientetxt, EdadporFechadeNacimientoClientetxt };
+        for (javax.swing.JTextField c : campos) {
+            c.setText("");
+            c.putClientProperty("valido", false);
+            c.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(80, 80, 80), 1, true));
+        }
+        // Restaurar placeholders
+        initPlaceholders();
+    }
+
+    // HELPERS
+    private void marcarCampo(javax.swing.JTextField campo, boolean valido) {
+        java.awt.Color color = valido ? COLOR_OK : COLOR_ERROR;
+        campo.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createLineBorder(color, 2, true),
+            javax.swing.BorderFactory.createEmptyBorder(4, 8, 4, 8)
+        ));
+        campo.putClientProperty("valido", valido);
+    }
+
+    private boolean todosValidos() {
+        javax.swing.JTextField[] campos = { nombreClientetxt, idClientetxt, emailClientetxt, EdadporFechadeNacimientoClientetxt };
+        for (javax.swing.JTextField c : campos) {
+            Object tag = c.getClientProperty("valido");
+            if (tag == null || !(Boolean) tag) return false;
+        }
+        return true;
+    }
+
+    private static class SimpleDocListener implements javax.swing.event.DocumentListener {
+        private final Runnable accion;
+        SimpleDocListener(Runnable accion) { this.accion = accion; }
+        @Override public void insertUpdate(javax.swing.event.DocumentEvent e)  { accion.run(); }
+        @Override public void removeUpdate(javax.swing.event.DocumentEvent e)  { accion.run(); }
+        @Override public void changedUpdate(javax.swing.event.DocumentEvent e) { accion.run(); }
     }
 
     /**
