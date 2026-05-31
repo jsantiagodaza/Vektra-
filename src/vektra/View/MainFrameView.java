@@ -66,6 +66,7 @@ public class MainFrameView extends javax.swing.JFrame {
                 mostrarPanel(new AnadirVehiculo());
             }
         });
+        
         btnCerrar.addActionListener(e -> {
             int confirm = javax.swing.JOptionPane.showConfirmDialog(
                     this,
