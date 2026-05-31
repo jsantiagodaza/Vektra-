@@ -303,8 +303,8 @@ public class LoginFrame extends javax.swing.JFrame {
         return email.equals("admin@admin.com") && password.equals("adminadmin");
     }
 
-    private void abrirMainFrame() {
-        MainFrameView main = new MainFrameView();
+    private void abrirMainFrame(boolean isAdmin) {
+        MainFrameView main = new MainFrameView(isAdmin);
         main.setLocationRelativeTo(null);
         main.setVisible(true);
         this.dispose();
@@ -320,25 +320,29 @@ public class LoginFrame extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         validarCampos();
         if (!todosValidos()) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                "Por favor ingresa un correo válido y contraseña.",
-                "Campos inválidos",
-                javax.swing.JOptionPane.WARNING_MESSAGE);
+            new ERRORview().setVisible(true);
             return;
         }
 
-        if (esAdministrador() && esAdminValido()) {
-            abrirMainFrame();
-            return;
+        boolean isAdmin = esAdministrador();
+        
+        if (isAdmin) {
+            if (esAdminValido()) {
+                abrirMainFrame(true);
+            } else {
+                new ERRORview().setVisible(true);
+            }
+        } else {
+            // Pasajero Regular
+            abrirMainFrame(false);
         }
-
-        javax.swing.JOptionPane.showMessageDialog(this,
-            "Acceso restringido. Solo administradores con credenciales válidas pueden iniciar sesión.",
-            "Acceso denegado", javax.swing.JOptionPane.WARNING_MESSAGE);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        CrearCuentaFrame crearCuenta = new CrearCuentaFrame();
+        crearCuenta.setLocationRelativeTo(null);
+        crearCuenta.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void contrasenatxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contrasenatxtActionPerformed

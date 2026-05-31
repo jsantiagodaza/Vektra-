@@ -312,23 +312,32 @@ public class BorrarConductorPanel extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         validarCampos();
         if (!todosValidos()) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                "Por favor completa el conductor y escribe la misma ID mostrada a la derecha.",
-                "Campos incompletos/incorrectos",
-                javax.swing.JOptionPane.WARNING_MESSAGE);
+            new ERRORview().setVisible(true);
             return;
         }
 
-        String id = jTextField2.getText().trim();
-        vektra.Dao.ConductorDao dao = new vektra.Dao.ConductorDao();
-        boolean eliminado = dao.eliminarConductor(id);
-        if (eliminado) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Conductor eliminado correctamente.");
-            cargarConductores();
-            jTextField1.setText("");
-            actualizarIdMostrada();
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "No existe un conductor con ese ID o no se pudo eliminar.");
+        String idConductor = jTextField1.getText().trim();
+        
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(this,
+            "¿Estás seguro de que deseas borrar el conductor con ID: " + idConductor + "?\nEsta acción no se puede deshacer.",
+            "Confirmar Borrado",
+            javax.swing.JOptionPane.YES_NO_OPTION,
+            javax.swing.JOptionPane.WARNING_MESSAGE);
+            
+        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+            vektra.Dao.ConductorDao conductorDao = new vektra.Dao.ConductorDao();
+            boolean borrado = conductorDao.eliminarConductor(idConductor);
+            
+            if (borrado) {
+                new Confirmacion().setVisible(true);
+                jComboBox1.setSelectedIndex(0);
+                jTextField1.setText("Digite la ID del conductor...");
+                jTextField1.setForeground(new java.awt.Color(150, 150, 150));
+                validarCampos();
+            } else {
+                new ERRORview().setVisible(true);
+            }
+
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
