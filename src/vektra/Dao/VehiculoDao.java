@@ -16,11 +16,13 @@ import java.util.List;
 
 public class VehiculoDao {
     
+     Connection con = null;
+    
     public void agregarVehiculo(Vehiculo v) {
 
     String sql = "INSERT INTO vehiculos (id, capacidad) VALUES (?, ?)";
 
-    Connection con = null;
+    
 
     try {
         con = Conexion.conectar(); 
@@ -47,7 +49,7 @@ public class VehiculoDao {
     List<Vehiculo> lista = new ArrayList<>();
     String sql = "SELECT * FROM vehiculos";
 
-    Connection con = null;
+    
 
     try {
         con = Conexion.conectar(); 
@@ -73,6 +75,35 @@ public class VehiculoDao {
 
     return lista;
 }
-    
+    public Vehiculo buscarPorId(String id) {
+
+    String sql = "SELECT * FROM vehiculos WHERE id = ?";
+    Vehiculo v = null;
+
+   
+
+    try {
+        con = Conexion.conectar();
+
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, id);
+
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            v = new Vehiculo();
+            v.setId(rs.getString("id"));
+            v.setCapacidad(rs.getInt("capacidad"));
+        }
+
+    } catch (Exception e) {
+        System.out.println("Error al buscar vehículo: " + e.getMessage());
+
+    } finally {
+        Conexion.cerrarConexion();
+    }
+
+    return v;
+}
     
 }
