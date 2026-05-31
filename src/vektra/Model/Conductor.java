@@ -1,55 +1,51 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package vektra.Model;
 
-/**
- *
- * @author santi
- */
+import vektra.Model.Persona;
+import vektra.Model.Vehiculo;
+
 public class Conductor extends Persona {
+
     private String apellido;
-    private String cedula;
     private String telefono;
+    private String cedula;
     private String licencia;
+    private String estado;
     private String rutaAsignada;
-    
-    public Conductor(){
+    private Vehiculo vehiculo;
+
+    public Conductor() {
+        super();
     }
 
-    public Conductor(String cedula, String licencia, String id, String nombre, String apellido, String telefono, String rutaAsignada) {
-        super(id, nombre);
-        this.apellido = apellido;
+    public Conductor(String id, String nombre, String cedula, String licencia, String estado) {
+        super(id, nombre); 
         this.cedula = cedula;
-        this.telefono = telefono;
         this.licencia = licencia;
-        this.rutaAsignada = rutaAsignada;
-        
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public void setRutaAsignada(String rutaAsignada) {
-        this.rutaAsignada = rutaAsignada;
+        this.estado = estado;
     }
 
     public String getApellido() {
         return apellido;
     }
 
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
     public String getTelefono() {
         return telefono;
     }
 
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
     public String getRutaAsignada() {
         return rutaAsignada;
+    }
+
+    public void setRutaAsignada(String rutaAsignada) {
+        this.rutaAsignada = rutaAsignada;
     }
 
     public String getCedula() {
@@ -66,5 +62,22 @@ public class Conductor extends Persona {
 
     public void setLicencia(String licencia) {
         this.licencia = licencia;
-    }    
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public Vehiculo getVehiculo() {
+        return vehiculo;
+    }
+
+    public void setVehiculo(Vehiculo vehiculo) {
+        this.vehiculo = vehiculo;
+    }
+
 }
