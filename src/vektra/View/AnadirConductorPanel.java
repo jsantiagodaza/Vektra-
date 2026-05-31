@@ -9,6 +9,7 @@ public class AnadirConductorPanel extends javax.swing.JPanel {
 
     public AnadirConductorPanel() {
         initComponents();
+        vektra.Util.FontUtil.applyCustomFont(this);
         initPlaceholders();
         initValidaciones();
     }

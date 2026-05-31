@@ -17,6 +17,7 @@ public class CrearCuentaFrame extends javax.swing.JFrame {
      */
     public CrearCuentaFrame() {
         initComponents();
+        vektra.Util.FontUtil.applyCustomFont(this);
     }
 
     /**

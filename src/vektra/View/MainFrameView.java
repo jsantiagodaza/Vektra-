@@ -15,6 +15,7 @@ public class MainFrameView extends javax.swing.JFrame {
      */
     public MainFrameView() {
         initComponents();
+        vektra.Util.FontUtil.applyCustomFont(this);
         iniciarEstilos(); // Llama al método para aplicar los estilos minimalistas
         iniciarContenido();
     }

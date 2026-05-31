@@ -16,6 +16,7 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
     
     public ComprarTicketPanel() {
         initComponents();
+        vektra.Util.FontUtil.applyCustomFont(this);
         // Colores y comportamiento
         initColors();
         initPlaceholders();

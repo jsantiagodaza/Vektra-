@@ -15,6 +15,7 @@ public class TicketsActivosPanel extends javax.swing.JPanel {
      */
     public TicketsActivosPanel() {
         initComponents();
+        vektra.Util.FontUtil.applyCustomFont(this);
     }
 
     /**

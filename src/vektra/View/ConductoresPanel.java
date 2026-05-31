@@ -21,6 +21,7 @@ public class ConductoresPanel extends javax.swing.JPanel {
     public ConductoresPanel(MainFrameView frame) {
     this.mainFrame = frame;
     initComponents();
+    vektra.Util.FontUtil.applyCustomFont(this);
 }
 
     /**

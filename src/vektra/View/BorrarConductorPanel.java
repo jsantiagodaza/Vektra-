@@ -21,6 +21,7 @@ public class BorrarConductorPanel extends javax.swing.JPanel {
 
     public BorrarConductorPanel() {
         initComponents();
+        vektra.Util.FontUtil.applyCustomFont(this);
         initColors();
         initPlaceholders();
         initValidaciones();

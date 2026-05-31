@@ -15,6 +15,7 @@ public class AsignaraVehiculoPanel extends javax.swing.JPanel {
      */
     public AsignaraVehiculoPanel() {
         initComponents();
+        vektra.Util.FontUtil.applyCustomFont(this);
     }
 
     /**

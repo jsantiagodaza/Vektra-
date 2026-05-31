@@ -22,6 +22,7 @@ public class LoginFrame extends javax.swing.JFrame {
 
     public LoginFrame() {
         initComponents();
+        vektra.Util.FontUtil.applyCustomFont(this);
         initColors();
         initPlaceholders();
         initValidaciones();

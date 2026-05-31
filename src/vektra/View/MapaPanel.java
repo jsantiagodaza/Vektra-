@@ -15,6 +15,7 @@ public class MapaPanel extends javax.swing.JPanel {
      */
     public MapaPanel() {
         initComponents();
+        vektra.Util.FontUtil.applyCustomFont(this);
     }
 
     /**

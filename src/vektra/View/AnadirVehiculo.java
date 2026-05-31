@@ -15,6 +15,7 @@ public class AnadirVehiculo extends javax.swing.JPanel {
      */
     public AnadirVehiculo() {
         initComponents();
+        vektra.Util.FontUtil.applyCustomFont(this);
     }
 
     private static final java.awt.Color COLOR_CAMPO = new java.awt.Color(51, 51, 51);
