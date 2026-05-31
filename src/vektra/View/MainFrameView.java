@@ -35,6 +35,7 @@ public class MainFrameView extends javax.swing.JFrame {
         panelContenido = new javax.swing.JPanel(new java.awt.BorderLayout());
         panelContenido.setBackground(new java.awt.Color(255, 255, 255));
 
+        
         // Agregar al lado derecho del sidebar
         jPanel1.setLayout(new java.awt.BorderLayout());
         jPanel1.add(jPanel2, java.awt.BorderLayout.WEST);

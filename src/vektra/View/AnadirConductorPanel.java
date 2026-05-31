@@ -1,27 +1,50 @@
 package vektra.View;
 
+import javax.swing.JOptionPane;
+import vektra.Dao.ConductorDao;
+import vektra.Model.Conductor;
+
+/**
+ *
+ * @author santi
+ */
 public class AnadirConductorPanel extends javax.swing.JPanel {
 
     private static final java.awt.Color COLOR_CAMPO = new java.awt.Color(51, 51, 51);
     private static final java.awt.Color COLOR_ERROR = new java.awt.Color(200, 50, 50);
-    private static final java.awt.Color COLOR_OK    = new java.awt.Color(39, 174, 96);
+    private static final java.awt.Color COLOR_OK = new java.awt.Color(39, 174, 96);
     private static final java.awt.Color COLOR_TEXTO = new java.awt.Color(204, 204, 204);
 
     public AnadirConductorPanel() {
         initComponents();
         vektra.Util.FontUtil.applyCustomFont(this);
         initPlaceholders();
+        cargarRutas();
         initValidaciones();
     }
 
     // ── PLACEHOLDERS ──────────────────────────────────────────────
     private void initPlaceholders() {
-        configurarPlaceholder(nombreConductortxt,    "Ej. Marco Javier");
+        configurarPlaceholder(nombreConductortxt, "Ej. Marco Javier");
         configurarPlaceholder(apellidosConductortxt, "Ej. Torres Piña");
-        configurarPlaceholder(cedulaConductortxt,    "Ej. 12345678");
-        configurarPlaceholder(telefonoConductortxt,  "Ej. +57 300 000 0000");
-        configurarPlaceholder(correoConductortxt,    "Ej. correo@email.com");
-        configurarPlaceholder(licenciaConductortxt,  "Ej. LIC-2025-9293839");
+        configurarPlaceholder(cedulaConductortxt, "Ej. 12345678");
+        configurarPlaceholder(telefonoConductortxt, "Ej. +57 300 000 0000");
+        configurarPlaceholder(correoConductortxt, "Ej. correo@email.com");
+        configurarPlaceholder(licenciaConductortxt, "Ej. LIC-2025-9293839");
+    }
+
+    private void cargarRutas() {
+        try {
+            vektra.Dao.RutaDao dao = new vektra.Dao.RutaDao();
+            java.util.List<vektra.Model.Ruta> rutas = dao.obtenerTodasLasRutas();
+            cmbRutas.removeAllItems();
+            cmbRutas.addItem("Seleccionar ruta...");
+            for (vektra.Model.Ruta r : rutas) {
+                cmbRutas.addItem(r.formatoUI());
+            }
+        } catch (Exception e) {
+            System.out.println("Error al cargar rutas: " + e.getMessage());
+        }
     }
 
     private void configurarPlaceholder(javax.swing.JTextField campo, String placeholder) {
@@ -35,6 +58,7 @@ public class AnadirConductorPanel extends javax.swing.JPanel {
                     campo.setForeground(COLOR_TEXTO);
                 }
             }
+
             @Override
             public void focusLost(java.awt.event.FocusEvent e) {
                 if (campo.getText().trim().isEmpty()) {
@@ -51,37 +75,37 @@ public class AnadirConductorPanel extends javax.swing.JPanel {
         nombreConductortxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
             String v = nombreConductortxt.getText().trim();
             marcarCampo(nombreConductortxt,
-                !v.isEmpty() && !v.equals("Ej. Marco Javier") && v.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+"));
+                    !v.isEmpty() && !v.equals("Ej. Marco Javier") && v.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+"));
         }));
 
         apellidosConductortxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
             String v = apellidosConductortxt.getText().trim();
             marcarCampo(apellidosConductortxt,
-                !v.isEmpty() && !v.equals("Ej. Torres Piña") && v.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+"));
+                    !v.isEmpty() && !v.equals("Ej. Torres Piña") && v.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+"));
         }));
 
         cedulaConductortxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
             String v = cedulaConductortxt.getText().trim();
             marcarCampo(cedulaConductortxt,
-                !v.isEmpty() && !v.equals("Ej. 12345678") && v.matches("\\d{6,12}"));
+                    !v.isEmpty() && !v.equals("Ej. 12345678") && v.matches("\\d{6,12}"));
         }));
 
         telefonoConductortxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
             String v = telefonoConductortxt.getText().trim().replaceAll("\\s", "");
             marcarCampo(telefonoConductortxt,
-                !v.isEmpty() && !v.equals("Ej.+57300000000") && v.matches("\\+57\\d{10}"));
+                    !v.isEmpty() && !v.equals("Ej.+57300000000") && v.matches("\\+57\\d{10}"));
         }));
 
         correoConductortxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
             String v = correoConductortxt.getText().trim();
             marcarCampo(correoConductortxt,
-                !v.isEmpty() && !v.equals("Ej. correo@email.com") && v.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$"));
+                    !v.isEmpty() && !v.equals("Ej. correo@email.com") && v.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$"));
         }));
 
         licenciaConductortxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
             String v = licenciaConductortxt.getText().trim();
             marcarCampo(licenciaConductortxt,
-                !v.isEmpty() && !v.equals("Ej. LIC-2025-9293839") && v.matches("[A-Za-z0-9\\-]+") && v.length() >= 5);
+                    !v.isEmpty() && !v.equals("Ej. LIC-2025-9293839") && v.matches("[A-Za-z0-9\\-]+") && v.length() >= 5);
         }));
     }
 
@@ -89,8 +113,8 @@ public class AnadirConductorPanel extends javax.swing.JPanel {
     private void marcarCampo(javax.swing.JTextField campo, boolean valido) {
         java.awt.Color color = valido ? COLOR_OK : COLOR_ERROR;
         campo.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-            javax.swing.BorderFactory.createLineBorder(color, 2, true),
-            javax.swing.BorderFactory.createEmptyBorder(4, 8, 4, 8)
+                javax.swing.BorderFactory.createLineBorder(color, 2, true),
+                javax.swing.BorderFactory.createEmptyBorder(4, 8, 4, 8)
         ));
         campo.putClientProperty("valido", valido);
     }
@@ -102,57 +126,35 @@ public class AnadirConductorPanel extends javax.swing.JPanel {
         };
         for (javax.swing.JTextField c : campos) {
             Object tag = c.getClientProperty("valido");
-            if (tag == null || !(Boolean) tag) return false;
+            if (tag == null || !(Boolean) tag) {
+                return false;
+            }
         }
         return true;
     }
 
     private static class SimpleDocListener implements javax.swing.event.DocumentListener {
+
         private final Runnable accion;
-        SimpleDocListener(Runnable accion) { this.accion = accion; }
-        @Override public void insertUpdate(javax.swing.event.DocumentEvent e)  { accion.run(); }
-        @Override public void removeUpdate(javax.swing.event.DocumentEvent e)  { accion.run(); }
-        @Override public void changedUpdate(javax.swing.event.DocumentEvent e) { accion.run(); }
-    }
 
-    // ── ACCIÓN DEL BOTÓN ─────────────────────────────────────────
-    private void btnAnadirConductorActionPerformed(java.awt.event.ActionEvent evt) {
-        if (!todosValidos()) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                "Por favor corrige los campos marcados en rojo.",
-                "Campos incompletos",
-                javax.swing.JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        if (cmbRutas.getSelectedItem() == null ||
-            cmbRutas.getSelectedItem().toString().startsWith("Item")) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                "Selecciona una ruta para el conductor.",
-                "Ruta requerida",
-                javax.swing.JOptionPane.WARNING_MESSAGE);
-            return;
+        SimpleDocListener(Runnable accion) {
+            this.accion = accion;
         }
 
-        // ── Aquí irá la llamada al DAO cuando Dev 1 lo entregue ──
-        // vektra.Dao.ConductorDao dao = new vektra.Dao.ConductorDao();
-        // dao.agregarConductor(new vektra.Model.Conductor(...));
-
-        javax.swing.JOptionPane.showMessageDialog(this,
-            "✓ Conductor registrado correctamente.",
-            "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-
-        // Limpiar
-        javax.swing.JTextField[] campos = {
-            nombreConductortxt, apellidosConductortxt, cedulaConductortxt,
-            telefonoConductortxt, correoConductortxt, licenciaConductortxt
-        };
-        for (javax.swing.JTextField c : campos) {
-            c.setText("");
-            c.putClientProperty("valido", false);
-            c.setBorder(javax.swing.BorderFactory.createLineBorder(
-                new java.awt.Color(80, 80, 80), 1, true));
+        @Override
+        public void insertUpdate(javax.swing.event.DocumentEvent e) {
+            accion.run();
         }
-        cmbRutas.setSelectedIndex(0);
+
+        @Override
+        public void removeUpdate(javax.swing.event.DocumentEvent e) {
+            accion.run();
+        }
+
+        @Override
+        public void changedUpdate(javax.swing.event.DocumentEvent e) {
+            accion.run();
+        }
     }
 
     // ── GEN — NO TOCAR ────────────────────────────────────────────
@@ -233,82 +235,163 @@ public class AnadirConductorPanel extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel10)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel3)
-                            .addComponent(nombreConductortxt, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
-                            .addComponent(jLabel5)
-                            .addComponent(apellidosConductortxt)
-                            .addComponent(jLabel4)
-                            .addComponent(cedulaConductortxt)
-                            .addComponent(jLabel8)
-                            .addComponent(telefonoConductortxt)
-                            .addComponent(jLabel7)
-                            .addComponent(licenciaConductortxt))
-                        .addGap(18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel6)
-                            .addComponent(correoConductortxt, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
-                            .addComponent(jLabel9)
-                            .addComponent(cmbRutas, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnAnadirConductor, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel1)
+                                        .addComponent(jLabel2)
+                                        .addComponent(jLabel10)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(jLabel3)
+                                                        .addComponent(nombreConductortxt, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
+                                                        .addComponent(jLabel5)
+                                                        .addComponent(apellidosConductortxt)
+                                                        .addComponent(jLabel4)
+                                                        .addComponent(cedulaConductortxt)
+                                                        .addComponent(jLabel8)
+                                                        .addComponent(telefonoConductortxt)
+                                                        .addComponent(jLabel7)
+                                                        .addComponent(licenciaConductortxt))
+                                                .addGap(18)
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(jLabel6)
+                                                        .addComponent(correoConductortxt, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
+                                                        .addComponent(jLabel9)
+                                                        .addComponent(cmbRutas, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(btnAnadirConductor, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE))))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(16)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addGap(2)
-                .addComponent(jLabel10)
-                .addGap(10)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3).addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(nombreConductortxt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(correoConductortxt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5).addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(apellidosConductortxt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbRutas, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cedulaConductortxt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAnadirConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(telefonoConductortxt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(licenciaConductortxt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(16)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2)
+                                .addGap(2)
+                                .addComponent(jLabel10)
+                                .addGap(10)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel3).addComponent(jLabel6))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(nombreConductortxt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(correoConductortxt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(12)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel5).addComponent(jLabel9))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(apellidosConductortxt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(cmbRutas, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(12)
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(cedulaConductortxt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnAnadirConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(12)
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(telefonoConductortxt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(12)
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(licenciaConductortxt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
         layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
     }// </editor-fold>
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
+    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField2ActionPerformed
+
+    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField3ActionPerformed
+
+    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField4ActionPerformed
+
+    private void btnAnadirConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnadirConductorActionPerformed
+        if (!todosValidos()) {
+            JOptionPane.showMessageDialog(this,
+                    "Por favor corrige los campos marcados en rojo.",
+                    "Campos incompletos",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (cmbRutas.getSelectedItem() == null
+                || cmbRutas.getSelectedItem().toString().startsWith("Item")
+                || cmbRutas.getSelectedItem().toString().equals("Seleccionar ruta...")) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Selecciona una ruta para el conductor.",
+                    "Ruta requerida",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+
+            Conductor c = new Conductor();
+
+            c.setNombre(nombreConductortxt.getText());
+            c.setApellido(apellidosConductortxt.getText());
+            c.setCedula(cedulaConductortxt.getText());
+            c.setTelefono(telefonoConductortxt.getText());
+            c.setLicencia(licenciaConductortxt.getText());
+
+            // Si tu modelo tiene correo:
+            // c.setCorreo(correoConductortxt.getText());
+            c.setRutaAsignada(cmbRutas.getSelectedItem().toString());
+
+            ConductorDao dao = new ConductorDao();
+
+            boolean registrado = dao.agregarConductor(c);
+
+            if (registrado) {
+
+                JOptionPane.showMessageDialog(this,
+                        "Conductor registrado correctamente");
+
+                nombreConductortxt.setText("");
+                apellidosConductortxt.setText("");
+                cedulaConductortxt.setText("");
+                telefonoConductortxt.setText("");
+                licenciaConductortxt.setText("");
+                correoConductortxt.setText("");
+
+                cmbRutas.setSelectedIndex(0);
+
+            } else {
+
+                JOptionPane.showMessageDialog(this,
+                        "No fue posible registrar el conductor");
+            }
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Error: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnAnadirConductorActionPerformed
+
+    // Variables declaration - do not modify                     
     // Variables declaration - do not modify
     private javax.swing.JTextField apellidosConductortxt;
     private javax.swing.JButton btnAnadirConductor;

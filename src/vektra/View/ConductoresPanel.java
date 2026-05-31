@@ -4,7 +4,13 @@
  */
 package vektra.View;
 
-
+import java.awt.BorderLayout;
+import java.util.List;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import vektra.Dao.ConductorDao;
+import vektra.Model.Conductor;
 
 /**
  *
@@ -15,14 +21,18 @@ public class ConductoresPanel extends javax.swing.JPanel {
     /**
      * Creates new form ConductoresPanel
      */
-  
+    private JScrollPane scrollTabla;
+    private JTable tablaConductores;
     private MainFrameView mainFrame;
-    
+
     public ConductoresPanel(MainFrameView frame) {
-    this.mainFrame = frame;
-    initComponents();
-    vektra.Util.FontUtil.applyCustomFont(this);
-}
+
+        this.mainFrame = frame;
+        initComponents();
+        crearTabla();
+        cargarConductores();
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -51,7 +61,7 @@ public class ConductoresPanel extends javax.swing.JPanel {
         );
         PaneldeConductoresLayout.setVerticalGroup(
             PaneldeConductoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 380, Short.MAX_VALUE)
+            .addGap(0, 366, Short.MAX_VALUE)
         );
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -104,9 +114,9 @@ public class ConductoresPanel extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnAnadirConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(48, 48, 48)
+                        .addGap(40, 40, 40)
                         .addComponent(btnAsignaraMetro, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(38, 38, 38)
+                        .addGap(46, 46, 46)
                         .addComponent(btnEliminarConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(PaneldeConductores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -121,14 +131,14 @@ public class ConductoresPanel extends javax.swing.JPanel {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(PaneldeConductores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAnadirConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEliminarConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAsignaraMetro, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(23, Short.MAX_VALUE))
+                    .addComponent(btnAsignaraMetro, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEliminarConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -142,24 +152,78 @@ public class ConductoresPanel extends javax.swing.JPanel {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
-    
+
+    private void crearTabla() {
+
+        String columnas[] = {
+            "ID",
+            "Nombre",
+            "Apellido",
+            "Cedula",
+            "Telefono",
+            "Licencia",
+            "Ruta"
+        };
+
+        DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
+        tablaConductores = new JTable(modelo);
+        scrollTabla = new JScrollPane(tablaConductores);
+        PaneldeConductores.setLayout(new BorderLayout());
+        PaneldeConductores.removeAll();
+        PaneldeConductores.add(scrollTabla, BorderLayout.CENTER);
+        PaneldeConductores.revalidate();
+        PaneldeConductores.repaint();
+    }
+
+    private void cargarConductores() {
+
+        try {
+            ConductorDao dao = new ConductorDao();
+            List<Conductor> lista = dao.obtenerTodos();
+            DefaultTableModel modelo = (DefaultTableModel) tablaConductores.getModel();
+
+            modelo.setRowCount(0);
+
+            for (Conductor c : lista) {
+                modelo.addRow(new Object[]{
+                    c.getId(),
+                    c.getNombre(),
+                    c.getApellido(),
+                    c.getCedula(),
+                    c.getTelefono(),
+                    c.getLicencia(),
+                    c.getRutaAsignada()
+                });
+            }
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "Error cargando conductores: "
+                    + e.getMessage()
+            );
+        }
+    }
+
 
     private void btnAnadirConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnadirConductorActionPerformed
-        
-        mainFrame.mostrarPanel(new AnadirConductorPanel());
+        if (mainFrame != null) {
+            mainFrame.mostrarPanel(new AnadirConductorPanel());
+        }
     }//GEN-LAST:event_btnAnadirConductorActionPerformed
 
     private void btnEliminarConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarConductorActionPerformed
-        // TODO add your handling code here:
-        mainFrame.mostrarPanel(new BorrarConductorPanel());
+        if (mainFrame != null) {
+            mainFrame.mostrarPanel(new BorrarConductorPanel());
+        }
     }//GEN-LAST:event_btnEliminarConductorActionPerformed
 
     private void btnAsignaraMetroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignaraMetroActionPerformed
-        // TODO add your handling code here:
-        mainFrame.mostrarPanel(new AsignaraVehiculoPanel());
+        if (mainFrame != null) {
+            mainFrame.mostrarPanel(new AsignaraVehiculoPanel());
+        }
     }//GEN-LAST:event_btnAsignaraMetroActionPerformed
 
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PaneldeConductores;

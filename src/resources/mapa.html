@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>Mapa Metro</title>
+
     <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
     <style>
         html, body, #map {
             height: 100%;
@@ -14,62 +18,206 @@
         }
     </style>
 </head>
+
 <body>
 
-    <div id="map"></div>
+<div id="map"></div>
 
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        // Coordenadas del centro de Valledupar
-        const lat = 10.4631;
-        const lng = -73.2532;
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-        // Inicializar el mapa de Leaflet
-        const map = L.map('map').setView([lat, lng], 13);
+<script>
 
-        // Corregir problemas de carga de cuadrículas grises en WebViews de JavaFX
-        const resizeObserver = new ResizeObserver(() => {
-            map.invalidateSize();
-        });
-        resizeObserver.observe(document.getElementById('map'));
-        
-        // Hack definitivo para WebEngine: forzar actualización periódica
-        setInterval(() => {
-            map.invalidateSize();
-        }, 500);
+    // ================================
+    // INICIALIZAR MAPA
+    // ================================
 
-        // Añadir capa de mapas de OpenStreetMap
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    const map = L.map('map').setView(
+        [10.4631, -73.2532],
+        13
+    );
+
+    // OpenStreetMap
+    L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {
             maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+            attribution:
+                '&copy; OpenStreetMap contributors'
+        }
+    ).addTo(map);
 
-        // ESTACIONES
-        const estaciones = [
-            {
-                nombre: "Portal Norte",
-                lat: 10.4800,
-                lng: -73.2500
-            },
-            {
-                nombre: "Calle 72",
-                lat: 10.4700,
-                lng: -73.2400
-            },
-            {
-                nombre: "Portal Sur",
-                lat: 10.4500,
-                lng: -73.2300
-            }
-        ];
+    // Corregir render en JavaFX
+    setTimeout(() => map.invalidateSize(), 200);
+    setTimeout(() => map.invalidateSize(), 800);
 
-        // Añadir los marcadores en el mapa
+    window.addEventListener('resize', () => {
+        map.invalidateSize();
+    });
+
+    // ================================
+    // LISTAS DINÁMICAS
+    // ================================
+
+    let marcadores = [];
+    let polilineas = [];
+
+    // ================================
+    // FUNCIÓN PRINCIPAL
+    // Java -> HTML
+    // ================================
+
+    function cargarDatos(estaciones, rutas) {
+
+        console.log("Estaciones:", estaciones);
+        console.log("Rutas:", rutas);
+
+        // Limpiar mapa
+        marcadores.forEach(m => map.removeLayer(m));
+        polilineas.forEach(p => map.removeLayer(p));
+
+        marcadores = [];
+        polilineas = [];
+
+        // Map rápido por ID
+        const estacionesMap = {};
+
         estaciones.forEach(estacion => {
-            const marker = L.marker([estacion.lat, estacion.lng]).addTo(map);
-            marker.bindPopup(`<h3>${estacion.nombre}</h3>`);
+
+            estacionesMap[estacion.id] = estacion;
+
         });
-    </script>
+
+        // ================================
+        // DIBUJAR ESTACIONES
+        // ================================
+
+        estaciones.forEach(estacion => {
+
+            const marker = L.marker([
+                estacion.lat,
+                estacion.lng
+            ]).addTo(map);
+
+            marker.bindPopup(`
+                <div style="font-family:Segoe UI;">
+                    <h3>${estacion.nombre}</h3>
+
+                    <p>
+                        <b>Línea:</b>
+                        ${estacion.linea}
+                    </p>
+                </div>
+            `);
+
+            marcadores.push(marker);
+
+        });
+
+        // ================================
+        // DIBUJAR RUTAS
+        // ================================
+
+        rutas.forEach(ruta => {
+
+            const origen =
+                estacionesMap[ruta.origen_id];
+
+            const destino =
+                estacionesMap[ruta.destino_id];
+
+            if (origen && destino) {
+
+                const color =
+                    getHexColor(ruta.color_linea);
+
+                const polyline = L.polyline(
+                    [
+                        [origen.lat, origen.lng],
+                        [destino.lat, destino.lng]
+                    ],
+                    {
+                        color: color,
+                        weight: 6,
+                        opacity: 0.9
+                    }
+                ).addTo(map);
+
+                polyline.bindPopup(`
+                    <div style="font-family:Segoe UI;">
+
+                        <h3>Ruta</h3>
+
+                        <p>
+                            <b>${origen.nombre}</b>
+                            →
+                            <b>${destino.nombre}</b>
+                        </p>
+
+                        <p>
+                            Tiempo:
+                            ${ruta.tiempo} min
+                        </p>
+
+                    </div>
+                `);
+
+                polilineas.push(polyline);
+
+            }
+
+        });
+
+        // ================================
+        // AJUSTAR ZOOM
+        // ================================
+
+        if (estaciones.length > 0) {
+
+            const bounds = L.latLngBounds(
+                estaciones.map(e => [e.lat, e.lng])
+            );
+
+            map.fitBounds(bounds, {
+                padding: [40, 40]
+            });
+
+        }
+
+    }
+
+    // ================================
+    // COLORES DE LÍNEAS
+    // ================================
+
+    function getHexColor(linea) {
+
+        if (!linea)
+            return "#7f8c8d";
+
+        const l = linea.toLowerCase();
+
+        if (l.includes("roja"))
+            return "#E50822";
+
+        if (l.includes("azul"))
+            return "#2980B9";
+
+        if (l.includes("verde"))
+            return "#27AE60";
+
+        if (l.includes("amarilla"))
+            return "#F39C12";
+
+        return "#7f8c8d";
+    }
+
+    // Mantener render correcto en JavaFX
+    setInterval(() => {
+        map.invalidateSize();
+    }, 1500);
+
+</script>
 
 </body>
 </html>
