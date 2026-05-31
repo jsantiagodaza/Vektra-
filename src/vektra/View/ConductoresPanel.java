@@ -165,6 +165,9 @@ public class ConductoresPanel extends javax.swing.JPanel {
 
         DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
         tablaConductores = new JTable(modelo);
+        tablaConductores.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        tablaConductores.setFillsViewportHeight(true);
+        tablaConductores.setRowHeight(30);
         scrollTabla = new JScrollPane(tablaConductores);
         PaneldeConductores.setLayout(new BorderLayout());
         PaneldeConductores.removeAll();
