@@ -21,15 +21,15 @@ public class Conductor extends Persona {
     }
 
    
-    public Conductor(String id, String nombre, String cedula, String licencia, String estado, Vehiculo vehiculo) {
-        super(id, nombre); // 
+    public Conductor(String id, String nombre, String cedula, String licencia, String estado) {
+        super(id, nombre); 
         this.cedula = cedula;
         this.licencia = licencia;
         this.estado = estado;
-        this.vehiculo = vehiculo;
+     
     }
 
-    // 🔹 Getters y Setters
+   
 
     public String getCedula() {
         return cedula;

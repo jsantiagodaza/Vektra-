@@ -69,7 +69,7 @@ public class ConductorDao {
                 rs.getString("nombre"),
                 rs.getString("cedula"),
                 rs.getString("licencia"),
-                rs.getString("estado")
+                rs.getString("estado")     
             );
 
             lista.add(c);
