@@ -240,16 +240,11 @@ public class AnadirVehiculo extends javax.swing.JPanel {
 
     private void btnAnadirVehiculoActionPerformed(java.awt.event.ActionEvent evt) {
         if (!todosValidos()) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                "Por favor corrige los campos marcados en rojo.",
-                "Campos incompletos",
-                javax.swing.JOptionPane.WARNING_MESSAGE);
+            new ERRORview().setVisible(true);
             return;
         }
 
-        javax.swing.JOptionPane.showMessageDialog(this,
-            "✓ Vehículo registrado correctamente.",
-            "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        new Confirmacion().setVisible(true);
 
         // Limpiar campos
         IDvehiculotxt.setText("");

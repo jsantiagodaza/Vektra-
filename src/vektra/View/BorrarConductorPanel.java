@@ -312,10 +312,7 @@ public class BorrarConductorPanel extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         validarCampos();
         if (!todosValidos()) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                "Por favor completa el conductor y escribe la misma ID mostrada a la derecha.",
-                "Campos incompletos/incorrectos",
-                javax.swing.JOptionPane.WARNING_MESSAGE);
+            new ERRORview().setVisible(true);
             return;
         }
 
@@ -332,17 +329,13 @@ public class BorrarConductorPanel extends javax.swing.JPanel {
             boolean borrado = conductorDao.eliminarConductor(idConductor);
             
             if (borrado) {
-                javax.swing.JOptionPane.showMessageDialog(this,
-                    "✓ Conductor borrado exitosamente.",
-                    "Borrado exitoso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                new Confirmacion().setVisible(true);
                 jComboBox1.setSelectedIndex(0);
                 jTextField1.setText("Digite la ID del conductor...");
                 jTextField1.setForeground(new java.awt.Color(150, 150, 150));
                 validarCampos();
             } else {
-                javax.swing.JOptionPane.showMessageDialog(this,
-                    "Error al borrar el conductor.",
-                    "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                new ERRORview().setVisible(true);
             }
 
         }

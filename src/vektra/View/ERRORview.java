@@ -17,6 +17,9 @@ public class ERRORview extends javax.swing.JFrame {
      */
     public ERRORview() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        btnOk.addActionListener(e -> dispose());
     }
 
     /**
@@ -36,7 +39,7 @@ public class ERRORview extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         btnOk = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(255, 0, 51));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));

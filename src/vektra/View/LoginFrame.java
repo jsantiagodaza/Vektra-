@@ -320,10 +320,7 @@ public class LoginFrame extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         validarCampos();
         if (!todosValidos()) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                "Por favor ingresa un correo válido y contraseña.",
-                "Campos inválidos",
-                javax.swing.JOptionPane.WARNING_MESSAGE);
+            new ERRORview().setVisible(true);
             return;
         }
 
@@ -333,9 +330,7 @@ public class LoginFrame extends javax.swing.JFrame {
             if (esAdminValido()) {
                 abrirMainFrame(true);
             } else {
-                javax.swing.JOptionPane.showMessageDialog(this,
-                    "Acceso restringido. Credenciales de administrador inválidas.",
-                    "Acceso denegado", javax.swing.JOptionPane.WARNING_MESSAGE);
+                new ERRORview().setVisible(true);
             }
         } else {
             // Pasajero Regular

@@ -125,17 +125,12 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
 
     private void btnGenerarTicketActionPerformed(java.awt.event.ActionEvent evt) {
         if (!todosValidos()) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                "Por favor corrige los campos marcados en rojo.",
-                "Campos incompletos",
-                javax.swing.JOptionPane.WARNING_MESSAGE);
+            new ERRORview().setVisible(true);
             return;
         }
 
         // Aquí iría la lógica de generación de ticket / DAO
-        javax.swing.JOptionPane.showMessageDialog(this,
-            "✓ Ticket generado correctamente.",
-            "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        new Confirmacion().setVisible(true);
 
         // Limpiar campos
         javax.swing.JTextField[] campos = { nombreClientetxt, idClientetxt, emailClientetxt, EdadporFechadeNacimientoClientetxt };

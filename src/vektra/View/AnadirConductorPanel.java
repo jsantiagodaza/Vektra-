@@ -328,10 +328,7 @@ public class AnadirConductorPanel extends javax.swing.JPanel {
 
     private void btnAnadirConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnadirConductorActionPerformed
         if (!todosValidos()) {
-            JOptionPane.showMessageDialog(this,
-                    "Por favor corrige los campos marcados en rojo.",
-                    "Campos incompletos",
-                    JOptionPane.WARNING_MESSAGE);
+            new ERRORview().setVisible(true);
             return;
         }
 
@@ -339,10 +336,7 @@ public class AnadirConductorPanel extends javax.swing.JPanel {
                 || cmbRutas.getSelectedItem().toString().startsWith("Item")
                 || cmbRutas.getSelectedItem().toString().equals("Seleccionar ruta...")) {
 
-            JOptionPane.showMessageDialog(this,
-                    "Selecciona una ruta para el conductor.",
-                    "Ruta requerida",
-                    JOptionPane.WARNING_MESSAGE);
+            new ERRORview().setVisible(true);
             return;
         }
 
@@ -366,8 +360,7 @@ public class AnadirConductorPanel extends javax.swing.JPanel {
 
             if (registrado) {
 
-                JOptionPane.showMessageDialog(this,
-                        "Conductor registrado correctamente");
+                new Confirmacion().setVisible(true);
 
                 nombreConductortxt.setText("");
                 apellidosConductortxt.setText("");
@@ -380,14 +373,12 @@ public class AnadirConductorPanel extends javax.swing.JPanel {
 
             } else {
 
-                JOptionPane.showMessageDialog(this,
-                        "No fue posible registrar el conductor");
+                new ERRORview().setVisible(true);
             }
 
         } catch (Exception e) {
 
-            JOptionPane.showMessageDialog(this,
-                    "Error: " + e.getMessage());
+            new ERRORview().setVisible(true);
         }
     }//GEN-LAST:event_btnAnadirConductorActionPerformed
 
