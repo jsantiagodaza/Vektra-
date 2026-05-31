@@ -67,7 +67,7 @@ public class MainFrameView extends javax.swing.JFrame {
         javax.swing.JButton[] botones = {
             btnDashboardInicial, btnGenerarticket, btnTustickets,
             btnEditarConductoresdelaEmpresa,
-            btnGestionRutas, btnCerrar
+            btnGestionRutas, btnCerrar, btnAnadirVehiculo
         };
 
         for (javax.swing.JButton btn : botones) {
@@ -139,6 +139,7 @@ public class MainFrameView extends javax.swing.JFrame {
         btnCerrar = new javax.swing.JButton();
         btnTustickets = new javax.swing.JButton();
         btnGestionRutas = new javax.swing.JButton();
+        btnAnadirVehiculo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -168,6 +169,8 @@ public class MainFrameView extends javax.swing.JFrame {
             }
         });
 
+        btnAnadirVehiculo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/vehiculos (2) (1) (1).png"))); // NOI18N
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -180,7 +183,8 @@ public class MainFrameView extends javax.swing.JFrame {
                     .addComponent(btnCerrar)
                     .addComponent(btnDashboardInicial)
                     .addComponent(btnTustickets)
-                    .addComponent(btnGestionRutas))
+                    .addComponent(btnGestionRutas)
+                    .addComponent(btnAnadirVehiculo))
                 .addContainerGap(9, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -188,7 +192,7 @@ public class MainFrameView extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addComponent(btnDashboardInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnGenerarticket, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35)
                 .addComponent(btnGestionRutas, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -196,9 +200,11 @@ public class MainFrameView extends javax.swing.JFrame {
                 .addComponent(btnTustickets, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28)
                 .addComponent(btnEditarConductoresdelaEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addGap(18, 18, 18)
+                .addComponent(btnAnadirVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
                 .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(93, 93, 93))
+                .addGap(100, 100, 100))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -222,7 +228,7 @@ public class MainFrameView extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 620, Short.MAX_VALUE)
         );
 
         pack();
@@ -262,6 +268,7 @@ public class MainFrameView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAnadirVehiculo;
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnDashboardInicial;
     private javax.swing.JButton btnEditarConductoresdelaEmpresa;
