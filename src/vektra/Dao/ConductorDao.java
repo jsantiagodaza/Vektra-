@@ -126,19 +126,14 @@ public class ConductorDao {
     public boolean eliminarConductor(String id) {
 
         String sql = "DELETE FROM conductores WHERE id = ?";
-
-        try (
-                Connection con = Conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setString(1, id);
-
+        try (Connection con = Conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1,Integer.parseInt(id));
             return ps.executeUpdate() > 0;
-
+            
         } catch (SQLException e) {
             System.out.println("Error al eliminar conductor: " + e.getMessage());
             return false;
         }
-
     }
 
     public boolean asignarARuta(String conductorId, int rutaId) {
@@ -146,26 +141,21 @@ public class ConductorDao {
         boolean asignado = false;
         try {
             con = Conexion.conectar();
-
             String sql = """
                      INSERT INTO conductores (conductor_id, ruta_id)
                      VALUES (?, ?)
                      """;
-
             ps = con.prepareStatement(sql);
             ps.setString(1, conductorId);
             ps.setInt(2, rutaId);
             int filas = ps.executeUpdate();
             asignado = (filas > 0);
-
         } catch (SQLException e) {
-
             if (e.getMessage().contains("duplicate")) {
                 System.out.println("El conductor ya tiene esa ruta asignada");
             } else {
                 System.out.println("Error al asignar ruta: " + e.getMessage());
             }
-
         } finally {
             try {
                 if (ps != null) {
