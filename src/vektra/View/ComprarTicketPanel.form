@@ -46,10 +46,10 @@
                           <Component id="jLabel4" alignment="0" min="-2" pref="271" max="-2" attributes="0"/>
                           <Component id="jLabel5" alignment="0" min="-2" pref="271" max="-2" attributes="0"/>
                           <Component id="jLabel6" alignment="0" min="-2" pref="271" max="-2" attributes="0"/>
-                          <Component id="jTextField1" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jTextField2" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jTextField3" pref="553" max="32767" attributes="0"/>
-                          <Component id="jTextField4" max="32767" attributes="0"/>
+                          <Component id="nombreClientetxt" alignment="0" max="32767" attributes="0"/>
+                          <Component id="idClientetxt" alignment="0" max="32767" attributes="0"/>
+                          <Component id="emailClientetxt" pref="553" max="32767" attributes="0"/>
+                          <Component id="EdadporFechadeNacimientoClientetxt" max="32767" attributes="0"/>
                       </Group>
                       <Component id="btnGenerarTicket" min="-2" pref="248" max="-2" attributes="0"/>
                   </Group>
@@ -67,19 +67,19 @@
                   <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
                   <Component id="jLabel3" min="-2" pref="28" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jTextField1" min="-2" pref="44" max="-2" attributes="0"/>
+                  <Component id="nombreClientetxt" min="-2" pref="44" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                   <Component id="jLabel4" min="-2" pref="28" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jTextField2" min="-2" pref="44" max="-2" attributes="0"/>
+                  <Component id="idClientetxt" min="-2" pref="44" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                   <Component id="jLabel5" min="-2" pref="28" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jTextField3" min="-2" pref="45" max="-2" attributes="0"/>
+                  <Component id="emailClientetxt" min="-2" pref="45" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                   <Component id="jLabel6" min="-2" pref="28" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jTextField4" min="-2" pref="46" max="-2" attributes="0"/>
+                  <Component id="EdadporFechadeNacimientoClientetxt" min="-2" pref="46" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                   <Component id="btnGenerarTicket" min="-2" pref="42" max="-2" attributes="0"/>
                   <EmptySpace pref="18" max="32767" attributes="0"/>
@@ -151,7 +151,7 @@
             <Property name="text" type="java.lang.String" value="Fecha de Nacimiento:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="jTextField1">
+        <Component class="javax.swing.JTextField" name="nombreClientetxt">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="33" green="33" red="33" type="rgb"/>
@@ -165,10 +165,10 @@
             <Property name="text" type="java.lang.String" value="Ej. Juan P&#xe9;rez"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="nombreClientetxtActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JTextField" name="jTextField2">
+        <Component class="javax.swing.JTextField" name="idClientetxt">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="33" green="33" red="33" type="rgb"/>
@@ -182,7 +182,7 @@
             <Property name="text" type="java.lang.String" value="Ej. 1234567"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="jTextField3">
+        <Component class="javax.swing.JTextField" name="emailClientetxt">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="33" green="33" red="33" type="rgb"/>
@@ -196,7 +196,7 @@
             <Property name="text" type="java.lang.String" value="tuincreiblecorreo123@ejemplo.com"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="jTextField4">
+        <Component class="javax.swing.JTextField" name="EdadporFechadeNacimientoClientetxt">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="33" green="33" red="33" type="rgb"/>

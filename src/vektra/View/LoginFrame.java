@@ -15,8 +15,16 @@ public class LoginFrame extends javax.swing.JFrame {
     /**
      * Creates new form LoginFrame
      */
+    private static final java.awt.Color COLOR_CAMPO = new java.awt.Color(51, 51, 51);
+    private static final java.awt.Color COLOR_ERROR = new java.awt.Color(200, 50, 50);
+    private static final java.awt.Color COLOR_OK    = new java.awt.Color(39, 174, 96);
+    private static final java.awt.Color COLOR_TEXTO = new java.awt.Color(255, 255, 255);
+
     public LoginFrame() {
         initComponents();
+        initColors();
+        initPlaceholders();
+        initValidaciones();
     }
 
     /**
@@ -35,13 +43,15 @@ public class LoginFrame extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbTipoUsuario = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        logincorreotxt = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        contrasenatxt = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -90,18 +100,18 @@ public class LoginFrame extends javax.swing.JFrame {
         jLabel5.setForeground(new java.awt.Color(102, 102, 102));
         jLabel5.setText("Tipo de usuario:");
 
-        jComboBox1.setBackground(new java.awt.Color(51, 51, 51));
-        jComboBox1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jComboBox1.setForeground(new java.awt.Color(255, 255, 255));
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pasajero Regular", "Administrador" }));
+        cmbTipoUsuario.setBackground(new java.awt.Color(51, 51, 51));
+        cmbTipoUsuario.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        cmbTipoUsuario.setForeground(new java.awt.Color(255, 255, 255));
+        cmbTipoUsuario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pasajero Regular", "Administrador" }));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(102, 102, 102));
         jLabel6.setText("Correo Electronico:");
 
-        jTextField1.setBackground(new java.awt.Color(51, 51, 51));
-        jTextField1.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField1.setText("tuincreiblecorreo@gmail.com");
+        logincorreotxt.setBackground(new java.awt.Color(51, 51, 51));
+        logincorreotxt.setForeground(new java.awt.Color(255, 255, 255));
+        logincorreotxt.setText("tuincreiblecorreo@gmail.com");
 
         jButton1.setBackground(new java.awt.Color(51, 51, 51));
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -129,6 +139,19 @@ public class LoginFrame extends javax.swing.JFrame {
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/VIKTOR BN (2) (2).png"))); // NOI18N
 
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel9.setText("Contraseña:");
+
+        contrasenatxt.setBackground(new java.awt.Color(51, 51, 51));
+        contrasenatxt.setForeground(new java.awt.Color(255, 255, 255));
+        contrasenatxt.setToolTipText("");
+        contrasenatxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                contrasenatxtActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout basePanelLoginLayout = new javax.swing.GroupLayout(basePanelLogin);
         basePanelLogin.setLayout(basePanelLoginLayout);
         basePanelLoginLayout.setHorizontalGroup(
@@ -141,11 +164,13 @@ public class LoginFrame extends javax.swing.JFrame {
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
+                    .addComponent(cmbTipoUsuario, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(logincorreotxt, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(contrasenatxt))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 230, Short.MAX_VALUE))
         );
@@ -160,18 +185,22 @@ public class LoginFrame extends javax.swing.JFrame {
                 .addGap(57, 57, 57)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cmbTipoUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25)
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
-                .addComponent(jLabel7)
+                .addComponent(logincorreotxt, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(contrasenatxt, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(91, Short.MAX_VALUE))
+                .addGap(37, 37, 37))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, basePanelLoginLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -191,13 +220,129 @@ public class LoginFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void initColors() {
+        cmbTipoUsuario.setBackground(COLOR_CAMPO);
+        cmbTipoUsuario.setForeground(COLOR_TEXTO);
+        logincorreotxt.setBackground(COLOR_CAMPO);
+        logincorreotxt.setForeground(COLOR_TEXTO);
+        contrasenatxt.setBackground(COLOR_CAMPO);
+        contrasenatxt.setForeground(COLOR_TEXTO);
+        jButton1.setBackground(new java.awt.Color(51, 51, 51));
+        jButton1.setForeground(COLOR_TEXTO);
+    }
+
+    private void initPlaceholders() {
+        configurarPlaceholder(logincorreotxt, "tuincreiblecorreo@gmail.com");
+        configurarPlaceholder(contrasenatxt, "Ingresa tu Contraseña");
+    }
+
+    private void configurarPlaceholder(javax.swing.JTextField campo, String placeholder) {
+        campo.setText(placeholder);
+        campo.setForeground(new java.awt.Color(150, 150, 150));
+        campo.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                if (campo.getText().equals(placeholder)) {
+                    campo.setText("");
+                    campo.setForeground(COLOR_TEXTO);
+                }
+            }
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (campo.getText().trim().isEmpty()) {
+                    campo.setText(placeholder);
+                    campo.setForeground(new java.awt.Color(150, 150, 150));
+                    marcarCampo(campo, false);
+                }
+            }
+        });
+    }
+
+    private void initValidaciones() {
+        logincorreotxt.getDocument().addDocumentListener(new SimpleDocListener(this::validarCampos));
+        contrasenatxt.getDocument().addDocumentListener(new SimpleDocListener(this::validarCampos));
+        validarCampos();
+    }
+
+    private void validarCampos() {
+        String email = logincorreotxt.getText().trim();
+        String password = contrasenatxt.getText().trim();
+        boolean emailValido = !email.isEmpty() && !email.equals("tuincreiblecorreo@gmail.com")
+            && email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
+        boolean passwordValido = !password.isEmpty() && !password.equals("Ingresa tu Contraseña") && password.length() >= 4;
+        marcarCampo(logincorreotxt, emailValido);
+        marcarCampo(contrasenatxt, passwordValido);
+    }
+
+    private void marcarCampo(javax.swing.JTextField campo, boolean valido) {
+        java.awt.Color color = valido ? COLOR_OK : COLOR_ERROR;
+        campo.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createLineBorder(color, 2, true),
+            javax.swing.BorderFactory.createEmptyBorder(4, 8, 4, 8)
+        ));
+        campo.putClientProperty("valido", valido);
+    }
+
+    private boolean todosValidos() {
+        Object email = logincorreotxt.getClientProperty("valido");
+        Object pass = contrasenatxt.getClientProperty("valido");
+        return email instanceof Boolean && (Boolean) email
+            && pass instanceof Boolean && (Boolean) pass;
+    }
+
+
+    private boolean esAdministrador() {
+        return cmbTipoUsuario.getSelectedItem() != null
+            && cmbTipoUsuario.getSelectedItem().toString().equals("Administrador");
+    }
+
+    private boolean esAdminValido() {
+        String email = logincorreotxt.getText().trim();
+        String password = contrasenatxt.getText().trim();
+        return email.equals("admin@admin.com") && password.equals("adminadmin");
+    }
+
+    private void abrirMainFrame() {
+        MainFrameView main = new MainFrameView();
+        main.setLocationRelativeTo(null);
+        main.setVisible(true);
+        this.dispose();
+    }
+    private static class SimpleDocListener implements javax.swing.event.DocumentListener {
+        private final Runnable accion;
+        SimpleDocListener(Runnable accion) { this.accion = accion; }
+        @Override public void insertUpdate(javax.swing.event.DocumentEvent e) { accion.run(); }
+        @Override public void removeUpdate(javax.swing.event.DocumentEvent e) { accion.run(); }
+        @Override public void changedUpdate(javax.swing.event.DocumentEvent e) { accion.run(); }
+    }
+
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        validarCampos();
+        if (!todosValidos()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Por favor ingresa un correo válido y contraseña.",
+                "Campos inválidos",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (esAdministrador() && esAdminValido()) {
+            abrirMainFrame();
+            return;
+        }
+
+        javax.swing.JOptionPane.showMessageDialog(this,
+            "Acceso restringido. Solo administradores con credenciales válidas pueden iniciar sesión.",
+            "Acceso denegado", javax.swing.JOptionPane.WARNING_MESSAGE);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void contrasenatxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contrasenatxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_contrasenatxtActionPerformed
 
     /**
      * @param args the command line arguments
@@ -226,9 +371,10 @@ public class LoginFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel basePanelLogin;
+    private javax.swing.JComboBox<String> cmbTipoUsuario;
+    private javax.swing.JTextField contrasenatxt;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -237,7 +383,8 @@ public class LoginFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField logincorreotxt;
     // End of variables declaration//GEN-END:variables
 }

@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import vektra.Dao.ConductorDao;
 
 /**
+ * 
  *
  * @author santi
  */
@@ -16,8 +17,16 @@ public class BorrarConductorPanel extends javax.swing.JPanel {
     /**
      * Creates new form BorrarConductorPanel
      */
+    private static final java.awt.Color COLOR_CAMPO = new java.awt.Color(51, 51, 51);
+    private static final java.awt.Color COLOR_ERROR = new java.awt.Color(200, 50, 50);
+    private static final java.awt.Color COLOR_OK    = new java.awt.Color(39, 174, 96);
+    private static final java.awt.Color COLOR_TEXTO = new java.awt.Color(204, 204, 204);
+
     public BorrarConductorPanel() {
         initComponents();
+        initColors();
+        initPlaceholders();
+        initValidaciones();
     }
 
     /**
@@ -107,7 +116,7 @@ public class BorrarConductorPanel extends javax.swing.JPanel {
 
         jComboBox1.setBackground(new java.awt.Color(51, 51, 51));
         jComboBox1.setForeground(new java.awt.Color(255, 255, 255));
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "M", "d" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar conductor...", "M", "d" }));
 
         jLabel6.setBackground(new java.awt.Color(102, 102, 102));
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -131,6 +140,7 @@ public class BorrarConductorPanel extends javax.swing.JPanel {
         jTextField2.setBackground(new java.awt.Color(51, 51, 51));
         jTextField2.setForeground(new java.awt.Color(255, 255, 255));
         jTextField2.setText("ID del Conductor");
+        jTextField2.setEditable(false);
 
         jButton1.setBackground(new java.awt.Color(153, 0, 0));
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -207,11 +217,83 @@ public class BorrarConductorPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void initColors() {
+        jComboBox1.setBackground(COLOR_CAMPO);
+        jComboBox1.setForeground(COLOR_TEXTO);
+        jTextField1.setBackground(COLOR_CAMPO);
+        jTextField1.setForeground(COLOR_TEXTO);
+        jTextField2.setBackground(COLOR_CAMPO);
+        jTextField2.setForeground(COLOR_TEXTO);
+    }
+
+    private void initPlaceholders() {
+        jTextField1.setText("Digite la ID del conductor...");
+        jTextField1.setForeground(new java.awt.Color(150, 150, 150));
+        jTextField2.setText("ID del Conductor");
+        jTextField2.setForeground(new java.awt.Color(150, 150, 150));
+        jTextField1.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                if (jTextField1.getText().equals("Digite la ID del conductor...")) {
+                    jTextField1.setText("");
+                    jTextField1.setForeground(COLOR_TEXTO);
+                }
+            }
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (jTextField1.getText().trim().isEmpty()) {
+                    jTextField1.setText("Digite la ID del conductor...");
+                    jTextField1.setForeground(new java.awt.Color(150, 150, 150));
+                    marcarCampo(jTextField1, false);
+                }
+            }
+        });
+    }
+
+    private void initValidaciones() {
+        jComboBox1.addItemListener(e -> {
+            if (e.getStateChange() != java.awt.event.ItemEvent.SELECTED) return;
+            actualizarIdMostrada();
+            validarCampos();
+        });
+
+        jTextField1.getDocument().addDocumentListener(new SimpleDocListener(this::validarCampos));
+        actualizarIdMostrada();
+        validarCampos();
+    }
+
+    private void actualizarIdMostrada() {
+        String seleccionado = jComboBox1.getSelectedItem() == null ? "" : jComboBox1.getSelectedItem().toString();
+        if (seleccionado.isEmpty() || seleccionado.equals("Seleccionar conductor...")) {
+            jTextField2.setText("ID del Conductor");
+            jTextField2.setForeground(new java.awt.Color(150, 150, 150));
+            marcarCampo(jTextField2, false);
+        } else {
+            jTextField2.setText(seleccionado);
+            jTextField2.setForeground(COLOR_TEXTO);
+            marcarCampo(jTextField2, true);
+        }
+    }
+
+    private void validarCampos() {
+        boolean comboValido = jComboBox1.getSelectedItem() != null && !jComboBox1.getSelectedItem().toString().equals("Seleccionar conductor...");
+        boolean textoValido = !jTextField1.getText().trim().isEmpty() && !jTextField1.getText().equals("Digite la ID del conductor...");
+        boolean coincide = textoValido && comboValido && jTextField1.getText().trim().equals(jTextField2.getText().trim());
+
+        if (!comboValido) {
+            marcarCampo(jComboBox1, false);
+        } else {
+            marcarCampo(jComboBox1, true);
+        }
+        marcarCampo(jTextField1, coincide);
+    }
+
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
         
          String id1 = jTextField1.getText().trim();
          String id2 = jTextField2.getText().trim();
@@ -228,8 +310,52 @@ public class BorrarConductorPanel extends javax.swing.JPanel {
          }else {
            JOptionPane.showMessageDialog(this, "No existe un conductor con ese ID");
         }  
+
+        validarCampos();
+        if (!todosValidos()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Por favor completa el conductor y escribe la misma ID mostrada a la derecha.",
+                "Campos incompletos",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        javax.swing.JOptionPane.showMessageDialog(this,
+            "✓ Conductor validado para borrado.",
+            "Validación correcta", javax.swing.JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+
+    private void marcarCampo(javax.swing.JComponent campo, boolean valido) {
+        java.awt.Color color = valido ? COLOR_OK : COLOR_ERROR;
+        if (campo instanceof javax.swing.JTextField) {
+            ((javax.swing.JTextField) campo).setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                javax.swing.BorderFactory.createLineBorder(color, 2, true),
+                javax.swing.BorderFactory.createEmptyBorder(4, 8, 4, 8)
+            ));
+            campo.putClientProperty("valido", valido);
+        } else if (campo instanceof javax.swing.JComboBox) {
+            campo.setBorder(javax.swing.BorderFactory.createLineBorder(color, 2, true));
+            campo.putClientProperty("valido", valido);
+        }
+    }
+
+    private boolean todosValidos() {
+        Object combo = jComboBox1.getClientProperty("valido");
+        Object texto = jTextField1.getClientProperty("valido");
+        Object id = jTextField2.getClientProperty("valido");
+        return combo instanceof Boolean && (Boolean) combo
+            && texto instanceof Boolean && (Boolean) texto
+            && id instanceof Boolean && (Boolean) id;
+    }
+
+    private static class SimpleDocListener implements javax.swing.event.DocumentListener {
+        private final Runnable accion;
+        SimpleDocListener(Runnable accion) { this.accion = accion; }
+        @Override public void insertUpdate(javax.swing.event.DocumentEvent e) { accion.run(); }
+        @Override public void removeUpdate(javax.swing.event.DocumentEvent e) { accion.run(); }
+        @Override public void changedUpdate(javax.swing.event.DocumentEvent e) { accion.run(); }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

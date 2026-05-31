@@ -13,8 +13,219 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
     /**
      * Creates new form ComprarTicketPanel
      */
+    
     public ComprarTicketPanel() {
         initComponents();
+        // Colores y comportamiento
+        initColors();
+        initPlaceholders();
+        initValidaciones();
+        btnGenerarTicket.addActionListener(e -> btnGenerarTicketActionPerformed(e));
+    }
+ 
+    private static final java.awt.Color COLOR_CAMPO = new java.awt.Color(51, 51, 51);
+    private static final java.awt.Color COLOR_ERROR = new java.awt.Color(200, 50, 50);
+    private static final java.awt.Color COLOR_OK    = new java.awt.Color(39, 174, 96);
+    private static final java.awt.Color COLOR_TEXTO = new java.awt.Color(204, 204, 204);
+
+    private void initColors() {
+        nombreClientetxt.setBackground(COLOR_CAMPO);
+        nombreClientetxt.setForeground(COLOR_TEXTO);
+        idClientetxt.setBackground(COLOR_CAMPO);
+        idClientetxt.setForeground(COLOR_TEXTO);
+        emailClientetxt.setBackground(COLOR_CAMPO);
+        emailClientetxt.setForeground(COLOR_TEXTO);
+        EdadporFechadeNacimientoClientetxt.setBackground(COLOR_CAMPO);
+        EdadporFechadeNacimientoClientetxt.setForeground(COLOR_TEXTO);
+        btnGenerarTicket.setBackground(new java.awt.Color(51, 153, 255));
+        btnGenerarTicket.setForeground(java.awt.Color.WHITE);
+    }
+
+    // PLACEHOLDERS
+    private void initPlaceholders() {
+        configurarPlaceholder(nombreClientetxt, "Ej. Juan Pérez");
+        configurarPlaceholder(idClientetxt, "Ej. 1234567");
+        configurarPlaceholder(emailClientetxt, "tuincreiblecorreo123@ejemplo.com");
+        configurarPlaceholder(EdadporFechadeNacimientoClientetxt, "DD/MM/AAAA");
+        // Añadir filtro para formatear la fecha automáticamente a dd/MM/aaaa
+        try {
+            javax.swing.text.Document d = EdadporFechadeNacimientoClientetxt.getDocument();
+            if (d instanceof javax.swing.text.AbstractDocument) {
+                ((javax.swing.text.AbstractDocument) d).setDocumentFilter(new DateDocumentFilter());
+            }
+        } catch (Exception ex) {
+            // no crítico
+        }
+    }
+
+    private void configurarPlaceholder(javax.swing.JTextField campo, String placeholder) {
+        campo.setText(placeholder);
+        campo.setForeground(new java.awt.Color(120, 120, 120));
+        campo.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                if (campo.getText().equals(placeholder)) {
+                    campo.setText("");
+                    campo.setForeground(COLOR_TEXTO);
+                }
+            }
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (campo.getText().trim().isEmpty()) {
+                    campo.setText(placeholder);
+                    campo.setForeground(new java.awt.Color(120, 120, 120));
+                    marcarCampo(campo, false);
+                }
+            }
+        });
+    }
+
+    // VALIDACIONES
+    private void initValidaciones() {
+        nombreClientetxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = nombreClientetxt.getText().trim();
+            marcarCampo(nombreClientetxt,
+                !v.isEmpty() && !v.equals("Ej. Juan Pérez") && v.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+"));
+        }));
+
+        idClientetxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = idClientetxt.getText().trim();
+            marcarCampo(idClientetxt,
+                !v.isEmpty() && !v.equals("Ej. 1234567") && v.matches("\\d{6,12}"));
+        }));
+
+        emailClientetxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = emailClientetxt.getText().trim();
+            marcarCampo(emailClientetxt,
+                !v.isEmpty() && !v.equals("tuincreiblecorreo123@ejemplo.com") && v.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$"));
+        }));
+
+        EdadporFechadeNacimientoClientetxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = EdadporFechadeNacimientoClientetxt.getText().trim();
+            if (v.isEmpty() || v.equals("DD/MM/AAAA")) { marcarCampo(EdadporFechadeNacimientoClientetxt, false); return; }
+            // Extraer solo dígitos
+            String digits = v.replaceAll("\\D", "");
+            if (digits.length() != 8) { marcarCampo(EdadporFechadeNacimientoClientetxt, false); return; }
+            try {
+                int day = Integer.parseInt(digits.substring(0, 2));
+                int month = Integer.parseInt(digits.substring(2, 4));
+                int year = Integer.parseInt(digits.substring(4, 8));
+                java.time.LocalDate dob = java.time.LocalDate.of(year, month, day);
+                java.time.LocalDate today = java.time.LocalDate.now();
+                int edad = java.time.Period.between(dob, today).getYears();
+                boolean valido = !dob.isAfter(today) && edad >= 0 && edad < 150;
+                marcarCampo(EdadporFechadeNacimientoClientetxt, valido);
+                if (valido) EdadporFechadeNacimientoClientetxt.putClientProperty("edad", edad);
+            } catch (Exception ex) {
+                marcarCampo(EdadporFechadeNacimientoClientetxt, false);
+            }
+        }));
+    }
+
+    private void btnGenerarTicketActionPerformed(java.awt.event.ActionEvent evt) {
+        if (!todosValidos()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Por favor corrige los campos marcados en rojo.",
+                "Campos incompletos",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Aquí iría la lógica de generación de ticket / DAO
+        javax.swing.JOptionPane.showMessageDialog(this,
+            "✓ Ticket generado correctamente.",
+            "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+        // Limpiar campos
+        javax.swing.JTextField[] campos = { nombreClientetxt, idClientetxt, emailClientetxt, EdadporFechadeNacimientoClientetxt };
+        for (javax.swing.JTextField c : campos) {
+            c.setText("");
+            c.putClientProperty("valido", false);
+            c.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(80, 80, 80), 1, true));
+        }
+        // Restaurar placeholders
+        initPlaceholders();
+    }
+
+    // HELPERS
+    private void marcarCampo(javax.swing.JTextField campo, boolean valido) {
+        java.awt.Color color = valido ? COLOR_OK : COLOR_ERROR;
+        campo.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createLineBorder(color, 2, true),
+            javax.swing.BorderFactory.createEmptyBorder(4, 8, 4, 8)
+        ));
+        campo.putClientProperty("valido", valido);
+    }
+
+    private boolean todosValidos() {
+        javax.swing.JTextField[] campos = { nombreClientetxt, idClientetxt, emailClientetxt, EdadporFechadeNacimientoClientetxt };
+        for (javax.swing.JTextField c : campos) {
+            Object tag = c.getClientProperty("valido");
+            if (tag == null || !(Boolean) tag) return false;
+        }
+        return true;
+    }
+
+    private static class SimpleDocListener implements javax.swing.event.DocumentListener {
+        private final Runnable accion;
+        SimpleDocListener(Runnable accion) { this.accion = accion; }
+        @Override public void insertUpdate(javax.swing.event.DocumentEvent e)  { accion.run(); }
+        @Override public void removeUpdate(javax.swing.event.DocumentEvent e)  { accion.run(); }
+        @Override public void changedUpdate(javax.swing.event.DocumentEvent e) { accion.run(); }
+    }
+
+    // DocumentFilter para formatear la fecha a dd/MM/aaaa mientras se escribe
+    private static class DateDocumentFilter extends javax.swing.text.DocumentFilter {
+        @Override
+        public void insertString(FilterBypass fb, int offset, String string, javax.swing.text.AttributeSet attr) throws javax.swing.text.BadLocationException {
+            replace(fb, offset, 0, string, attr);
+        }
+
+        @Override
+        public void remove(FilterBypass fb, int offset, int length) throws javax.swing.text.BadLocationException {
+            javax.swing.text.Document doc = fb.getDocument();
+            String current = doc.getText(0, doc.getLength());
+            // eliminar y reformat
+            StringBuilder sb = new StringBuilder(current);
+            sb.delete(offset, offset + length);
+            String digits = sb.toString().replaceAll("\\D", "");
+            String formatted = formatDigits(digits);
+            fb.remove(0, doc.getLength());
+            if (!formatted.isEmpty()) fb.insertString(0, formatted, null);
+        }
+
+        @Override
+        public void replace(FilterBypass fb, int offset, int length, String text, javax.swing.text.AttributeSet attrs) throws javax.swing.text.BadLocationException {
+            javax.swing.text.Document doc = fb.getDocument();
+            String current = doc.getText(0, doc.getLength());
+            // construir nuevo texto
+            StringBuilder sb = new StringBuilder(current);
+            // tratar cuando placeholder está presente (letras)
+            if (sb.toString().matches(".*[A-Za-z].*")) {
+                sb = new StringBuilder();
+            }
+            if (length > 0) {
+                int end = Math.min(offset + length, sb.length());
+                if (end > offset) sb.delete(offset, end);
+            }
+            if (text != null) sb.insert(offset, text);
+            String digits = sb.toString().replaceAll("\\D", "");
+            if (digits.length() > 8) digits = digits.substring(0, 8);
+            String formatted = formatDigits(digits);
+            fb.remove(0, doc.getLength());
+            if (!formatted.isEmpty()) fb.insertString(0, formatted, attrs);
+        }
+
+        private static String formatDigits(String d) {
+            StringBuilder out = new StringBuilder();
+            int len = d.length();
+            for (int i = 0; i < len; i++) {
+                out.append(d.charAt(i));
+                if (i == 1 && len > 2) out.append('/');
+                if (i == 3 && len > 4) out.append('/');
+            }
+            return out.toString();
+        }
     }
 
     /**
@@ -33,10 +244,10 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
+        nombreClientetxt = new javax.swing.JTextField();
+        idClientetxt = new javax.swing.JTextField();
+        emailClientetxt = new javax.swing.JTextField();
+        EdadporFechadeNacimientoClientetxt = new javax.swing.JTextField();
         btnGenerarTicket = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -64,30 +275,30 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
         jLabel6.setForeground(new java.awt.Color(153, 153, 153));
         jLabel6.setText("Fecha de Nacimiento:");
 
-        jTextField1.setBackground(new java.awt.Color(51, 51, 51));
-        jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField1.setForeground(new java.awt.Color(153, 153, 153));
-        jTextField1.setText("Ej. Juan Pérez");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        nombreClientetxt.setBackground(new java.awt.Color(51, 51, 51));
+        nombreClientetxt.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        nombreClientetxt.setForeground(new java.awt.Color(153, 153, 153));
+        nombreClientetxt.setText("Ej. Juan Pérez");
+        nombreClientetxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                nombreClientetxtActionPerformed(evt);
             }
         });
 
-        jTextField2.setBackground(new java.awt.Color(51, 51, 51));
-        jTextField2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField2.setForeground(new java.awt.Color(204, 204, 204));
-        jTextField2.setText("Ej. 1234567");
+        idClientetxt.setBackground(new java.awt.Color(51, 51, 51));
+        idClientetxt.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        idClientetxt.setForeground(new java.awt.Color(204, 204, 204));
+        idClientetxt.setText("Ej. 1234567");
 
-        jTextField3.setBackground(new java.awt.Color(51, 51, 51));
-        jTextField3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField3.setForeground(new java.awt.Color(153, 153, 153));
-        jTextField3.setText("tuincreiblecorreo123@ejemplo.com");
+        emailClientetxt.setBackground(new java.awt.Color(51, 51, 51));
+        emailClientetxt.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        emailClientetxt.setForeground(new java.awt.Color(153, 153, 153));
+        emailClientetxt.setText("tuincreiblecorreo123@ejemplo.com");
 
-        jTextField4.setBackground(new java.awt.Color(51, 51, 51));
-        jTextField4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField4.setForeground(new java.awt.Color(153, 153, 153));
-        jTextField4.setText("DD/MM/AAAA");
+        EdadporFechadeNacimientoClientetxt.setBackground(new java.awt.Color(51, 51, 51));
+        EdadporFechadeNacimientoClientetxt.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        EdadporFechadeNacimientoClientetxt.setForeground(new java.awt.Color(153, 153, 153));
+        EdadporFechadeNacimientoClientetxt.setText("DD/MM/AAAA");
 
         btnGenerarTicket.setBackground(new java.awt.Color(51, 51, 51));
         btnGenerarTicket.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -108,10 +319,10 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextField1)
-                        .addComponent(jTextField2)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 553, Short.MAX_VALUE)
-                        .addComponent(jTextField4))
+                        .addComponent(nombreClientetxt)
+                        .addComponent(idClientetxt)
+                        .addComponent(emailClientetxt, javax.swing.GroupLayout.DEFAULT_SIZE, 553, Short.MAX_VALUE)
+                        .addComponent(EdadporFechadeNacimientoClientetxt))
                     .addComponent(btnGenerarTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(344, Short.MAX_VALUE))
         );
@@ -125,19 +336,19 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
                 .addGap(45, 45, 45)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(nombreClientetxt, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(idClientetxt, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(emailClientetxt, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(EdadporFechadeNacimientoClientetxt, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addComponent(btnGenerarTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(18, Short.MAX_VALUE))
@@ -155,13 +366,16 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void nombreClientetxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreClientetxtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_nombreClientetxtActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField EdadporFechadeNacimientoClientetxt;
     private javax.swing.JButton btnGenerarTicket;
+    private javax.swing.JTextField emailClientetxt;
+    private javax.swing.JTextField idClientetxt;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -169,9 +383,6 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField nombreClientetxt;
     // End of variables declaration//GEN-END:variables
 }
