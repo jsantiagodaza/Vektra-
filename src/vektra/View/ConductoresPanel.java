@@ -12,6 +12,7 @@ import javax.swing.table.DefaultTableModel;
 import vektra.Dao.ConductorDao;
 import vektra.Model.Conductor;
 
+
 /**
  *
  * @author santi
