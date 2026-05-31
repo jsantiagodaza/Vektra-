@@ -300,9 +300,32 @@ public class BorrarConductorPanel extends javax.swing.JPanel {
             return;
         }
 
-        javax.swing.JOptionPane.showMessageDialog(this,
-            "✓ Conductor validado para borrado.",
-            "Validación correcta", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        String idConductor = jTextField1.getText().trim();
+        
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(this,
+            "¿Estás seguro de que deseas borrar el conductor con ID: " + idConductor + "?\nEsta acción no se puede deshacer.",
+            "Confirmar Borrado",
+            javax.swing.JOptionPane.YES_NO_OPTION,
+            javax.swing.JOptionPane.WARNING_MESSAGE);
+            
+        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+            vektra.Dao.ConductorDao conductorDao = new vektra.Dao.ConductorDao();
+            boolean borrado = conductorDao.eliminarConductor(idConductor);
+            
+            if (borrado) {
+                javax.swing.JOptionPane.showMessageDialog(this,
+                    "✓ Conductor borrado exitosamente.",
+                    "Borrado exitoso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                jComboBox1.setSelectedIndex(0);
+                jTextField1.setText("Digite la ID del conductor...");
+                jTextField1.setForeground(new java.awt.Color(150, 150, 150));
+                validarCampos();
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this,
+                    "Error al borrar el conductor.",
+                    "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
 
