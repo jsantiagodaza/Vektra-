@@ -42,9 +42,30 @@ public class MainFrameView extends javax.swing.JFrame {
         // Cargar dashboard por defecto
         mostrarPanel(new DashboardPanel());
         btnDashboardInicial.addActionListener(e -> mostrarPanel(new DashboardPanel()));
-        btnGenerarticket.addActionListener(e -> mostrarPanel(new ComprarTicketPanel()));
-        btnTustickets.addActionListener(e -> mostrarPanel(new TicketsActivosPanel()));
-        btnGestionRutas.addActionListener(e -> mostrarPanel(new MapaPanel()));
+        btnGenerarticket.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                mostrarPanel(new ComprarTicketPanel());
+            }
+        });
+        btnTustickets.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                mostrarPanel(new TicketsActivosPanel());
+            }
+        });
+        btnGestionRutas.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                mostrarPanel(new MapaPanel());
+            }
+        });
+        btnAnadirVehiculo.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                mostrarPanel(new AnadirVehiculo());
+            }
+        });
         btnCerrar.addActionListener(e -> {
             int confirm = javax.swing.JOptionPane.showConfirmDialog(
                     this,
