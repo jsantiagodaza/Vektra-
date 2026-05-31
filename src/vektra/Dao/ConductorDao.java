@@ -20,7 +20,7 @@ public class ConductorDao {
 
     public boolean agregarConductor(Conductor c) {
         String sql
-                = "INSERT INTO conductores "
+                = "INSERT INTO conductoress "
                 + "(nombre, apellido, cedula, telefono, licencia, ruta_asignada) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -46,7 +46,7 @@ public class ConductorDao {
     public List<Conductor> obtenerTodos() {
 
         List<Conductor> lista = new ArrayList<>();
-        String sql = "SELECT * FROM conductores";
+        String sql = "SELECT * FROM conductoress";
 
         try {
             Connection con = Conexion.conectar();
@@ -89,7 +89,7 @@ public class ConductorDao {
 
     public boolean editarConductor(Conductor c) {
         String sql
-                = "UPDATE conductores "
+                = "UPDATE conductoress "
                 + "SET nombre=?, cedula=?, apellido=?, telefono=?, licencia=?, ruta_asignada=? "
                 + "WHERE id=?";
         try (
@@ -125,7 +125,7 @@ public class ConductorDao {
 
     public boolean eliminarConductor(String id) {
 
-        String sql = "DELETE FROM conductores WHERE id = ?";
+        String sql = "DELETE FROM conductoress WHERE id = ?";
 
         try (
                 Connection con = Conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
@@ -148,7 +148,7 @@ public class ConductorDao {
             con = Conexion.conectar();
 
             String sql = """
-                     INSERT INTO conductores (conductor_id, ruta_id)
+                     INSERT INTO conductoress (conductor_id, ruta_id)
                      VALUES (?, ?)
                      """;
 

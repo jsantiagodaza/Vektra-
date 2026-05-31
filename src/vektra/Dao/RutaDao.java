@@ -33,9 +33,9 @@ public class RutaDao {
                  e1.linea AS origen_linea,
                  e2.nombre AS destino_nombre,
                  e2.linea AS destino_linea
-             FROM rutas r
-             JOIN estaciones e1 ON r.estacion_origen_id = e1.id
-             JOIN estaciones e2 ON r.estacion_destino_id = e2.id
+             FROM rutass r
+             JOIN estacioness e1 ON r.estacion_origen_id = e1.id
+             JOIN estacioness e2 ON r.estacion_destino_id = e2.id
              """;
              
         try {
