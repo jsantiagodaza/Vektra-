@@ -4,6 +4,9 @@
  */
 package vektra.View;
 
+import javax.swing.JOptionPane;
+import vektra.Dao.ConductorDao;
+
 /**
  *
  * @author santi
@@ -209,7 +212,22 @@ public class BorrarConductorPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        
+         String id1 = jTextField1.getText().trim();
+         String id2 = jTextField2.getText().trim();
+             
+         if (!id1.equals(id2)){
+         JOptionPane.showMessageDialog(this, "Los ID no coinciden");
+          return;
+        }
+             
+         ConductorDao dao =new ConductorDao();
+         boolean eliminado = dao.eliminarConductor(id1);
+         if( eliminado ){
+           JOptionPane.showMessageDialog(this, "Conductor eliminado correctamente ");
+         }else {
+           JOptionPane.showMessageDialog(this, "No existe un conductor con ese ID");
+        }  
     }//GEN-LAST:event_jButton1ActionPerformed
 
 

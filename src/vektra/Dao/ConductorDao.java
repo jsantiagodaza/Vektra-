@@ -120,7 +120,7 @@ public class ConductorDao {
     
     public boolean eliminarConductor(String id) {
 
-    String sql = "DELETE FROM conductor_ruta WHERE conductor_id = ?";
+    String sql = "DELETE FROM conductores WHERE id = ?";
 
      try (
         Connection con = Conexion.conectar();
