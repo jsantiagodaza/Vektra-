@@ -55,7 +55,7 @@ public class ConductoresPanel extends javax.swing.JPanel {
         PaneldeConductores.setLayout(PaneldeConductoresLayout);
         PaneldeConductoresLayout.setHorizontalGroup(
             PaneldeConductoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 872, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         PaneldeConductoresLayout.setVerticalGroup(
             PaneldeConductoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -109,17 +109,19 @@ public class ConductoresPanel extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnAnadirConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(48, 48, 48)
                         .addComponent(btnAsignaraMetro, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(38, 38, 38)
                         .addComponent(btnEliminarConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(PaneldeConductores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(517, 517, 517))
+                    .addComponent(PaneldeConductores, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -154,24 +156,26 @@ public class ConductoresPanel extends javax.swing.JPanel {
     private void crearTabla() {
 
         String columnas[] = {
-            "ID",
-            "Nombre",
-            "Apellido",
-            "Cedula",
-            "Telefono",
-            "Licencia",
-            "Ruta"
+            "   ID    ",
+            "     Nombre      ",
+            "    Apellido     ",
+            "     Cedula     ",
+            "    Telefono    ",
+            "    Licencia    ",
+            "                Ruta                 "
         };
 
         DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
         tablaConductores = new JTable(modelo);
-        tablaConductores.setRowHeight(30);
-        tablaConductores.getColumnModel().getColumn(0).setPreferredWidth(50);
-        tablaConductores.getColumnModel().getColumn(1).setPreferredWidth(150);
-        tablaConductores.getColumnModel().getColumn(2).setPreferredWidth(150);
-        tablaConductores.getColumnModel().getColumn(3).setPreferredWidth(120);
-        tablaConductores.getColumnModel().getColumn(4).setPreferredWidth(120);
-        tablaConductores.getColumnModel().getColumn(5).setPreferredWidth(120);
+        tablaConductores.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        tablaConductores.setFillsViewportHeight(true);
+        tablaConductores.setRowHeight(35);
+        tablaConductores.getColumnModel().getColumn(0).setPreferredWidth(50);   
+        tablaConductores.getColumnModel().getColumn(1).setPreferredWidth(150); 
+        tablaConductores.getColumnModel().getColumn(2).setPreferredWidth(150);  
+        tablaConductores.getColumnModel().getColumn(3).setPreferredWidth(120);  
+        tablaConductores.getColumnModel().getColumn(4).setPreferredWidth(120);  
+        tablaConductores.getColumnModel().getColumn(5).setPreferredWidth(120);  
         tablaConductores.getColumnModel().getColumn(6).setPreferredWidth(150);
         scrollTabla = new JScrollPane(tablaConductores);
         PaneldeConductores.setLayout(new BorderLayout());
