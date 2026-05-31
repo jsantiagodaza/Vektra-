@@ -150,7 +150,7 @@ public class VehiculoDao {
         String sql = "DELETE FROM vehiculos WHERE id = ?";
 
         try {
-            con = Conexion.conectar();
+            
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, id);
             ps.executeUpdate();
@@ -168,5 +168,44 @@ public class VehiculoDao {
             }
         }
 }
-    
+    public List<Vehiculo> obtenerPorTipo(String tipo) {
+        List<Vehiculo> lista = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String sql = "SELECT * FROM vehiculos WHERE tipo = ?";
+
+        try {
+            con = Conexion.conectar();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, tipo);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Vehiculo v = new Vehiculo();
+                v.setId(rs.getString("id"));
+                v.setCapacidad(rs.getInt("capacidad"));
+                v.setAnioFabricacion(rs.getInt("anio_fabricacion"));
+                lista.add(v);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error al obtener vehículos por tipo: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error cerrando recursos: " + e.getMessage());
+            }
+        }
+        return lista;
+    }
 }
