@@ -41,6 +41,7 @@ public class MainFrameView extends javax.swing.JFrame {
         jPanel1.add(panelContenido, java.awt.BorderLayout.CENTER);
 
         // Cargar dashboard por defecto
+        
         mostrarPanel(new DashboardPanel());
         btnDashboardInicial.addActionListener(e -> mostrarPanel(new DashboardPanel()));
         btnGenerarticket.addActionListener(new java.awt.event.ActionListener() {
