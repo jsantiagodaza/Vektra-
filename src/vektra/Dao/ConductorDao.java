@@ -14,204 +14,172 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConductorDao {
-     Connection con = null;
-      PreparedStatement ps = null;
+
+    Connection con = null;
+    PreparedStatement ps = null;
 
     public boolean agregarConductor(Conductor c) {
+        String sql
+                = "INSERT INTO conductores "
+                + "(nombre, apellido, cedula, telefono, licencia, ruta_asignada) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
 
-    boolean registrado = false;
+        try (
+                Connection con = Conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
 
-    try {
-        Connection con = Conexion.conectar();
+            ps.setString(1, c.getNombre());
+            ps.setString(2, c.getApellido());
+            ps.setString(3, c.getCedula());
+            ps.setString(4, c.getTelefono());
+            ps.setString(5, c.getLicencia());
+            ps.setString(6, c.getRutaAsignada());
 
-        String sql = """
-                     INSERT INTO conductores (id, nombre, cedula, licencia, estado)
-                     VALUES (?, ?, ?, ?, ?)
-                     """;
+            return ps.executeUpdate() > 0;
 
-        PreparedStatement ps = con.prepareStatement(sql);
+        } catch (Exception e) {
 
-        ps.setString(1, c.getId());
-        ps.setString(2, c.getNombre());
-        ps.setString(3, c.getCedula());
-        ps.setString(4, c.getLicencia());
-        ps.setString(5, c.getEstado());
-
-        int filas = ps.executeUpdate();
-        registrado = (filas > 0);
-
-    } catch (Exception e) {
-        System.out.println("Error: " + e.getMessage());
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 
-    return registrado;
-}
-    
     public List<Conductor> obtenerTodos() {
 
-    List<Conductor> lista = new ArrayList<>();
+        List<Conductor> lista = new ArrayList<>();
+        String sql = "SELECT * FROM conductores";
 
-
-    ResultSet rs = null;
-
-    try {
-        con = Conexion.conectar();
-
-        String sql = "SELECT id, nombre, cedula, licencia, estado FROM conductores";
-        ps = con.prepareStatement(sql);
-
-        rs = ps.executeQuery();
-
-        while (rs.next()) {
-
-            Conductor c = new Conductor(
-                rs.getString("id"),
-                rs.getString("nombre"),
-                rs.getString("cedula"),
-                rs.getString("licencia"),
-                rs.getString("estado")
-            );
-
-            lista.add(c);
-        }
-
-    } catch (SQLException e) {
-        System.out.println("Error al listar: " + e.getMessage());
-    } finally {
         try {
-            if (rs != null) rs.close();
-            if (ps != null) ps.close();
-            if (con != null) con.close();
+            Connection con = Conexion.conectar();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Conductor c = new Conductor();
+
+                c.setId(rs.getString("id"));
+                c.setNombre(rs.getString("nombre"));
+                c.setApellido(rs.getString("apellido"));
+                c.setCedula(rs.getString("cedula"));
+                c.setTelefono(rs.getString("telefono"));
+                c.setLicencia(rs.getString("licencia"));
+                c.setRutaAsignada(rs.getString("ruta_asignada"));
+
+                lista.add(c);
+            }
+
         } catch (SQLException e) {
-            System.out.println("Error cerrando recursos: " + e.getMessage());
+            System.out.println("Error al listar: " + e.getMessage());
+        } finally {
+            try {
+
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error cerrando recursos: " + e.getMessage());
+            }
         }
+
+        return lista;
     }
 
-    return lista;
-}
-    
     public boolean editarConductor(Conductor c) {
+        String sql
+                = "UPDATE conductores "
+                + "SET nombre=?, cedula=?, apellido=?, telefono=?, licencia=?, ruta_asignada=? "
+                + "WHERE id=?";
+        try (
+                Connection con = Conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
 
-    boolean actualizado = false;
+            ps.setString(1, c.getNombre());
+            ps.setString(2, c.getCedula());
+            ps.setString(3, c.getApellido());
+            ps.setString(4, c.getTelefono());
+            ps.setString(5, c.getLicencia());
+            ps.setString(6, c.getRutaAsignada());
+            ps.setString(7, c.getId());
 
+            return ps.executeUpdate() > 0;
 
-    try {
-        con = Conexion.conectar();
-
-        String sql = """
-                     UPDATE conductores
-                     SET nombre = ?, cedula = ?, licencia = ?, estado = ?
-                     WHERE id = ?
-                     """;
-
-        ps = con.prepareStatement(sql);
-
-        ps.setString(1, c.getNombre());
-        ps.setString(2, c.getCedula());
-        ps.setString(3, c.getLicencia());
-        ps.setString(4, c.getEstado());
-        ps.setString(5, c.getId()); 
-
-        int filas = ps.executeUpdate();
-
-        actualizado = (filas > 0);
-
-    } catch (SQLException e) {
-        System.out.println("Error al editar conductor: " + e.getMessage());
-    } finally {
-        try {
-            if (ps != null) ps.close();
-            if (con != null) con.close();
         } catch (SQLException e) {
-            System.out.println("Error cerrando recursos: " + e.getMessage());
+            System.out.println("Error al editar conductor: " + e.getMessage());
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error cerrando recursos: " + e.getMessage());
+            }
         }
+
+        return false;
     }
 
-    return actualizado;
-}
-    
     public boolean eliminarConductor(String id) {
 
-    boolean eliminado = false;
+        String sql = "DELETE FROM conductores WHERE id = ?";
 
-    PreparedStatement ps1 = null;
-    PreparedStatement ps2 = null;
+        try (
+                Connection con = Conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
 
-    try {
-        con = Conexion.conectar();
+            ps.setString(1, id);
 
-       
-        String sql1 = "DELETE FROM conductor_ruta WHERE conductor_id = ?";
-        ps1 = con.prepareStatement(sql1);
-        ps1.setString(1, id);
-        ps1.executeUpdate();
+            return ps.executeUpdate() > 0;
 
-        
-        String sql2 = "DELETE FROM conductores WHERE id = ?";
-        ps2 = con.prepareStatement(sql2);
-        ps2.setString(1, id);
-
-        int filas = ps2.executeUpdate();
-
-        eliminado = (filas > 0);
-
-    } catch (SQLException e) {
-        System.out.println("Error al eliminar conductor: " + e.getMessage());
-    } finally {
-        try {
-            if (ps1 != null) ps1.close();
-            if (ps2 != null) ps2.close();
-            if (con != null) con.close();
         } catch (SQLException e) {
-            System.out.println("Error cerrando recursos: " + e.getMessage());
+            System.out.println("Error al eliminar conductor: " + e.getMessage());
+            return false;
         }
+
     }
 
-    return eliminado;
-}
     public boolean asignarARuta(String conductorId, int rutaId) {
 
-    boolean asignado = false;
-  
+        boolean asignado = false;
+        try {
+            con = Conexion.conectar();
 
-    try {
-        con = Conexion.conectar();
-
-        String sql = """
-                     INSERT INTO conductor_ruta (conductor_id, ruta_id)
+            String sql = """
+                     INSERT INTO conductores (conductor_id, ruta_id)
                      VALUES (?, ?)
                      """;
 
-        ps = con.prepareStatement(sql);
+            ps = con.prepareStatement(sql);
+            ps.setString(1, conductorId);
+            ps.setInt(2, rutaId);
+            int filas = ps.executeUpdate();
+            asignado = (filas > 0);
 
-        ps.setString(1, conductorId);
-        ps.setInt(2, rutaId);
-
-        int filas = ps.executeUpdate();
-
-        asignado = (filas > 0);
-
-    } catch (SQLException e) {
-
-      
-        if (e.getMessage().contains("duplicate")) {
-            System.out.println("El conductor ya tiene esa ruta asignada");
-        } else {
-            System.out.println("Error al asignar ruta: " + e.getMessage());
-        }
-
-    } finally {
-        try {
-            if (ps != null) ps.close();
-            if (con != null) con.close();
         } catch (SQLException e) {
-            System.out.println("Error cerrando recursos: " + e.getMessage());
+
+            if (e.getMessage().contains("duplicate")) {
+                System.out.println("El conductor ya tiene esa ruta asignada");
+            } else {
+                System.out.println("Error al asignar ruta: " + e.getMessage());
+            }
+
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error cerrando recursos: " + e.getMessage());
+            }
         }
+
+        return asignado;
     }
 
-    return asignado;
 }
-    
-}
-    
-
