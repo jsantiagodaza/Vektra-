@@ -86,7 +86,7 @@ public class AnadirVehiculo extends javax.swing.JPanel {
         jLabel4.setForeground(new java.awt.Color(153, 153, 153));
         jLabel4.setText("Placa/Matricula:");
 
-        IDvehiculotxt.setBackground(new java.awt.Color(51, 51, 51));
+        IDvehiculotxt.setBackground(new java.awt.Color(0, 0, 0));
         IDvehiculotxt.setForeground(new java.awt.Color(204, 204, 204));
         IDvehiculotxt.setText("Ej. VTRAIN-928");
         IDvehiculotxt.addActionListener(new java.awt.event.ActionListener() {
@@ -99,7 +99,7 @@ public class AnadirVehiculo extends javax.swing.JPanel {
         jLabel5.setForeground(new java.awt.Color(153, 153, 153));
         jLabel5.setText("Línea Asignada:");
 
-        aniofabricacionVehiculotxt.setBackground(new java.awt.Color(51, 51, 51));
+        aniofabricacionVehiculotxt.setBackground(new java.awt.Color(0, 0, 0));
         aniofabricacionVehiculotxt.setForeground(new java.awt.Color(204, 204, 204));
         aniofabricacionVehiculotxt.setText("Ej. 2023");
         aniofabricacionVehiculotxt.addActionListener(new java.awt.event.ActionListener() {

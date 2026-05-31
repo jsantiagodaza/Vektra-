@@ -303,8 +303,8 @@ public class LoginFrame extends javax.swing.JFrame {
         return email.equals("admin@admin.com") && password.equals("adminadmin");
     }
 
-    private void abrirMainFrame() {
-        MainFrameView main = new MainFrameView();
+    private void abrirMainFrame(boolean isAdmin) {
+        MainFrameView main = new MainFrameView(isAdmin);
         main.setLocationRelativeTo(null);
         main.setVisible(true);
         this.dispose();
@@ -327,14 +327,20 @@ public class LoginFrame extends javax.swing.JFrame {
             return;
         }
 
-        if (esAdministrador() && esAdminValido()) {
-            abrirMainFrame();
-            return;
+        boolean isAdmin = esAdministrador();
+        
+        if (isAdmin) {
+            if (esAdminValido()) {
+                abrirMainFrame(true);
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this,
+                    "Acceso restringido. Credenciales de administrador inválidas.",
+                    "Acceso denegado", javax.swing.JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            // Pasajero Regular
+            abrirMainFrame(false);
         }
-
-        javax.swing.JOptionPane.showMessageDialog(this,
-            "Acceso restringido. Solo administradores con credenciales válidas pueden iniciar sesión.",
-            "Acceso denegado", javax.swing.JOptionPane.WARNING_MESSAGE);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
