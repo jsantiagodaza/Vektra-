@@ -12,14 +12,20 @@ public class Vehiculo {
 
     private String id;
     private int capacidad;
+    private int anioFabricacion;
 
-    public Vehiculo(String id, int capacidad) {
-        this.id = id;
-        this.capacidad = capacidad;
-    }
-
+    
     public Vehiculo() {
     }
+
+    
+    public Vehiculo(String id, int capacidad, int anioFabricacion) {
+        this.id = id;
+        this.capacidad = capacidad;
+        this.anioFabricacion = anioFabricacion;
+    }
+
+    
 
     public String getId() {
         return id;
@@ -37,12 +43,20 @@ public class Vehiculo {
         this.capacidad = capacidad;
     }
 
-    @Override
-    public String toString() {
-        return "Vehiculo{"
-                + "id='" + id + '\''
-                + ", capacidad=" + capacidad
-                + '}';
+    public int getAnioFabricacion() {
+        return anioFabricacion;
     }
 
+    public void setAnioFabricacion(int anioFabricacion) {
+        this.anioFabricacion = anioFabricacion;
+    }
+
+    @Override
+    public String toString() {
+        return "Vehiculo{" +
+                "id='" + id + '\'' +
+                ", capacidad=" + capacidad +
+                ", anioFabricacion=" + anioFabricacion +
+                '}';
+    }
 }
