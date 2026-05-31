@@ -17,6 +17,30 @@ public class AnadirVehiculo extends javax.swing.JPanel {
         initComponents();
     }
 
+    private static final java.awt.Color COLOR_CAMPO = new java.awt.Color(51, 51, 51);
+    private static final java.awt.Color COLOR_ERROR = new java.awt.Color(200, 50, 50);
+    private static final java.awt.Color COLOR_OK    = new java.awt.Color(39, 174, 96);
+    private static final java.awt.Color COLOR_TEXTO = new java.awt.Color(204, 204, 204);
+
+    // Inicialización adicional
+    {
+        // Se ejecuta después del initComponents cuando el constructor termina
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                initColors();
+                initPlaceholders();
+                initValidaciones();
+                btnAnadirVehiculo.addActionListener(new java.awt.event.ActionListener() {
+                    @Override
+                    public void actionPerformed(java.awt.event.ActionEvent e) {
+                        btnAnadirVehiculoActionPerformed(e);
+                    }
+                });
+            }
+        });
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -213,6 +237,31 @@ public class AnadirVehiculo extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_IDvehiculotxtActionPerformed
 
+    private void btnAnadirVehiculoActionPerformed(java.awt.event.ActionEvent evt) {
+        if (!todosValidos()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Por favor corrige los campos marcados en rojo.",
+                "Campos incompletos",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        javax.swing.JOptionPane.showMessageDialog(this,
+            "✓ Vehículo registrado correctamente.",
+            "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+        // Limpiar campos
+        IDvehiculotxt.setText("");
+        aniofabricacionVehiculotxt.setText("");
+        IDvehiculotxt.putClientProperty("valido", false);
+        aniofabricacionVehiculotxt.putClientProperty("valido", false);
+        IDvehiculotxt.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(80,80,80),1,true));
+        aniofabricacionVehiculotxt.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(80,80,80),1,true));
+        cmbLineas.setSelectedIndex(0);
+        cmbCapacidad.setSelectedIndex(0);
+        cmbConductoresDisponibles.setSelectedIndex(0);
+    }
+
     private void aniofabricacionVehiculotxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aniofabricacionVehiculotxtActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_aniofabricacionVehiculotxtActionPerformed
@@ -221,6 +270,118 @@ public class AnadirVehiculo extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbConductoresDisponiblesActionPerformed
 
+
+    // ── Inicialización y validaciones ─────────────────────────────────
+    private void initColors() {
+        IDvehiculotxt.setBackground(COLOR_CAMPO);
+        IDvehiculotxt.setForeground(COLOR_TEXTO);
+        aniofabricacionVehiculotxt.setBackground(COLOR_CAMPO);
+        aniofabricacionVehiculotxt.setForeground(COLOR_TEXTO);
+        cmbLineas.setBackground(COLOR_CAMPO);
+        cmbLineas.setForeground(COLOR_TEXTO);
+        cmbCapacidad.setBackground(COLOR_CAMPO);
+        cmbCapacidad.setForeground(COLOR_TEXTO);
+        cmbConductoresDisponibles.setBackground(COLOR_CAMPO);
+        cmbConductoresDisponibles.setForeground(COLOR_TEXTO);
+        btnAnadirVehiculo.setBackground(new java.awt.Color(51, 153, 255));
+        btnAnadirVehiculo.setForeground(java.awt.Color.WHITE);
+    }
+
+    private void initPlaceholders() {
+        configurarPlaceholder(IDvehiculotxt, "Ej. VTRAIN-928");
+        configurarPlaceholder(aniofabricacionVehiculotxt, "Ej. 2023");
+    }
+
+    private void configurarPlaceholder(javax.swing.JTextField campo, String placeholder) {
+        campo.setText(placeholder);
+        campo.setForeground(new java.awt.Color(150, 150, 150));
+        campo.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                if (campo.getText().equals(placeholder)) {
+                    campo.setText("");
+                    campo.setForeground(COLOR_TEXTO);
+                }
+            }
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (campo.getText().trim().isEmpty()) {
+                    campo.setText(placeholder);
+                    campo.setForeground(new java.awt.Color(150, 150, 150));
+                    marcarCampo(campo, false);
+                }
+            }
+        });
+    }
+
+    private void initValidaciones() {
+        IDvehiculotxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = IDvehiculotxt.getText().trim();
+            marcarCampo(IDvehiculotxt, !v.isEmpty() && !v.equals("Ej. VTRAIN-928") && v.matches("[A-Za-z0-9\\- ]{5,}"));
+        }));
+
+        aniofabricacionVehiculotxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = aniofabricacionVehiculotxt.getText().trim();
+            boolean ok = false;
+            if (!v.isEmpty() && !v.equals("Ej. 2023") && v.matches("\\d{4}")) {
+                try {
+                    int y = Integer.parseInt(v);
+                    int thisYear = java.time.LocalDate.now().getYear();
+                    ok = y >= 1950 && y <= thisYear;
+                } catch (Exception ex) { ok = false; }
+            }
+            marcarCampo(aniofabricacionVehiculotxt, ok);
+        }));
+
+        // Combos: marcar válidos si no están en su índice 0 (si se agrega placeholder en futuro)
+        cmbLineas.addItemListener(e -> {
+            if (e.getStateChange() != java.awt.event.ItemEvent.SELECTED) return;
+            marcarCampo(cmbLineas, cmbLineas.getSelectedIndex() > -1);
+        });
+        cmbCapacidad.addItemListener(e -> {
+            if (e.getStateChange() != java.awt.event.ItemEvent.SELECTED) return;
+            marcarCampo(cmbCapacidad, cmbCapacidad.getSelectedIndex() > -1);
+        });
+        cmbConductoresDisponibles.addItemListener(e -> {
+            if (e.getStateChange() != java.awt.event.ItemEvent.SELECTED) return;
+            marcarCampo(cmbConductoresDisponibles, cmbConductoresDisponibles.getSelectedIndex() > -1);
+        });
+    }
+
+    private void marcarCampo(javax.swing.JComponent campo, boolean valido) {
+        java.awt.Color color = valido ? COLOR_OK : COLOR_ERROR;
+        if (campo instanceof javax.swing.JTextField) {
+            ((javax.swing.JTextField) campo).setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                javax.swing.BorderFactory.createLineBorder(color, 2, true),
+                javax.swing.BorderFactory.createEmptyBorder(4, 8, 4, 8)
+            ));
+            campo.putClientProperty("valido", valido);
+        } else if (campo instanceof javax.swing.JComboBox) {
+            campo.setBorder(javax.swing.BorderFactory.createLineBorder(color, 2, true));
+            campo.putClientProperty("valido", valido);
+        }
+    }
+
+    private boolean todosValidos() {
+        Object id = IDvehiculotxt.getClientProperty("valido");
+        Object anio = aniofabricacionVehiculotxt.getClientProperty("valido");
+        Object l = cmbLineas.getClientProperty("valido");
+        Object c = cmbCapacidad.getClientProperty("valido");
+        Object d = cmbConductoresDisponibles.getClientProperty("valido");
+        return id instanceof Boolean && (Boolean) id
+            && anio instanceof Boolean && (Boolean) anio
+            && l instanceof Boolean && (Boolean) l
+            && c instanceof Boolean && (Boolean) c
+            && d instanceof Boolean && (Boolean) d;
+    }
+
+    private static class SimpleDocListener implements javax.swing.event.DocumentListener {
+        private final Runnable accion;
+        SimpleDocListener(Runnable accion) { this.accion = accion; }
+        @Override public void insertUpdate(javax.swing.event.DocumentEvent e) { accion.run(); }
+        @Override public void removeUpdate(javax.swing.event.DocumentEvent e) { accion.run(); }
+        @Override public void changedUpdate(javax.swing.event.DocumentEvent e) { accion.run(); }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField IDvehiculotxt;
