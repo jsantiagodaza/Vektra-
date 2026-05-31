@@ -9,8 +9,6 @@ package vektra.Model;
  * @author santi
  */
 public class Conductor extends Persona {
-    private String id;
-    private String nombre;
     private String apellido;
     private String cedula;
     private String telefono;

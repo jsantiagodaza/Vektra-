@@ -18,6 +18,7 @@ public class AnadirConductorPanel extends javax.swing.JPanel {
     public AnadirConductorPanel() {
         initComponents();
         initPlaceholders();
+        cargarRutas();
         initValidaciones();
     }
 
@@ -29,6 +30,20 @@ public class AnadirConductorPanel extends javax.swing.JPanel {
         configurarPlaceholder(telefonoConductortxt, "Ej. +57 300 000 0000");
         configurarPlaceholder(correoConductortxt, "Ej. correo@email.com");
         configurarPlaceholder(licenciaConductortxt, "Ej. LIC-2025-9293839");
+    }
+
+    private void cargarRutas() {
+        try {
+            vektra.Dao.RutaDao dao = new vektra.Dao.RutaDao();
+            java.util.List<vektra.Model.Ruta> rutas = dao.obtenerTodasLasRutas();
+            cmbRutas.removeAllItems();
+            cmbRutas.addItem("Seleccionar ruta...");
+            for (vektra.Model.Ruta r : rutas) {
+                cmbRutas.addItem(r.formatoUI());
+            }
+        } catch (Exception e) {
+            System.out.println("Error al cargar rutas: " + e.getMessage());
+        }
     }
 
     private void configurarPlaceholder(javax.swing.JTextField campo, String placeholder) {
@@ -320,7 +335,8 @@ public class AnadirConductorPanel extends javax.swing.JPanel {
         }
 
         if (cmbRutas.getSelectedItem() == null
-                || cmbRutas.getSelectedItem().toString().startsWith("Item")) {
+                || cmbRutas.getSelectedItem().toString().startsWith("Item")
+                || cmbRutas.getSelectedItem().toString().equals("Seleccionar ruta...")) {
 
             JOptionPane.showMessageDialog(this,
                     "Selecciona una ruta para el conductor.",

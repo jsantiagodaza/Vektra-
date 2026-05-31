@@ -121,10 +121,8 @@ public class Dashboard extends javax.swing.JFrame {
 
         // Instanciamos MapaValleduparView y extraemos su panel principal
         
-        MapaValleduparView mapaValleduparView = new MapaValleduparView();
-        java.awt.Container contenidoMapa = mapaValleduparView.getContentPane();
-
-        panelContenido.add(contenidoMapa, java.awt.BorderLayout.CENTER);
+        MapaPanel mapaValleduparView = new MapaPanel();
+        panelContenido.add(mapaValleduparView, java.awt.BorderLayout.CENTER);
 
         panelContenido.revalidate();
         panelContenido.repaint();
@@ -453,12 +451,8 @@ public class Dashboard extends javax.swing.JFrame {
     private void cargarPanelTickets() {
         panelContenido.removeAll();
 
-        // Instanciamos la ventana TicketsView pero en lugar de mostrarla, 
-        // extraemos su panel principal y lo incrustamos en el Dashboard.
-        TicketsView ticketsView = new TicketsView();
-        java.awt.Container contenidoTickets = ticketsView.getContentPane();
-
-        panelContenido.add(contenidoTickets, java.awt.BorderLayout.CENTER);
+        ComprarTicketPanel ticketsView = new ComprarTicketPanel();
+        panelContenido.add(ticketsView, java.awt.BorderLayout.CENTER);
 
         panelContenido.revalidate();
         panelContenido.repaint();
@@ -475,11 +469,8 @@ public class Dashboard extends javax.swing.JFrame {
     private void cargarPanelEquipo() {
         panelContenido.removeAll();
 
-        // Extraemos el panel principal de TicketsActivosView
-        TicketsActivosView ticketsActivosView = new TicketsActivosView();
-        java.awt.Container contenidoEquipo = ticketsActivosView.getContentPane();
-
-        panelContenido.add(contenidoEquipo, java.awt.BorderLayout.CENTER);
+        TicketsActivosPanel ticketsActivosView = new TicketsActivosPanel();
+        panelContenido.add(ticketsActivosView, java.awt.BorderLayout.CENTER);
 
         panelContenido.revalidate();
         panelContenido.repaint();
@@ -492,24 +483,8 @@ public class Dashboard extends javax.swing.JFrame {
     public void cargarPanelConductores() {
         panelContenido.removeAll();
 
-        // Extraemos el panel principal de ConductoresView
-        ConductoresView conductoresView = new ConductoresView();
-        java.awt.Container contenidoConductores = conductoresView.getContentPane();
-
-        panelContenido.add(contenidoConductores, java.awt.BorderLayout.CENTER);
-
-        panelContenido.revalidate();
-        panelContenido.repaint();
-    }
-
-    public void cargarPanelEditarConductores() {
-        panelContenido.removeAll();
-
-        // Extraemos el panel principal de EditarConductoresView
-        EditarConductoresView editarConductoresView = new EditarConductoresView();
-        java.awt.Container contenidoEditar = editarConductoresView.getContentPane();
-
-        panelContenido.add(contenidoEditar, java.awt.BorderLayout.CENTER);
+        ConductoresPanel conductoresView = new ConductoresPanel(null);
+        panelContenido.add(conductoresView, java.awt.BorderLayout.CENTER);
 
         panelContenido.revalidate();
         panelContenido.repaint();
@@ -517,24 +492,24 @@ public class Dashboard extends javax.swing.JFrame {
 
     public void cargarPanelAnadirConductor() {
         panelContenido.removeAll();
-        AnadirConductorView vista = new AnadirConductorView();
-        panelContenido.add(vista.getContentPane(), java.awt.BorderLayout.CENTER);
+        AnadirConductorPanel vista = new AnadirConductorPanel();
+        panelContenido.add(vista, java.awt.BorderLayout.CENTER);
         panelContenido.revalidate();
         panelContenido.repaint();
     }
 
     public void cargarPanelAsignarVehiculo() {
         panelContenido.removeAll();
-        AsignarVehiculo vista = new AsignarVehiculo();
-        panelContenido.add(vista.getContentPane(), java.awt.BorderLayout.CENTER);
+        AsignaraVehiculoPanel vista = new AsignaraVehiculoPanel();
+        panelContenido.add(vista, java.awt.BorderLayout.CENTER);
         panelContenido.revalidate();
         panelContenido.repaint();
     }
 
     public void cargarPanelBorrarConductor() {
         panelContenido.removeAll();
-        BorrarConductor vista = new BorrarConductor();
-        panelContenido.add(vista.getContentPane(), java.awt.BorderLayout.CENTER);
+        BorrarConductorPanel vista = new BorrarConductorPanel();
+        panelContenido.add(vista, java.awt.BorderLayout.CENTER);
         panelContenido.revalidate();
         panelContenido.repaint();
     }

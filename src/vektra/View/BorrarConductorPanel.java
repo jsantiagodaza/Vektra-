@@ -26,6 +26,7 @@ public class BorrarConductorPanel extends javax.swing.JPanel {
         initComponents();
         initColors();
         initPlaceholders();
+        cargarConductores();
         initValidaciones();
     }
 
@@ -226,6 +227,20 @@ public class BorrarConductorPanel extends javax.swing.JPanel {
         jTextField2.setForeground(COLOR_TEXTO);
     }
 
+    private void cargarConductores() {
+        try {
+            vektra.Dao.ConductorDao dao = new vektra.Dao.ConductorDao();
+            java.util.List<vektra.Model.Conductor> lista = dao.obtenerTodos();
+            jComboBox1.removeAllItems();
+            jComboBox1.addItem("Seleccionar conductor...");
+            for (vektra.Model.Conductor c : lista) {
+                jComboBox1.addItem(c.getId() + " - " + c.getNombre() + " " + c.getApellido());
+            }
+        } catch (Exception e) {
+            System.out.println("Error al cargar conductores: " + e.getMessage());
+        }
+    }
+
     private void initPlaceholders() {
         jTextField1.setText("Digite la ID del conductor...");
         jTextField1.setForeground(new java.awt.Color(150, 150, 150));
@@ -269,7 +284,8 @@ public class BorrarConductorPanel extends javax.swing.JPanel {
             jTextField2.setForeground(new java.awt.Color(150, 150, 150));
             marcarCampo(jTextField2, false);
         } else {
-            jTextField2.setText(seleccionado);
+            String id = seleccionado.split(" - ")[0];
+            jTextField2.setText(id);
             jTextField2.setForeground(COLOR_TEXTO);
             marcarCampo(jTextField2, true);
         }
@@ -293,38 +309,27 @@ public class BorrarConductorPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
-        
-         String id1 = jTextField1.getText().trim();
-         String id2 = jTextField2.getText().trim();
-             
-         if (!id1.equals(id2)){
-         JOptionPane.showMessageDialog(this, "Los ID no coinciden");
-          return;
-        }
-             
-         ConductorDao dao =new ConductorDao();
-         boolean eliminado = dao.eliminarConductor(id1);
-         if( eliminado ){
-           JOptionPane.showMessageDialog(this, "Conductor eliminado correctamente ");
-         }else {
-           JOptionPane.showMessageDialog(this, "No existe un conductor con ese ID");
-        }  
-
         validarCampos();
         if (!todosValidos()) {
             javax.swing.JOptionPane.showMessageDialog(this,
                 "Por favor completa el conductor y escribe la misma ID mostrada a la derecha.",
-                "Campos incompletos",
+                "Campos incompletos/incorrectos",
                 javax.swing.JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        javax.swing.JOptionPane.showMessageDialog(this,
-            "✓ Conductor validado para borrado.",
-            "Validación correcta", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        String id = jTextField2.getText().trim();
+        vektra.Dao.ConductorDao dao = new vektra.Dao.ConductorDao();
+        boolean eliminado = dao.eliminarConductor(id);
+        if (eliminado) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Conductor eliminado correctamente.");
+            cargarConductores();
+            jTextField1.setText("");
+            actualizarIdMostrada();
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "No existe un conductor con ese ID o no se pudo eliminar.");
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
-
 
     private void marcarCampo(javax.swing.JComponent campo, boolean valido) {
         java.awt.Color color = valido ? COLOR_OK : COLOR_ERROR;

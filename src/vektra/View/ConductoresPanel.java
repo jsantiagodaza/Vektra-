@@ -205,18 +205,21 @@ public class ConductoresPanel extends javax.swing.JPanel {
 
 
     private void btnAnadirConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnadirConductorActionPerformed
-
-        mainFrame.mostrarPanel(new AnadirConductorPanel());
+        if (mainFrame != null) {
+            mainFrame.mostrarPanel(new AnadirConductorPanel());
+        }
     }//GEN-LAST:event_btnAnadirConductorActionPerformed
 
     private void btnEliminarConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarConductorActionPerformed
-        // TODO add your handling code here:
-        mainFrame.mostrarPanel(new BorrarConductorPanel());
+        if (mainFrame != null) {
+            mainFrame.mostrarPanel(new BorrarConductorPanel());
+        }
     }//GEN-LAST:event_btnEliminarConductorActionPerformed
 
     private void btnAsignaraMetroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignaraMetroActionPerformed
-        // TODO add your handling code here:
-        mainFrame.mostrarPanel(new AsignaraVehiculoPanel());
+        if (mainFrame != null) {
+            mainFrame.mostrarPanel(new AsignaraVehiculoPanel());
+        }
     }//GEN-LAST:event_btnAsignaraMetroActionPerformed
 
 
