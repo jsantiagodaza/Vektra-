@@ -13,7 +13,7 @@ public class FontUtil {
     public static Font getCustomFont() {
         if (customFont == null) {
             try {
-                InputStream is = FontUtil.class.getResourceAsStream("/vektra/View/Fuentes/TheStudentsTeacher-Regular.ttf");
+                InputStream is = FontUtil.class.getResourceAsStream("/vektra/View/Fuentes/Coolvetica Rg.otf");
                 if (is != null) {
                     customFont = Font.createFont(Font.TRUETYPE_FONT, is);
                 } else {
