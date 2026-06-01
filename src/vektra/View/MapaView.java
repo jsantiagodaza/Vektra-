@@ -24,6 +24,7 @@ public class MapaView extends JPanel {
         setLayout(new BorderLayout());
 
         jfxPanel = new JFXPanel();
+        jfxPanel.setPreferredSize(new java.awt.Dimension(860, 500));
 
         add(jfxPanel, BorderLayout.CENTER);
 
@@ -35,6 +36,7 @@ public class MapaView extends JPanel {
         WebView webView = new WebView();
 
         WebEngine engine = webView.getEngine();
+        engine.setUserAgent("VektraApp/1.0 (Contact: tu_email@ejemplo.com)");
 
         // Inicializar datos
         try (Connection con = Conexion.conectar()) {
@@ -51,16 +53,18 @@ public class MapaView extends JPanel {
             );
         }
 
-        String url = getClass()
-                .getResource("/resources/mapa.html")
-                .toExternalForm();
+        java.net.URL resourceUrl = getClass().getResource("/resources/mapa.html");
+        if (resourceUrl == null) {
+            System.err.println("No se encontro /resources/mapa.html");
+            return;
+        }
+        
+        String url = resourceUrl.toExternalForm();
+        System.out.println("Cargando URL: " + url);
 
         engine.load(url);
 
         Scene scene = new Scene(webView);
-
-        webView.prefWidthProperty().bind(scene.widthProperty());
-        webView.prefHeightProperty().bind(scene.heightProperty());
 
         jfxPanel.setScene(scene);
 
@@ -86,6 +90,19 @@ public class MapaView extends JPanel {
                         });
                     }
                 });
+
+        // Forzar resize después de que cargue
+        Platform.runLater(() -> {
+            javafx.animation.PauseTransition pause = 
+                new javafx.animation.PauseTransition(
+                    javafx.util.Duration.millis(1000)
+                );
+            pause.setOnFinished(e -> {
+                jfxPanel.setSize(jfxPanel.getWidth() + 1, jfxPanel.getHeight());
+                jfxPanel.setSize(jfxPanel.getWidth() - 1, jfxPanel.getHeight());
+            });
+            pause.play();
+        });
     }
 
     private void asegurarColumnasYDatos(Connection con) {
@@ -126,7 +143,7 @@ public class MapaView extends JPanel {
                         orden_estacion,
                         latitud,
                         longitud
-                    FROM estacioness
+                    FROM estaciones
                 """)
                 ) {
 
@@ -198,7 +215,7 @@ public class MapaView extends JPanel {
                         kilometros,
                         color_linea,
                         transbordos
-                    FROM rutass
+                    FROM rutas
                 """)
                 ) {
 
