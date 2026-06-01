@@ -68,9 +68,13 @@ public class MainFrameView extends javax.swing.JFrame {
             }
         });
         btnGestionRutas.addActionListener(new java.awt.event.ActionListener() {
+            private MapaPanel mapaPanelInstance;
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
-                mostrarPanel(new MapaPanel());
+                if (mapaPanelInstance == null) {
+                    mapaPanelInstance = new MapaPanel();
+                }
+                mostrarPanel(mapaPanelInstance);
             }
         });
         btnAnadirVehiculo.addActionListener(new java.awt.event.ActionListener() {
