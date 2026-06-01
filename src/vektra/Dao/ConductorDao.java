@@ -19,10 +19,9 @@ public class ConductorDao {
     PreparedStatement ps = null;
 
     public boolean agregarConductor(Conductor c) {
-        String sql
-                = "INSERT INTO conductores "
-                + "(nombre, apellido, cedula, telefono, licencia, ruta_asignada) "
-                + "VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO conductores "
+           + "(nombre, apellido, cedula, telefono, licencia, ruta_asignada, correo) "
+           + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (
                 Connection con = Conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
@@ -33,6 +32,7 @@ public class ConductorDao {
             ps.setString(4, c.getTelefono());
             ps.setString(5, c.getLicencia());
             ps.setString(6, c.getRutaAsignada());
+            ps.setString(7, c.getCorreo());
 
             return ps.executeUpdate() > 0;
 
@@ -64,6 +64,7 @@ public class ConductorDao {
                 c.setTelefono(rs.getString("telefono"));
                 c.setLicencia(rs.getString("licencia"));
                 c.setRutaAsignada(rs.getString("ruta_asignada"));
+                c.setCorreo(rs.getString("correo"));
 
                 lista.add(c);
             }
@@ -88,10 +89,9 @@ public class ConductorDao {
     }
 
     public boolean editarConductor(Conductor c) {
-        String sql
-                = "UPDATE conductores "
-                + "SET nombre=?, cedula=?, apellido=?, telefono=?, licencia=?, ruta_asignada=? "
-                + "WHERE id=?";
+        String sql = "UPDATE conductores "
+           + "SET nombre=?, cedula=?, apellido=?, telefono=?, licencia=?, ruta_asignada=?, correo=? "
+           + "WHERE id=?";
         try (
                 Connection con = Conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -101,7 +101,8 @@ public class ConductorDao {
             ps.setString(4, c.getTelefono());
             ps.setString(5, c.getLicencia());
             ps.setString(6, c.getRutaAsignada());
-            ps.setString(7, c.getId());
+            ps.setString(7, c.getCorreo());
+            ps.setString(8, c.getId());
 
             return ps.executeUpdate() > 0;
 
