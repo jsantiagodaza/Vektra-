@@ -4,6 +4,10 @@
  */
 package vektra.View;
 
+import java.util.List;
+import vektra.Dao.TicketDao;
+import vektra.Model.Ticket;
+
 /**
  *
  * @author santi
@@ -16,6 +20,42 @@ public class TicketsActivosPanel extends javax.swing.JPanel {
     public TicketsActivosPanel() {
         initComponents();
         vektra.Util.FontUtil.applyCustomFont(this);
+        cargarTicketsActivos();
+    }
+
+    private void cargarTicketsActivos() {
+        try {
+            TicketDao dao = new TicketDao();
+            List<Ticket> tickets = dao.obtenerTicketsActivos();
+            StringBuilder sb = new StringBuilder();
+            if (tickets.isEmpty()) {
+                sb.append("No hay tickets activos disponibles.\n");
+            } else {
+                for (Ticket t : tickets) {
+                    sb.append("BOLETO\n");
+                    sb.append("ID: ");
+                    sb.append(t.getPasajero() != null ? t.getPasajero().getId() : "N/A");
+                    sb.append("\n");
+                    sb.append("NOMBRE DEL CLIENTE: ");
+                    sb.append(t.getPasajero() != null ? t.getPasajero().getNombre() : "N/A");
+                    sb.append("\n");
+                    sb.append("ORIGEN: ");
+                    sb.append(t.getEstacionOrigen() != null ? t.getEstacionOrigen().getNombre() : "N/A");
+                    sb.append("\n");
+                    sb.append("DESTINO: ");
+                    sb.append(t.getEstacionDestino() != null ? t.getEstacionDestino().getNombre() : "N/A");
+                    sb.append("\n");
+                    sb.append("TIKET ID: ");
+                    sb.append(t.getCodigo() != null ? t.getCodigo() : t.getId());
+                    sb.append("\n");
+                    sb.append("__________________\n\n");
+                }
+            }
+            txtTicketsActivos.setText(sb.toString());
+            txtTicketsActivos.setCaretPosition(0);
+        } catch (Exception e) {
+            txtTicketsActivos.setText("Error al cargar tickets: " + e.getMessage());
+        }
     }
 
     /**
@@ -31,6 +71,8 @@ public class TicketsActivosPanel extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         PanelTicketsactivos = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtTicketsActivos = new javax.swing.JTextArea();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -41,15 +83,24 @@ public class TicketsActivosPanel extends javax.swing.JPanel {
         jLabel2.setForeground(new java.awt.Color(153, 153, 153));
         jLabel2.setText("Tickets vigentes");
 
+        txtTicketsActivos.setEditable(false);
+        txtTicketsActivos.setBackground(new java.awt.Color(240, 240, 240));
+        txtTicketsActivos.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtTicketsActivos.setForeground(new java.awt.Color(51, 51, 51));
+        txtTicketsActivos.setLineWrap(true);
+        txtTicketsActivos.setWrapStyleWord(true);
+        txtTicketsActivos.setBorder(javax.swing.BorderFactory.createEmptyBorder(12, 12, 12, 12));
+        jScrollPane1.setViewportView(txtTicketsActivos);
+
         javax.swing.GroupLayout PanelTicketsactivosLayout = new javax.swing.GroupLayout(PanelTicketsactivos);
         PanelTicketsactivos.setLayout(PanelTicketsactivosLayout);
         PanelTicketsactivosLayout.setHorizontalGroup(
             PanelTicketsactivosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 886, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
         );
         PanelTicketsactivosLayout.setVerticalGroup(
             PanelTicketsactivosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 496, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -91,6 +142,8 @@ public class TicketsActivosPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelTicketsactivos;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea txtTicketsActivos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

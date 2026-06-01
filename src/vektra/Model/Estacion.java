@@ -53,11 +53,8 @@ public class Estacion {
 
     @Override
     public String toString() {
-        return "Estacion{"
-                + "id='" + id + '\''
-                + ", nombre='" + nombre + '\''
-                + ", color linea='" + lineas + '\''
-                + '}';
+        String linea = (lineas != null && !lineas.isEmpty()) ? " (Línea " + lineas.get(0) + ")" : "";
+        return nombre + linea;
     }
 
 }
