@@ -8,6 +8,7 @@ public class Conductor extends Persona {
     private String apellido;
     private String telefono;
     private String cedula;
+    private String correo;
     private String licencia;
     private String estado;
     private String rutaAsignada;
@@ -17,9 +18,10 @@ public class Conductor extends Persona {
         super();
     }
 
-    public Conductor(String id, String nombre, String cedula, String licencia, String estado) {
+    public Conductor(String id, String nombre, String cedula, String correo, String licencia, String estado) {
         super(id, nombre); 
         this.cedula = cedula;
+        this.correo= correo;
         this.licencia = licencia;
         this.estado = estado;
     }
@@ -40,20 +42,20 @@ public class Conductor extends Persona {
         this.telefono = telefono;
     }
 
-    public String getRutaAsignada() {
-        return rutaAsignada;
-    }
-
-    public void setRutaAsignada(String rutaAsignada) {
-        this.rutaAsignada = rutaAsignada;
-    }
-
     public String getCedula() {
         return cedula;
     }
 
     public void setCedula(String cedula) {
         this.cedula = cedula;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
     public String getLicencia() {
@@ -72,6 +74,14 @@ public class Conductor extends Persona {
         this.estado = estado;
     }
 
+    public String getRutaAsignada() {
+        return rutaAsignada;
+    }
+
+    public void setRutaAsignada(String rutaAsignada) {
+        this.rutaAsignada = rutaAsignada;
+    }
+
     public Vehiculo getVehiculo() {
         return vehiculo;
     }
@@ -79,5 +89,7 @@ public class Conductor extends Persona {
     public void setVehiculo(Vehiculo vehiculo) {
         this.vehiculo = vehiculo;
     }
+
+    
 
 }

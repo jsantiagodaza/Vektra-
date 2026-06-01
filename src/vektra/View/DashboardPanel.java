@@ -4,10 +4,7 @@
  */
 package vektra.View;
 
-/**
- *
- * @author santi
- */
+
 public class DashboardPanel extends javax.swing.JPanel {
 
     /**
@@ -66,10 +63,12 @@ public class DashboardPanel extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         PanelEstacionesActivas = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
+        EstacionesActivasTxt = new javax.swing.JLabel();
         PanelPasajerosenCirculacion = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         PanelTicketsActivos = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
+        PasajerosEnCirculacionTxt = new javax.swing.JLabel();
         PanelLineasActivas = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         PanelTicketsHoy = new javax.swing.JPanel();
@@ -85,19 +84,30 @@ public class DashboardPanel extends javax.swing.JPanel {
         jLabel3.setForeground(new java.awt.Color(153, 153, 153));
         jLabel3.setText("Estaciones Activas");
 
+        EstacionesActivasTxt.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
+        EstacionesActivasTxt.setForeground(new java.awt.Color(0, 153, 255));
+        EstacionesActivasTxt.setText("0");
+
         javax.swing.GroupLayout PanelEstacionesActivasLayout = new javax.swing.GroupLayout(PanelEstacionesActivas);
         PanelEstacionesActivas.setLayout(PanelEstacionesActivasLayout);
         PanelEstacionesActivasLayout.setHorizontalGroup(
             PanelEstacionesActivasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelEstacionesActivasLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(PanelEstacionesActivasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PanelEstacionesActivasLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(PanelEstacionesActivasLayout.createSequentialGroup()
+                        .addGap(95, 95, 95)
+                        .addComponent(EstacionesActivasTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(78, Short.MAX_VALUE))
         );
         PanelEstacionesActivasLayout.setVerticalGroup(
             PanelEstacionesActivasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelEstacionesActivasLayout.createSequentialGroup()
-                .addContainerGap(128, Short.MAX_VALUE)
+                .addContainerGap(31, Short.MAX_VALUE)
+                .addComponent(EstacionesActivasTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -105,23 +115,6 @@ public class DashboardPanel extends javax.swing.JPanel {
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(153, 153, 153));
         jLabel4.setText("Pasajeros en Circulación");
-
-        javax.swing.GroupLayout PanelPasajerosenCirculacionLayout = new javax.swing.GroupLayout(PanelPasajerosenCirculacion);
-        PanelPasajerosenCirculacion.setLayout(PanelPasajerosenCirculacionLayout);
-        PanelPasajerosenCirculacionLayout.setHorizontalGroup(
-            PanelPasajerosenCirculacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelPasajerosenCirculacionLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(83, Short.MAX_VALUE))
-        );
-        PanelPasajerosenCirculacionLayout.setVerticalGroup(
-            PanelPasajerosenCirculacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelPasajerosenCirculacionLayout.createSequentialGroup()
-                .addContainerGap(129, Short.MAX_VALUE)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
 
         jLabel5.setBackground(new java.awt.Color(153, 153, 153));
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -143,6 +136,40 @@ public class DashboardPanel extends javax.swing.JPanel {
                 .addContainerGap(128, Short.MAX_VALUE)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+        );
+
+        PasajerosEnCirculacionTxt.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
+        PasajerosEnCirculacionTxt.setForeground(new java.awt.Color(102, 102, 102));
+        PasajerosEnCirculacionTxt.setText("0");
+
+        javax.swing.GroupLayout PanelPasajerosenCirculacionLayout = new javax.swing.GroupLayout(PanelPasajerosenCirculacion);
+        PanelPasajerosenCirculacion.setLayout(PanelPasajerosenCirculacionLayout);
+        PanelPasajerosenCirculacionLayout.setHorizontalGroup(
+            PanelPasajerosenCirculacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelPasajerosenCirculacionLayout.createSequentialGroup()
+                .addGroup(PanelPasajerosenCirculacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PanelPasajerosenCirculacionLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelPasajerosenCirculacionLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(PasajerosEnCirculacionTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(90, 90, 90)))
+                .addComponent(PanelTicketsActivos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        PanelPasajerosenCirculacionLayout.setVerticalGroup(
+            PanelPasajerosenCirculacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelPasajerosenCirculacionLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(PasajerosEnCirculacionTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelPasajerosenCirculacionLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(PanelTicketsActivos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -199,11 +226,10 @@ public class DashboardPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
                         .addComponent(PanelEstacionesActivas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(PanelPasajerosenCirculacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(PanelTicketsActivos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(PanelPasajerosenCirculacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(PanelLineasActivas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -222,8 +248,7 @@ public class DashboardPanel extends javax.swing.JPanel {
                 .addGap(49, 49, 49)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(PanelEstacionesActivas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(PanelPasajerosenCirculacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(PanelTicketsActivos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(PanelPasajerosenCirculacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(PanelLineasActivas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -245,11 +270,13 @@ public class DashboardPanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel EstacionesActivasTxt;
     private javax.swing.JPanel PanelEstacionesActivas;
     private javax.swing.JPanel PanelLineasActivas;
     private javax.swing.JPanel PanelPasajerosenCirculacion;
     private javax.swing.JPanel PanelTicketsActivos;
     private javax.swing.JPanel PanelTicketsHoy;
+    private javax.swing.JLabel PasajerosEnCirculacionTxt;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
