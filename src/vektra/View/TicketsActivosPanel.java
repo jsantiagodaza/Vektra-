@@ -35,11 +35,11 @@ public class TicketsActivosPanel extends javax.swing.JPanel {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setText("Tus Tikects Activos");
+        jLabel1.setText("Tikects Activos");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel2.setText("Tickets vigentes en tu cuenta");
+        jLabel2.setText("Tickets vigentes");
 
         javax.swing.GroupLayout PanelTicketsactivosLayout = new javax.swing.GroupLayout(PanelTicketsactivos);
         PanelTicketsactivos.setLayout(PanelTicketsactivosLayout);
