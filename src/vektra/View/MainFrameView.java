@@ -28,6 +28,7 @@ public class MainFrameView extends javax.swing.JFrame {
             btnAnadirVehiculo.setVisible(false);
         }
     }
+    
     private javax.swing.JPanel panelContenido;
 
     public void mostrarPanel(javax.swing.JPanel panel) {

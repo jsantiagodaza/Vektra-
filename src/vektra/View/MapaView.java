@@ -123,10 +123,10 @@ public class MapaView extends JPanel {
                         id,
                         nombre,
                         linea,
-                        orden,
+                        orden_estacion,
                         latitud,
                         longitud
-                    FROM estaciones
+                    FROM estacioness
                 """)
                 ) {
 
@@ -156,7 +156,7 @@ public class MapaView extends JPanel {
                         .append("\",")
 
                         .append("\"orden\":")
-                        .append(rs.getInt("orden"))
+                        .append(rs.getInt("orden_estacion"))
                         .append(",")
 
                         .append("\"lat\":")
@@ -198,7 +198,7 @@ public class MapaView extends JPanel {
                         kilometros,
                         color_linea,
                         transbordos
-                    FROM rutas
+                    FROM rutass
                 """)
                 ) {
 
@@ -234,7 +234,7 @@ public class MapaView extends JPanel {
                         .append(rs.getDouble("kilometros"))
                         .append(",")
 
-                        .append("\"color\":\"")
+                        .append("\"color_linea\":\"")
                         .append(rs.getString("color_linea")
                                 .replace("\"", "\\\""))
                         .append("\",")
