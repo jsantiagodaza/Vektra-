@@ -8,9 +8,11 @@ import java.sql.Statement;
 
 public class DbQuery {
     public static void main(String[] args) {
-        String URL = "jdbc:postgresql://localhost:5432/Vektra-";
+
+        String URL = "jdbc:postgresql://localhost:5432/Vektra";
+
         String USER = "postgres";
-        String PASSWORD = "admin123";
+        String PASSWORD = "adminadmin";
         
         try {
             Class.forName("org.postgresql.Driver");

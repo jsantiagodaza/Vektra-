@@ -9,7 +9,7 @@ public class ConexionBD {
     
      private static final String URL = "jdbc:postgresql://localhost:5432/Vetkra";
     private static final String USUARIO = "postgres";
-    private static final String CONTRASENA = "admin123";
+    private static final String CONTRASENA = "adminadmin";
 
     public static Connection getConexion() {
         Connection con = null;

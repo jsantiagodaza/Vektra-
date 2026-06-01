@@ -349,9 +349,7 @@ public class AnadirConductorPanel extends javax.swing.JPanel {
             c.setCedula(cedulaConductortxt.getText());
             c.setTelefono(telefonoConductortxt.getText());
             c.setLicencia(licenciaConductortxt.getText());
-
-            // Si tu modelo tiene correo:
-            // c.setCorreo(correoConductortxt.getText());
+            c.setCorreo(correoConductortxt.getText());
             c.setRutaAsignada(cmbRutas.getSelectedItem().toString());
 
             ConductorDao dao = new ConductorDao();
