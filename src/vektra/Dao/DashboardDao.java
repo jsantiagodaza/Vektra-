@@ -31,6 +31,43 @@ public class DashboardDao {
 
         return 0;
     }
+     
+     public int totalConductores() {
+
+        String sql = "SELECT COUNT(*) FROM conductores";
+        try (
+            Connection con = ConexionBD.getConexion();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()
+        ) {
+            if (rs.next()) {
+
+                return rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+
+            System.out.println("Error: " + e.getMessage());
+        }
+        return 0;
+    }
+     
+      public int contarLineas() {
+        String sql = "SELECT COUNT(DISTINCT linea) FROM estacioness";
+        try (
+            Connection con = ConexionBD.getConexion();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()
+        ) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return 0;
+    }
+}
+
 
   
-}
