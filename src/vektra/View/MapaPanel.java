@@ -16,9 +16,26 @@ public class MapaPanel extends javax.swing.JPanel {
     public MapaPanel() {
         initComponents();
         vektra.Util.FontUtil.applyCustomFont(this);
-        jPanel2.setLayout(new java.awt.BorderLayout());
-
-        jPanel2.add(new MapaView(), java.awt.BorderLayout.CENTER);
+        
+        this.removeAll();
+        this.setLayout(new java.awt.BorderLayout());
+        
+        javax.swing.JPanel topPanel = new javax.swing.JPanel();
+        topPanel.setBackground(new java.awt.Color(255, 255, 255));
+        topPanel.setLayout(new javax.swing.BoxLayout(topPanel, javax.swing.BoxLayout.Y_AXIS));
+        topPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 10, 20));
+        
+        jLabel1.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
+        jLabel2.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
+        topPanel.add(jLabel1);
+        topPanel.add(javax.swing.Box.createVerticalStrut(5));
+        topPanel.add(jLabel2);
+        
+        this.add(topPanel, java.awt.BorderLayout.NORTH);
+        this.add(new MapaView(), java.awt.BorderLayout.CENTER);
+        
+        this.revalidate();
+        this.repaint();
     }
 
     /**

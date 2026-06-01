@@ -10,11 +10,19 @@
           href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <style>
-        html, body, #map {
+        html, body {
             height: 100%;
             width: 100%;
             margin: 0;
             padding: 0;
+            overflow: hidden;
+        }
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
         }
     </style>
 </head>
@@ -22,6 +30,11 @@
 <body>
 
 <div id="map"></div>
+
+<!-- Desactivar 3D Transforms para compatibilidad con JavaFX WebView -->
+<script>
+    window.L_DISABLE_3D = true;
+</script>
 
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -32,28 +45,54 @@
     // INICIALIZAR MAPA
     // ================================
 
-    const map = L.map('map').setView(
-        [10.4631, -73.2532],
-        13
-    );
+    const map = L.map('map', {
+        zoomAnimation: false,
+        fadeAnimation: false,
+        markerZoomAnimation: false,
+        preferCanvas: true
+    }).setView([10.4631, -73.2532], 13);
 
     // OpenStreetMap
     L.tileLayer(
         'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         {
             maxZoom: 19,
-            attribution:
-                '&copy; OpenStreetMap contributors'
+            attribution: '&copy; OpenStreetMap contributors',
+            updateWhenIdle: false,
+            keepBuffer: 4
         }
     ).addTo(map);
 
-    // Corregir render en JavaFX
-    setTimeout(() => map.invalidateSize(), 200);
-    setTimeout(() => map.invalidateSize(), 800);
+    // Fix agresivo para JavaFX WebView
+    function forceRedraw() {
+        map.invalidateSize({ animate: false, pan: false });
+        map.eachLayer(layer => {
+            if (layer._tiles) {
+                Object.values(layer._tiles).forEach(tile => {
+                    if (tile.el) {
+                        tile.el.src = tile.el.src;
+                    }
+                });
+            }
+        });
+    }
 
-    window.addEventListener('resize', () => {
-        map.invalidateSize();
-    });
+    // Secuencia de redraws escalonados
+    setTimeout(() => forceRedraw(), 100);
+    setTimeout(() => forceRedraw(), 400);
+    setTimeout(() => forceRedraw(), 800);
+    setTimeout(() => forceRedraw(), 1500);
+    setTimeout(() => forceRedraw(), 3000);
+
+    window.addEventListener('resize', () => forceRedraw());
+
+    // Intervalo continuo más agresivo al inicio
+    let count = 0;
+    const interval = setInterval(() => {
+        forceRedraw();
+        count++;
+        if (count > 8) clearInterval(interval);
+    }, 500);
 
     // ================================
     // LISTAS DINÁMICAS
@@ -179,10 +218,14 @@
             );
 
             map.fitBounds(bounds, {
-                padding: [40, 40]
+                padding: [40, 40],
+                animate: false
             });
 
         }
+        
+        // Force complete redraw after setting bounds
+        setTimeout(() => map.invalidateSize(true), 100);
 
     }
 
@@ -214,7 +257,7 @@
 
     // Mantener render correcto en JavaFX
     setInterval(() => {
-        map.invalidateSize();
+        map.invalidateSize(true);
     }, 1500);
 
 </script>

@@ -52,15 +52,15 @@
                                           <Component id="jTextField1" alignment="0" pref="361" max="32767" attributes="0"/>
                                           <Component id="jComboBox1" alignment="0" max="32767" attributes="0"/>
                                       </Group>
-                                      <Component id="jLabel7" alignment="0" min="-2" pref="283" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jTextField2" min="-2" pref="361" max="-2" attributes="0"/>
-                                      <Component id="jLabel6" min="-2" pref="283" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="jTextField2" pref="361" max="32767" attributes="0"/>
                                       <Component id="jButton1" alignment="0" min="-2" pref="243" max="-2" attributes="0"/>
+                                      <Component id="jLabel6" alignment="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
+                              <Component id="jLabel7" alignment="0" min="-2" pref="407" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -243,7 +243,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="66" green="66" red="66" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Confirma escribiendo su ID:"/>
+            <Property name="text" type="java.lang.String" value="Este es el N&#xfa;mero de Conductor de la empresa:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextField1">
@@ -271,7 +271,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="66" green="66" red="66" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Confirma escribiendo la ID del conductor:"/>
+            <Property name="text" type="java.lang.String" value="Confirma escribiendo el n&#xfa;mero asignado del conductor:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextField2">

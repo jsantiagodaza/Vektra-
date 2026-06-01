@@ -90,6 +90,12 @@ public class Conductor extends Persona {
         this.vehiculo = vehiculo;
     }
 
-    
+    @Override
+    public String toString() {
+        String nombreCompleto = (getNombre() != null ? getNombre() : "")
+                + (apellido != null && !apellido.isEmpty() ? " " + apellido : "");
+        String licenciaInfo = licencia != null && !licencia.isEmpty() ? " (" + licencia + ")" : "";
+        return nombreCompleto.trim() + licenciaInfo;
+    }
 
 }

@@ -4,6 +4,14 @@
  */
 package vektra.View;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import vektra.Dao.RutaDao;
+import vektra.Model.Estacion;
+import vektra.Model.Ruta;
+
 /**
  *
  * @author santi
@@ -20,6 +28,7 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
         // Colores y comportamiento
         initColors();
         initPlaceholders();
+        cargarEstacionesDesdeRutas();
         initValidaciones();
         btnGenerarTicket.addActionListener(e -> btnGenerarTicketActionPerformed(e));
     }
@@ -28,6 +37,8 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
     private static final java.awt.Color COLOR_ERROR = new java.awt.Color(200, 50, 50);
     private static final java.awt.Color COLOR_OK    = new java.awt.Color(39, 174, 96);
     private static final java.awt.Color COLOR_TEXTO = new java.awt.Color(204, 204, 204);
+
+    private List<Estacion> estaciones;
 
     private void initColors() {
         nombreClientetxt.setBackground(COLOR_CAMPO);
@@ -245,6 +256,10 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
         emailClientetxt = new javax.swing.JTextField();
         EdadporFechadeNacimientoClientetxt = new javax.swing.JTextField();
         btnGenerarTicket = new javax.swing.JButton();
+        cmbEstacion_origen = new javax.swing.JComboBox<>();
+        cmbEstacion_destino = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -301,6 +316,28 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
         btnGenerarTicket.setForeground(new java.awt.Color(255, 255, 255));
         btnGenerarTicket.setText("Generar Ticket");
 
+        cmbEstacion_origen.setBackground(new java.awt.Color(51, 51, 51));
+        cmbEstacion_origen.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        cmbEstacion_origen.setForeground(new java.awt.Color(255, 255, 255));
+        cmbEstacion_origen.setModel(new javax.swing.DefaultComboBoxModel<>());
+        cmbEstacion_origen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbEstacion_origenActionPerformed(evt);
+            }
+        });
+
+        cmbEstacion_destino.setBackground(new java.awt.Color(51, 51, 51));
+        cmbEstacion_destino.setForeground(new java.awt.Color(255, 255, 255));
+        cmbEstacion_destino.setModel(new javax.swing.DefaultComboBoxModel<>());
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel7.setText("¿Desde que estación Partes?:");
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel8.setText("¿A donde quieres ir?:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -319,8 +356,16 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
                         .addComponent(idClientetxt)
                         .addComponent(emailClientetxt, javax.swing.GroupLayout.DEFAULT_SIZE, 553, Short.MAX_VALUE)
                         .addComponent(EdadporFechadeNacimientoClientetxt))
-                    .addComponent(btnGenerarTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(344, Short.MAX_VALUE))
+                    .addComponent(btnGenerarTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cmbEstacion_origen, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cmbEstacion_destino, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(242, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -329,25 +374,35 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(nombreClientetxt, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(idClientetxt, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(emailClientetxt, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(EdadporFechadeNacimientoClientetxt, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbEstacion_origen, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbEstacion_destino, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(btnGenerarTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -366,10 +421,60 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_nombreClientetxtActionPerformed
 
+    private void cmbEstacion_origenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEstacion_origenActionPerformed
+        actualizarEstacionesDestino();
+    }//GEN-LAST:event_cmbEstacion_origenActionPerformed
+
+    private void cargarEstacionesDesdeRutas() {
+        try {
+            RutaDao dao = new RutaDao();
+            List<Ruta> rutas = dao.obtenerTodasLasRutas();
+            Map<String, Estacion> mapa = new LinkedHashMap<>();
+            for (Ruta ruta : rutas) {
+                if (ruta.getOrigen() != null && ruta.getOrigen().getId() != null) {
+                    mapa.put(ruta.getOrigen().getId(), ruta.getOrigen());
+                }
+                if (ruta.getDestino() != null && ruta.getDestino().getId() != null) {
+                    mapa.put(ruta.getDestino().getId(), ruta.getDestino());
+                }
+            }
+            estaciones = new ArrayList<>(mapa.values());
+            cmbEstacion_origen.removeAllItems();
+            cmbEstacion_origen.addItem(new Estacion("", "Seleccionar estación origen"));
+            for (Estacion estacion : estaciones) {
+                cmbEstacion_origen.addItem(estacion);
+            }
+            actualizarEstacionesDestino();
+        } catch (Exception e) {
+            System.out.println("Error al cargar estaciones: " + e.getMessage());
+        }
+    }
+
+    private void actualizarEstacionesDestino() {
+        Estacion seleccionado = null;
+        Object item = cmbEstacion_origen.getSelectedItem();
+        if (item instanceof Estacion) {
+            Estacion estacion = (Estacion) item;
+            if (estacion.getId() != null && !estacion.getId().isEmpty()) {
+                seleccionado = estacion;
+            }
+        }
+        cmbEstacion_destino.removeAllItems();
+        cmbEstacion_destino.addItem(new Estacion("", "Seleccionar estación destino"));
+        for (Estacion estacion : estaciones) {
+            if (seleccionado == null || !estacion.getId().equals(seleccionado.getId())) {
+                cmbEstacion_destino.addItem(estacion);
+            }
+        }
+        cmbEstacion_destino.setSelectedIndex(0);
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField EdadporFechadeNacimientoClientetxt;
     private javax.swing.JButton btnGenerarTicket;
+    private javax.swing.JComboBox<Estacion> cmbEstacion_destino;
+    private javax.swing.JComboBox<Estacion> cmbEstacion_origen;
     private javax.swing.JTextField emailClientetxt;
     private javax.swing.JTextField idClientetxt;
     private javax.swing.JLabel jLabel1;
@@ -378,6 +483,8 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField nombreClientetxt;
     // End of variables declaration//GEN-END:variables

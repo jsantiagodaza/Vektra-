@@ -105,25 +105,16 @@ public class Dashboard extends javax.swing.JFrame {
         panelContenido.repaint();
     }
 
+    private MapaPanel mapaPanelInstance;
+
     private void cargarPanelMapa() {
         panelContenido.removeAll();
 
-        RutaService service = new RutaService();
-        List<Ruta> rutas = service.loadRoutesFromDB();
-        DefaultListModel<String> modeloLista = new DefaultListModel<>();
-
-        for (Ruta r : rutas) {
-
-            modeloLista.addElement(r.formatoUI());
+        if (mapaPanelInstance == null) {
+            mapaPanelInstance = new MapaPanel();
         }
-        MapaView mapa = new MapaView();
 
-
-        // Instanciamos MapaValleduparView y extraemos su panel principal
-        
-        MapaPanel mapaValleduparView = new MapaPanel();
-        panelContenido.add(mapaValleduparView, java.awt.BorderLayout.CENTER);
-
+        panelContenido.add(mapaPanelInstance, java.awt.BorderLayout.CENTER);
         panelContenido.revalidate();
         panelContenido.repaint();
     }
@@ -498,13 +489,7 @@ public class Dashboard extends javax.swing.JFrame {
         panelContenido.repaint();
     }
 
-    public void cargarPanelAsignarVehiculo() {
-        panelContenido.removeAll();
-        AsignaraVehiculoPanel vista = new AsignaraVehiculoPanel();
-        panelContenido.add(vista, java.awt.BorderLayout.CENTER);
-        panelContenido.revalidate();
-        panelContenido.repaint();
-    }
+
 
     public void cargarPanelBorrarConductor() {
         panelContenido.removeAll();
