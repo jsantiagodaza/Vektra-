@@ -90,8 +90,10 @@ public class TicketDao {
                     destino
                 );
 
+                
                 tickets.add(t);
             }
+            
 
         } catch (SQLException e) {
             System.out.println("Error al obtener tickets: " + e.getMessage());
