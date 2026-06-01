@@ -21,30 +21,27 @@ public class MapaView extends JPanel {
 
     public MapaView() {
 
+        System.out.println(javafx.scene.Parent.class);
         setLayout(new BorderLayout());
-
-        jfxPanel = new JFXPanel();
-
-        add(jfxPanel, BorderLayout.CENTER);
+         jfxPanel = new JFXPanel();
+         add(jfxPanel, BorderLayout.CENTER);
 
         Platform.runLater(this::initFX);
+      //  javax.swing.JLabel lbl = new javax.swing.JLabel("Mapa cargado");
+        //add(lbl, BorderLayout.CENTER);
     }
 
     private void initFX() {
 
         WebView webView = new WebView();
-
         WebEngine engine = webView.getEngine();
-
         // Inicializar datos
         try (Connection con = Conexion.conectar()) {
-
             if (con != null) {
                 asegurarColumnasYDatos(con);
             }
 
         } catch (Exception e) {
-
             System.err.println(
                     "Error al inicializar BD: "
                     + e.getMessage()
@@ -93,12 +90,12 @@ public class MapaView extends JPanel {
         try (Statement stmt = con.createStatement()) {
 
             stmt.execute("""
-                ALTER TABLE estaciones
+                ALTER TABLE estacioness
                 ADD COLUMN IF NOT EXISTS latitud DOUBLE PRECISION
             """);
 
             stmt.execute("""
-                ALTER TABLE estaciones
+                ALTER TABLE estacioness
                 ADD COLUMN IF NOT EXISTS longitud DOUBLE PRECISION
             """);
 
@@ -116,9 +113,7 @@ public class MapaView extends JPanel {
         StringBuilder json = new StringBuilder("[");
 
         try (
-                Connection con = Conexion.conectar();
-                Statement stmt = con.createStatement();
-                ResultSet rs = stmt.executeQuery("""
+                Connection con = Conexion.conectar(); Statement stmt = con.createStatement(); ResultSet rs = stmt.executeQuery("""
                     SELECT
                         id,
                         nombre,
@@ -127,8 +122,7 @@ public class MapaView extends JPanel {
                         latitud,
                         longitud
                     FROM estacioness
-                """)
-                ) {
+                """)) {
 
             boolean first = true;
 
@@ -144,28 +138,22 @@ public class MapaView extends JPanel {
                         .append("\"id\":")
                         .append(rs.getInt("id"))
                         .append(",")
-
                         .append("\"nombre\":\"")
                         .append(rs.getString("nombre")
                                 .replace("\"", "\\\""))
                         .append("\",")
-
                         .append("\"linea\":\"")
                         .append(rs.getString("linea")
                                 .replace("\"", "\\\""))
                         .append("\",")
-
                         .append("\"orden\":")
                         .append(rs.getInt("orden_estacion"))
                         .append(",")
-
                         .append("\"lat\":")
                         .append(rs.getDouble("latitud"))
                         .append(",")
-
                         .append("\"lng\":")
                         .append(rs.getDouble("longitud"))
-
                         .append("}");
             }
 
@@ -187,9 +175,7 @@ public class MapaView extends JPanel {
         StringBuilder json = new StringBuilder("[");
 
         try (
-                Connection con = Conexion.conectar();
-                Statement stmt = con.createStatement();
-                ResultSet rs = stmt.executeQuery("""
+                Connection con = Conexion.conectar(); Statement stmt = con.createStatement(); ResultSet rs = stmt.executeQuery("""
                     SELECT
                         id,
                         estacion_origen_id,
@@ -199,8 +185,7 @@ public class MapaView extends JPanel {
                         color_linea,
                         transbordos
                     FROM rutass
-                """)
-                ) {
+                """)) {
 
             boolean first = true;
 
@@ -213,35 +198,27 @@ public class MapaView extends JPanel {
                 first = false;
 
                 json.append("{")
-
                         .append("\"id\":")
                         .append(rs.getInt("id"))
                         .append(",")
-
                         .append("\"origen_id\":")
                         .append(rs.getInt("estacion_origen_id"))
                         .append(",")
-
                         .append("\"destino_id\":")
                         .append(rs.getInt("estacion_destino_id"))
                         .append(",")
-
                         .append("\"tiempo\":")
                         .append(rs.getDouble("tiempo_minutos"))
                         .append(",")
-
                         .append("\"kilometros\":")
                         .append(rs.getDouble("kilometros"))
                         .append(",")
-
                         .append("\"color_linea\":\"")
                         .append(rs.getString("color_linea")
                                 .replace("\"", "\\\""))
                         .append("\",")
-
                         .append("\"transbordos\":")
                         .append(rs.getInt("transbordos"))
-
                         .append("}");
             }
 
@@ -258,4 +235,3 @@ public class MapaView extends JPanel {
         return json.toString();
     }
 }
-
