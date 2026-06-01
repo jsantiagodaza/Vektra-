@@ -4,6 +4,10 @@
  */
 package vektra.View;
 
+import java.util.List;
+import vektra.Dao.ConductorDao;
+import vektra.Model.Conductor;
+
 /**
  *
  * @author santi
@@ -15,6 +19,7 @@ public class AnadirVehiculo extends javax.swing.JPanel {
      */
     public AnadirVehiculo() {
         initComponents();
+        cargarConductores();
         vektra.Util.FontUtil.applyCustomFont(this);
     }
 
@@ -130,7 +135,7 @@ public class AnadirVehiculo extends javax.swing.JPanel {
 
         cmbConductoresDisponibles.setBackground(new java.awt.Color(51, 51, 51));
         cmbConductoresDisponibles.setForeground(new java.awt.Color(255, 255, 255));
-        cmbConductoresDisponibles.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { ".", "." }));
+        cmbConductoresDisponibles.setModel(new javax.swing.DefaultComboBoxModel<>());
         cmbConductoresDisponibles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbConductoresDisponiblesActionPerformed(evt);
@@ -288,6 +293,23 @@ public class AnadirVehiculo extends javax.swing.JPanel {
         configurarPlaceholder(aniofabricacionVehiculotxt, "Ej. 2023");
     }
 
+    private void cargarConductores() {
+        try {
+            ConductorDao dao = new ConductorDao();
+            List<Conductor> conductores = dao.obtenerTodos();
+            cmbConductoresDisponibles.removeAllItems();
+            cmbConductoresDisponibles.addItem(new Conductor() {
+                @Override public String toString() { return "Seleccionar conductor..."; }
+            });
+            for (Conductor conductor : conductores) {
+                cmbConductoresDisponibles.addItem(conductor);
+            }
+            cmbConductoresDisponibles.setSelectedIndex(0);
+        } catch (Exception e) {
+            System.out.println("Error al cargar conductores: " + e.getMessage());
+        }
+    }
+
     private void configurarPlaceholder(javax.swing.JTextField campo, String placeholder) {
         campo.setText(placeholder);
         campo.setForeground(new java.awt.Color(150, 150, 150));
@@ -340,7 +362,7 @@ public class AnadirVehiculo extends javax.swing.JPanel {
         });
         cmbConductoresDisponibles.addItemListener(e -> {
             if (e.getStateChange() != java.awt.event.ItemEvent.SELECTED) return;
-            marcarCampo(cmbConductoresDisponibles, cmbConductoresDisponibles.getSelectedIndex() > -1);
+            marcarCampo(cmbConductoresDisponibles, cmbConductoresDisponibles.getSelectedIndex() > 0);
         });
     }
 
@@ -384,7 +406,7 @@ public class AnadirVehiculo extends javax.swing.JPanel {
     private javax.swing.JTextField aniofabricacionVehiculotxt;
     private javax.swing.JButton btnAnadirVehiculo;
     private javax.swing.JComboBox<String> cmbCapacidad;
-    private javax.swing.JComboBox<String> cmbConductoresDisponibles;
+    private javax.swing.JComboBox<Conductor> cmbConductoresDisponibles;
     private javax.swing.JComboBox<String> cmbLineas;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
