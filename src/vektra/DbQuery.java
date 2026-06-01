@@ -8,7 +8,7 @@ import java.sql.Statement;
 
 public class DbQuery {
     public static void main(String[] args) {
-        String URL = "jdbc:postgresql://localhost:3003/Vektra-";
+        String URL = "jdbc:postgresql://localhost:5432/Vektra-";
         String USER = "postgres";
         String PASSWORD = "admin123";
         

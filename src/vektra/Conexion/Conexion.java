@@ -21,9 +21,9 @@ public class Conexion {
         try {
             Class.forName("org.postgresql.Driver");
 
-            String URL = "jdbc:postgresql://localhost:3003/Vektra-";
+            String URL = "jdbc:postgresql://localhost:5432/Vektra";
             String USER = "postgres";
-            String PASSWORD = "admin123";
+            String PASSWORD = "adminadmin";
 
 
             con = DriverManager.getConnection(URL, USER, PASSWORD);
