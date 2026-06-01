@@ -489,13 +489,7 @@ public class Dashboard extends javax.swing.JFrame {
         panelContenido.repaint();
     }
 
-    public void cargarPanelAsignarVehiculo() {
-        panelContenido.removeAll();
-        AsignaraVehiculoPanel vista = new AsignaraVehiculoPanel();
-        panelContenido.add(vista, java.awt.BorderLayout.CENTER);
-        panelContenido.revalidate();
-        panelContenido.repaint();
-    }
+
 
     public void cargarPanelBorrarConductor() {
         panelContenido.removeAll();

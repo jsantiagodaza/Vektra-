@@ -50,7 +50,6 @@ public class ConductoresPanel extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         btnAnadirConductor = new javax.swing.JButton();
         btnEliminarConductor = new javax.swing.JButton();
-        btnAsignaraMetro = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -95,17 +94,6 @@ public class ConductoresPanel extends javax.swing.JPanel {
             }
         });
 
-        btnAsignaraMetro.setBackground(new java.awt.Color(225, 223, 223));
-        btnAsignaraMetro.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnAsignaraMetro.setForeground(new java.awt.Color(0, 102, 204));
-        btnAsignaraMetro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/ADDBUS.png"))); // NOI18N
-        btnAsignaraMetro.setText("Asignar a Vehículo");
-        btnAsignaraMetro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAsignaraMetroActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -115,10 +103,9 @@ public class ConductoresPanel extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnAnadirConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40)
-                        .addComponent(btnAsignaraMetro, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(46, 46, 46)
-                        .addComponent(btnEliminarConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEliminarConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(330, 330, 330))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -139,7 +126,6 @@ public class ConductoresPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAnadirConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAsignaraMetro, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEliminarConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(78, Short.MAX_VALUE))
         );
@@ -231,17 +217,10 @@ public class ConductoresPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnEliminarConductorActionPerformed
 
-    private void btnAsignaraMetroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignaraMetroActionPerformed
-        if (mainFrame != null) {
-            mainFrame.mostrarPanel(new AsignaraVehiculoPanel());
-        }
-    }//GEN-LAST:event_btnAsignaraMetroActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PaneldeConductores;
     private javax.swing.JButton btnAnadirConductor;
-    private javax.swing.JButton btnAsignaraMetro;
     private javax.swing.JButton btnEliminarConductor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
