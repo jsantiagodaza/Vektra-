@@ -4,10 +4,33 @@
  */
 package vektra.Dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 /**
  *
  * @author Usuario
  */
 public class DashboardDao {
-    
+     public int contarEstaciones() {
+        String sql = "SELECT COUNT(*) FROM estacioness";
+
+        try (
+            Connection con = ConexionBD.getConexion();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()
+        ) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return 0;
+    }
+
+  
 }
