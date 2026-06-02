@@ -8,9 +8,13 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.DefaultListCellRenderer;
 import vektra.Dao.RutaDao;
+import vektra.Dao.PasajeroDao;
 import vektra.Model.Estacion;
+import vektra.Model.Pasajero;
 import vektra.Model.Ruta;
+import vektra.Service.TicketService;
 
 /**
  *
@@ -39,6 +43,17 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
     private static final java.awt.Color COLOR_TEXTO = new java.awt.Color(204, 204, 204);
 
     private List<Estacion> estaciones;
+
+    private static class EstacionRenderer extends DefaultListCellRenderer {
+        @Override
+        public java.awt.Component getListCellRendererComponent(javax.swing.JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            if (value instanceof Estacion) {
+                Estacion estacion = (Estacion) value;
+                value = estacion.getNombre();
+            }
+            return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+        }
+    }
 
     private void initColors() {
         nombreClientetxt.setBackground(COLOR_CAMPO);
@@ -140,18 +155,68 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
             return;
         }
 
-        // Aquí iría la lógica de generación de ticket / DAO
-        new Confirmacion().setVisible(true);
+        try {
+            // Obtener datos del formulario
+            String nombre = nombreClientetxt.getText().trim();
+            String id = idClientetxt.getText().trim();
+            String email = emailClientetxt.getText().trim();
+            
+            Object origenObj = cmbEstacion_origen.getSelectedItem();
+            Object destinoObj = cmbEstacion_destino.getSelectedItem();
+            
+            if (!(origenObj instanceof Estacion) || !(destinoObj instanceof Estacion)) {
+                new ERRORview().setVisible(true);
+                return;
+            }
+            
+            Estacion origen = (Estacion) origenObj;
+            Estacion destino = (Estacion) destinoObj;
+            
+            if (origen.getId() == null || origen.getId().isEmpty() ||
+                destino.getId() == null || destino.getId().isEmpty()) {
+                new ERRORview().setVisible(true);
+                return;
+            }
+            
+            // Crear o obtener pasajero
+            PasajeroDao pasajeroDao = new PasajeroDao();
+            Pasajero pasajero = new Pasajero();
+            pasajero.setId(id);
+            pasajero.setNombre(nombre);
+            pasajero.setEmail(email);
+            pasajero.setFechaRegistro(java.time.LocalDateTime.now());
+            
+            // Guardar pasajero si es nuevo
+            try {
+                pasajeroDao.registrarPasajero(pasajero);
+            } catch (Exception e) {
+                System.out.println("Pasajero puede ya existir: " + e.getMessage());
+            }
+            
+            // Crear ticket con precio base (se puede actualizar con lógica de tarifa)
+            double precio = 25000; // Precio base por defecto
+            TicketService ticketService = new TicketService();
+            ticketService.crearTicket(id, pasajero, origen, destino, precio);
+            
+            // Mostrar confirmación
+            new Confirmacion().setVisible(true);
 
-        // Limpiar campos
-        javax.swing.JTextField[] campos = { nombreClientetxt, idClientetxt, emailClientetxt, EdadporFechadeNacimientoClientetxt };
-        for (javax.swing.JTextField c : campos) {
-            c.setText("");
-            c.putClientProperty("valido", false);
-            c.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(80, 80, 80), 1, true));
+            // Limpiar campos
+            javax.swing.JTextField[] campos = { nombreClientetxt, idClientetxt, emailClientetxt, EdadporFechadeNacimientoClientetxt };
+            for (javax.swing.JTextField c : campos) {
+                c.setText("");
+                c.putClientProperty("valido", false);
+                c.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(80, 80, 80), 1, true));
+            }
+            // Restaurar placeholders
+            initPlaceholders();
+            cargarEstacionesDesdeRutas();
+            
+        } catch (Exception e) {
+            System.err.println("Error al generar ticket: " + e.getMessage());
+            e.printStackTrace();
+            new ERRORview().setVisible(true);
         }
-        // Restaurar placeholders
-        initPlaceholders();
     }
 
     // HELPERS
@@ -256,8 +321,8 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
         emailClientetxt = new javax.swing.JTextField();
         EdadporFechadeNacimientoClientetxt = new javax.swing.JTextField();
         btnGenerarTicket = new javax.swing.JButton();
-        cmbEstacion_origen = new javax.swing.JComboBox<>();
-        cmbEstacion_destino = new javax.swing.JComboBox<>();
+        cmbEstacion_origen = new javax.swing.JComboBox<Estacion>();
+        cmbEstacion_destino = new javax.swing.JComboBox<Estacion>();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
 
@@ -315,11 +380,15 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
         btnGenerarTicket.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnGenerarTicket.setForeground(new java.awt.Color(255, 255, 255));
         btnGenerarTicket.setText("Generar Ticket");
+        btnGenerarTicket.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerarTicketActionPerformed(evt);
+            }
+        });
 
         cmbEstacion_origen.setBackground(new java.awt.Color(51, 51, 51));
         cmbEstacion_origen.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         cmbEstacion_origen.setForeground(new java.awt.Color(255, 255, 255));
-        cmbEstacion_origen.setModel(new javax.swing.DefaultComboBoxModel<>());
         cmbEstacion_origen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbEstacion_origenActionPerformed(evt);
@@ -328,7 +397,6 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
 
         cmbEstacion_destino.setBackground(new java.awt.Color(51, 51, 51));
         cmbEstacion_destino.setForeground(new java.awt.Color(255, 255, 255));
-        cmbEstacion_destino.setModel(new javax.swing.DefaultComboBoxModel<>());
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(153, 153, 153));
@@ -440,6 +508,7 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
             }
             estaciones = new ArrayList<>(mapa.values());
             cmbEstacion_origen.removeAllItems();
+            cmbEstacion_origen.setRenderer(new EstacionRenderer());
             cmbEstacion_origen.addItem(new Estacion("", "Seleccionar estación origen"));
             for (Estacion estacion : estaciones) {
                 cmbEstacion_origen.addItem(estacion);
@@ -460,6 +529,7 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
             }
         }
         cmbEstacion_destino.removeAllItems();
+        cmbEstacion_destino.setRenderer(new EstacionRenderer());
         cmbEstacion_destino.addItem(new Estacion("", "Seleccionar estación destino"));
         for (Estacion estacion : estaciones) {
             if (seleccionado == null || !estacion.getId().equals(seleccionado.getId())) {

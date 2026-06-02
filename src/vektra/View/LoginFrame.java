@@ -4,6 +4,9 @@
  */
 package vektra.View;
 
+import vektra.Dao.PasajeroDao;
+import vektra.Model.Pasajero;
+
 /**
  *
  * @author santi
@@ -334,7 +337,13 @@ public class LoginFrame extends javax.swing.JFrame {
             }
         } else {
             // Pasajero Regular
-            abrirMainFrame(false);
+            PasajeroDao dao = new PasajeroDao();
+            Pasajero pasajero = dao.autenticar(logincorreotxt.getText().trim(), contrasenatxt.getText().trim());
+            if (pasajero != null) {
+                abrirMainFrame(false);
+            } else {
+                new ERRORview().setVisible(true);
+            }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

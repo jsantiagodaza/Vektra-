@@ -247,6 +247,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Generar Ticket"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGenerarTicketActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JComboBox" name="cmbEstacion_origen">
           <Properties>

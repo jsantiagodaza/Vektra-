@@ -4,6 +4,12 @@
  */
 package vektra.View;
 
+import java.awt.Color;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import vektra.Dao.PasajeroDao;
+import vektra.Model.Pasajero;
+
 /**
  *
  * @author santi
@@ -11,6 +17,10 @@ package vektra.View;
 public class CrearCuentaFrame extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CrearCuentaFrame.class.getName());
+    private static final Color COLOR_CAMPO = new Color(51, 51, 51);
+    private static final Color COLOR_ERROR = new Color(200, 50, 50);
+    private static final Color COLOR_OK = new Color(39, 174, 96);
+    private static final Color COLOR_TEXTO = new Color(204, 204, 204);
 
     /**
      * Creates new form CrearCuentaFrame
@@ -18,6 +28,10 @@ public class CrearCuentaFrame extends javax.swing.JFrame {
     public CrearCuentaFrame() {
         initComponents();
         vektra.Util.FontUtil.applyCustomFont(this);
+        initColors();
+        initPlaceholders();
+        initValidaciones();
+        jButton1.addActionListener(e -> crearCuentaActionPerformed(e));
     }
 
     /**
@@ -257,12 +271,217 @@ public class CrearCuentaFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void crearCuentaActionPerformed(java.awt.event.ActionEvent evt) {
+        if (!todosValidos()) {
+            new ERRORview().setVisible(true);
+            return;
+        }
+
+        String nombre = jTextField1.getText().trim();
+        String identificacion = jTextField2.getText().trim();
+        String fechaNacimiento = jTextField3.getText().trim();
+        String correo = jTextField4.getText().trim();
+        String contrasena = jTextField6.getText().trim();
+
+        PasajeroDao dao = new PasajeroDao();
+        if (dao.buscarPorCorreo(correo) != null) {
+            new ERRORview().setVisible(true);
+            return;
+        }
+
+        Pasajero pasajero = new Pasajero();
+        pasajero.setNombre(nombre);
+        pasajero.setCorreo(correo);
+        pasajero.setContraseña(contrasena);
+        pasajero.setFechaRegistro(LocalDateTime.now());
+
+        Pasajero registrado = dao.registrarPasajero(pasajero);
+        if (registrado == null) {
+            new ERRORview().setVisible(true);
+            return;
+        }
+
+        new Confirmacion().setVisible(true);
+        this.dispose();
+    }
+
+    private void initColors() {
+        jTextField1.setBackground(COLOR_CAMPO);
+        jTextField1.setForeground(COLOR_TEXTO);
+        jTextField2.setBackground(COLOR_CAMPO);
+        jTextField2.setForeground(COLOR_TEXTO);
+        jTextField3.setBackground(COLOR_CAMPO);
+        jTextField3.setForeground(COLOR_TEXTO);
+        jTextField4.setBackground(COLOR_CAMPO);
+        jTextField4.setForeground(COLOR_TEXTO);
+        jTextField6.setBackground(COLOR_CAMPO);
+        jTextField6.setForeground(COLOR_TEXTO);
+    }
+
+    private void initPlaceholders() {
+        configurarPlaceholder(jTextField1, "Ej. Roberto Carlos Buelvas Guiterrez");
+        configurarPlaceholder(jTextField2, "C.C / C.E/ T.I   Sin puntos, comas o espacios, Ej. 10667989888");
+        configurarPlaceholder(jTextField3, "DD/MM/AAAA");
+        configurarPlaceholder(jTextField4, "Ej. robertocarlos23@email.com");
+        configurarPlaceholder(jTextField6, "No compartas tu contraseña con terceros");
+
+        try {
+            javax.swing.text.Document d = jTextField3.getDocument();
+            if (d instanceof javax.swing.text.AbstractDocument) {
+                ((javax.swing.text.AbstractDocument) d).setDocumentFilter(new DateDocumentFilter());
+            }
+        } catch (Exception ignored) {
+        }
+    }
+
+    private void configurarPlaceholder(javax.swing.JTextField campo, String placeholder) {
+        campo.setText(placeholder);
+        campo.setForeground(new Color(120, 120, 120));
+        campo.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                if (campo.getText().equals(placeholder)) {
+                    campo.setText("");
+                    campo.setForeground(COLOR_TEXTO);
+                }
+            }
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (campo.getText().trim().isEmpty()) {
+                    campo.setText(placeholder);
+                    campo.setForeground(new Color(120, 120, 120));
+                    marcarCampo(campo, false);
+                }
+            }
+        });
+    }
+
+    private void initValidaciones() {
+        jTextField1.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = jTextField1.getText().trim();
+            marcarCampo(jTextField1,
+                !v.isEmpty() && !v.equals("Ej. Roberto Carlos Buelvas Guiterrez") && v.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+"));
+        }));
+
+        jTextField2.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = jTextField2.getText().trim();
+            marcarCampo(jTextField2,
+                !v.isEmpty() && !v.equals("C.C / C.E/ T.I   Sin puntos, comas o espacios, Ej. 10667989888") && v.matches("\\d{6,12}"));
+        }));
+
+        jTextField3.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = jTextField3.getText().trim();
+            if (v.isEmpty() || v.equals("DD/MM/AAAA")) { marcarCampo(jTextField3, false); return; }
+            String digits = v.replaceAll("\\D", "");
+            if (digits.length() != 8) { marcarCampo(jTextField3, false); return; }
+            try {
+                int day = Integer.parseInt(digits.substring(0, 2));
+                int month = Integer.parseInt(digits.substring(2, 4));
+                int year = Integer.parseInt(digits.substring(4, 8));
+                java.time.LocalDate dob = java.time.LocalDate.of(year, month, day);
+                java.time.LocalDate today = java.time.LocalDate.now();
+                boolean valido = !dob.isAfter(today) && year > 1900 && year <= today.getYear();
+                marcarCampo(jTextField3, valido);
+            } catch (Exception ex) {
+                marcarCampo(jTextField3, false);
+            }
+        }));
+
+        jTextField4.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = jTextField4.getText().trim();
+            marcarCampo(jTextField4,
+                !v.isEmpty() && !v.equals("Ej. robertocarlos23@email.com") && v.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$"));
+        }));
+
+        jTextField6.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = jTextField6.getText().trim();
+            marcarCampo(jTextField6,
+                !v.isEmpty() && !v.equals("No compartas tu contraseña con terceros") && v.length() >= 8);
+        }));
+    }
+
+    private void marcarCampo(javax.swing.JTextField campo, boolean valido) {
+        Color color = valido ? COLOR_OK : COLOR_ERROR;
+        campo.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createLineBorder(color, 2, true),
+            javax.swing.BorderFactory.createEmptyBorder(4, 8, 4, 8)
+        ));
+        campo.putClientProperty("valido", valido);
+    }
+
+    private boolean todosValidos() {
+        javax.swing.JTextField[] campos = { jTextField1, jTextField2, jTextField3, jTextField4, jTextField6 };
+        for (javax.swing.JTextField c : campos) {
+            Object tag = c.getClientProperty("valido");
+            if (tag == null || !(Boolean) tag) return false;
+        }
+        return true;
+    }
+
+    private static class SimpleDocListener implements javax.swing.event.DocumentListener {
+        private final Runnable accion;
+        SimpleDocListener(Runnable accion) { this.accion = accion; }
+        @Override public void insertUpdate(javax.swing.event.DocumentEvent e)  { accion.run(); }
+        @Override public void removeUpdate(javax.swing.event.DocumentEvent e)  { accion.run(); }
+        @Override public void changedUpdate(javax.swing.event.DocumentEvent e) { accion.run(); }
+    }
+
+    private static class DateDocumentFilter extends javax.swing.text.DocumentFilter {
+        @Override
+        public void insertString(FilterBypass fb, int offset, String string, javax.swing.text.AttributeSet attr) throws javax.swing.text.BadLocationException {
+            replace(fb, offset, 0, string, attr);
+        }
+
+        @Override
+        public void remove(FilterBypass fb, int offset, int length) throws javax.swing.text.BadLocationException {
+            javax.swing.text.Document doc = fb.getDocument();
+            String current = doc.getText(0, doc.getLength());
+            StringBuilder sb = new StringBuilder(current);
+            sb.delete(offset, offset + length);
+            String digits = sb.toString().replaceAll("\\D", "");
+            String formatted = formatDigits(digits);
+            fb.remove(0, doc.getLength());
+            if (!formatted.isEmpty()) fb.insertString(0, formatted, null);
+        }
+
+        @Override
+        public void replace(FilterBypass fb, int offset, int length, String text, javax.swing.text.AttributeSet attrs) throws javax.swing.text.BadLocationException {
+            javax.swing.text.Document doc = fb.getDocument();
+            String current = doc.getText(0, doc.getLength());
+            StringBuilder sb = new StringBuilder(current);
+            if (sb.toString().matches(".*[A-Za-z].*")) {
+                sb = new StringBuilder();
+            }
+            if (length > 0) {
+                int end = Math.min(offset + length, sb.length());
+                if (end > offset) sb.delete(offset, end);
+            }
+            if (text != null) sb.insert(offset, text);
+            String digits = sb.toString().replaceAll("\\D", "");
+            if (digits.length() > 8) digits = digits.substring(0, 8);
+            String formatted = formatDigits(digits);
+            fb.remove(0, doc.getLength());
+            if (!formatted.isEmpty()) fb.insertString(0, formatted, attrs);
+        }
+
+        private static String formatDigits(String d) {
+            StringBuilder out = new StringBuilder();
+            int len = d.length();
+            for (int i = 0; i < len; i++) {
+                out.append(d.charAt(i));
+                if (i == 1 && len > 2) out.append('/');
+                if (i == 3 && len > 4) out.append('/');
+            }
+            return out.toString();
+        }
+    }
+
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
+        // no-op
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
+        // no-op
     }//GEN-LAST:event_jTextField2ActionPerformed
 
     /**
