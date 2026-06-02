@@ -275,4 +275,3 @@ public class MapaView extends JPanel {
         return json.toString();
     }
 }
-

@@ -2,6 +2,7 @@ package vektra.View;
 
 import java.util.List;
 import javax.swing.DefaultListModel;
+import vektra.Dao.DashboardDao;
 import vektra.Model.Ruta;
 import vektra.Service.RutaService;
 
@@ -56,6 +57,12 @@ public class Dashboard extends javax.swing.JFrame {
 
     // ── PANEL INICIO ──────────────────────────────────────────────
     private void cargarPanelInicio() {
+        DashboardDao dao = new DashboardDao();
+
+        int estaciones = dao.contarEstaciones();
+        int lineas = dao.contarLineas();
+        int ticketsHoy = dao.ticketsVendidosHoy();
+        int conductores = dao.totalConductores();
         panelContenido.removeAll();
 
         javax.swing.JPanel panelTop = new javax.swing.JPanel(new java.awt.BorderLayout());
@@ -87,10 +94,10 @@ public class Dashboard extends javax.swing.JFrame {
         javax.swing.JPanel panelCards = new javax.swing.JPanel(new java.awt.GridLayout(1, 3, 15, 0));
         panelCards.setOpaque(false);
         panelCards.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 30, 20, 30));
-        panelCards.add(crearCard("0", "Estaciones", "ACTIVAS...", new java.awt.Color(229, 8, 34)));
-        panelCards.add(crearCard("0", "Pasajeros", "En Circulación...", new java.awt.Color(39, 174, 96)));
-        panelCards.add(crearCard("0", "Tickets", "Hoy", new java.awt.Color(41, 128, 185)));
-
+        
+        panelCards.add(crearCard(String.valueOf(estaciones)," Estaciones "," Activas", new java.awt.Color(229, 8, 34)));
+        panelCards.add(crearCard(String.valueOf(conductores)," Conductores "," Registrados ",new java.awt.Color(39, 174, 96)));
+        panelCards.add(crearCard(String.valueOf(ticketsHoy)," Tickets "," Vendidos Hoy ",new java.awt.Color(41, 128, 185)));
         javax.swing.JPanel panelInferior = new javax.swing.JPanel(new java.awt.GridLayout(1, 2, 15, 0));
         panelInferior.setOpaque(false);
         panelInferior.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 30, 30, 30));
@@ -113,6 +120,13 @@ public class Dashboard extends javax.swing.JFrame {
         if (mapaPanelInstance == null) {
             mapaPanelInstance = new MapaPanel();
         }
+
+        MapaView mapa = new MapaView();
+
+        // Instanciamos MapaValleduparView y extraemos su panel principal
+        MapaPanel mapaValleduparView = new MapaPanel();
+        panelContenido.add(mapaValleduparView, java.awt.BorderLayout.CENTER);
+
 
         panelContenido.add(mapaPanelInstance, java.awt.BorderLayout.CENTER);
         panelContenido.revalidate();

@@ -50,8 +50,8 @@ public class TicketDao {
                      "ed.id AS destino_id, ed.nombre AS destino_nombre " +
                      "FROM boletos b " +
                      "JOIN usuarios u ON b.usuario_id = u.id " +
-                     "JOIN estaciones eo ON b.estacion_origen_id = eo.id " +
-                     "JOIN estaciones ed ON b.estacion_destino_id = ed.id " +
+                     "JOIN estacioness eo ON b.estacion_origen_id = eo.id " +
+                     "JOIN estacioness ed ON b.estacion_destino_id = ed.id " +
                      "WHERE b.usuario_id = ?";
 
         try (Connection con = ConexionBD.getConexion()) {
