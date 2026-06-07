@@ -1,531 +1,285 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package vektra.View;
 
+import java.awt.BorderLayout;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.DefaultListCellRenderer;
-import vektra.Dao.RutaDao;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.util.StringConverter;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
 import vektra.Dao.PasajeroDao;
+import vektra.Dao.RutaDao;
 import vektra.Model.Estacion;
 import vektra.Model.Pasajero;
 import vektra.Model.Ruta;
 import vektra.Service.TicketService;
 
 /**
- *
+ * Panel de compra de ticket migrado a JavaFX para un diseño más moderno.
  * @author santi
  */
-public class ComprarTicketPanel extends javax.swing.JPanel {
+public class ComprarTicketPanel extends JPanel {
 
-    /**
-     * Creates new form ComprarTicketPanel
-     */
-    
+    private final JFXPanel jfxPanel;
+    private List<Estacion> estaciones = new ArrayList<>();
+
     public ComprarTicketPanel() {
-        initComponents();
-        vektra.Util.FontUtil.applyCustomFont(this);
-        // Colores y comportamiento
-        initColors();
-        initPlaceholders();
-        cargarEstacionesDesdeRutas();
-        initValidaciones();
-        btnGenerarTicket.addActionListener(e -> btnGenerarTicketActionPerformed(e));
+        setLayout(new BorderLayout());
+        jfxPanel = new JFXPanel();
+        add(jfxPanel, BorderLayout.CENTER);
+
+        // Inicializar JavaFX en su propio hilo
+        Platform.runLater(this::initFX);
     }
- 
-    private static final java.awt.Color COLOR_CAMPO = new java.awt.Color(51, 51, 51);
-    private static final java.awt.Color COLOR_ERROR = new java.awt.Color(200, 50, 50);
-    private static final java.awt.Color COLOR_OK    = new java.awt.Color(39, 174, 96);
-    private static final java.awt.Color COLOR_TEXTO = new java.awt.Color(204, 204, 204);
 
-    private List<Estacion> estaciones;
+    private void initFX() {
+        // --- Contenedor Principal (Fondo Degradado Moderno) ---
+        StackPane root = new StackPane();
+        root.setStyle("-fx-background-color: linear-gradient(to bottom right, #e0f2fe, #ffffff);");
 
-    private static class EstacionRenderer extends DefaultListCellRenderer {
-        @Override
-        public java.awt.Component getListCellRendererComponent(javax.swing.JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-            if (value instanceof Estacion) {
-                Estacion estacion = (Estacion) value;
-                value = estacion.getNombre();
+        // --- Tarjeta Central Blanca ---
+        VBox card = new VBox(15);
+        card.setAlignment(Pos.TOP_CENTER);
+        card.setMaxWidth(500);
+        card.setMaxHeight(Region.USE_PREF_SIZE);
+        card.setStyle("-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 40;");
+
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setRadius(25);
+        dropShadow.setOffsetY(10);
+        dropShadow.setColor(Color.color(0, 0, 0, 0.4));
+        card.setEffect(dropShadow);
+
+        // --- Título ---
+        Label lblTitle = new Label("Comprar un Ticket");
+        lblTitle.setFont(Font.font("Segoe UI", FontWeight.BOLD, 28));
+        lblTitle.setTextFill(Color.web("#333333"));
+
+        Label lblSubtitle = new Label("Completa tus datos para generar tu ticket");
+        lblSubtitle.setFont(Font.font("Segoe UI", 14));
+        lblSubtitle.setTextFill(Color.web("#888888"));
+
+        VBox headerBox = new VBox(5, lblTitle, lblSubtitle);
+        headerBox.setAlignment(Pos.CENTER);
+        headerBox.setPadding(new Insets(0, 0, 15, 0));
+
+        // --- Campos del Formulario ---
+        TextField txtNombre = createModernTextField("Nombre Completo (Ej. Juan Pérez)");
+        TextField txtId = createModernTextField("Identificación (C.C / C.E / T.I)");
+        TextField txtEmail = createModernTextField("Correo Electrónico");
+        TextField txtFechaNac = createModernTextField("Fecha Nacimiento (DD/MM/AAAA)");
+        PasswordField txtPassword = new PasswordField();
+        txtPassword.setPromptText("Contraseña de Usuario");
+        styleModernTextField(txtPassword);
+
+        // --- ComboBoxes ---
+        ComboBox<Estacion> cmbOrigen = new ComboBox<>();
+        ComboBox<Estacion> cmbDestino = new ComboBox<>();
+        setupComboBox(cmbOrigen, "Seleccionar estación origen");
+        setupComboBox(cmbDestino, "Seleccionar estación destino");
+
+        HBox comboHBox = new HBox(15, cmbOrigen, cmbDestino);
+        comboHBox.setAlignment(Pos.CENTER);
+        HBox.setHgrow(cmbOrigen, Priority.ALWAYS);
+        HBox.setHgrow(cmbDestino, Priority.ALWAYS);
+        cmbOrigen.setMaxWidth(Double.MAX_VALUE);
+        cmbDestino.setMaxWidth(Double.MAX_VALUE);
+
+        // --- Botón de Acción ---
+        Button btnGenerar = new Button("Generar Ticket");
+        btnGenerar.setMaxWidth(Double.MAX_VALUE);
+        btnGenerar.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
+        btnGenerar.setStyle("-fx-background-color: #37B9D6; -fx-text-fill: white; -fx-background-radius: 10; -fx-padding: 12;");
+        btnGenerar.setCursor(javafx.scene.Cursor.HAND);
+
+        btnGenerar.setOnMouseEntered(e -> btnGenerar.setStyle("-fx-background-color: #2da1bb; -fx-text-fill: white; -fx-background-radius: 10; -fx-padding: 12;"));
+        btnGenerar.setOnMouseExited(e -> btnGenerar.setStyle("-fx-background-color: #37B9D6; -fx-text-fill: white; -fx-background-radius: 10; -fx-padding: 12;"));
+
+        // --- Carga de Datos ---
+        cargarEstaciones(cmbOrigen, cmbDestino);
+
+        // --- Validaciones Estéticas Reactivas ---
+        validacionesdeConfiguracion(txtNombre, txtId, txtEmail, txtFechaNac, txtPassword, cmbOrigen, cmbDestino);
+
+        // --- Acción del botón ---
+        btnGenerar.setOnAction(e -> {
+            if (validarTodos(txtNombre, txtId, txtEmail, txtFechaNac, txtPassword, cmbOrigen, cmbDestino)) {
+                procesarCompra(txtNombre.getText(), txtId.getText(), txtEmail.getText(), txtPassword.getText(),
+                        cmbOrigen.getValue(), cmbDestino.getValue());
+                
+                // Limpiar después del éxito
+                txtNombre.clear(); txtId.clear(); txtEmail.clear(); txtFechaNac.clear(); txtPassword.clear();
+                cmbOrigen.getSelectionModel().selectFirst();
+                cmbDestino.getSelectionModel().selectFirst();
+                resetStyle(txtNombre, txtId, txtEmail, txtFechaNac, txtPassword);
+            } else {
+                SwingUtilities.invokeLater(() -> new ERRORview().setVisible(true));
             }
-            return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+        });
+
+        // --- Ensamblaje ---
+        card.getChildren().addAll(
+                headerBox,
+                txtNombre,
+                txtId,
+                txtEmail,
+                txtFechaNac,
+                comboHBox,
+                txtPassword,
+                btnGenerar
+        );
+
+        root.getChildren().add(card);
+        Scene scene = new Scene(root, 800, 600);
+        jfxPanel.setScene(scene);
+    }
+
+    private TextField createModernTextField(String prompt) {
+        TextField tf = new TextField();
+        tf.setPromptText(prompt);
+        styleModernTextField(tf);
+        return tf;
+    }
+
+    private void styleModernTextField(TextField tf) {
+        tf.setFont(Font.font("Segoe UI", 14));
+        tf.setStyle("-fx-background-color: #F3F4F6; -fx-background-radius: 8; -fx-padding: 12; -fx-text-fill: #333333; -fx-prompt-text-fill: #9CA3AF;");
+
+        tf.focusedProperty().addListener((obs, oldV, newV) -> {
+            Boolean isValid = (Boolean) tf.getProperties().get("valido");
+            if (isValid == null) return; // Aún no ha sido validado activamente
+
+            if (newV) {
+                if (!isValid) {
+                    tf.setStyle("-fx-background-color: #FEF2F2; -fx-border-color: #EF4444; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 11; -fx-text-fill: #991B1B;");
+                } else {
+                    tf.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: #37B9D6; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 11; -fx-text-fill: #333333;");
+                }
+            } else {
+                marcarCampo(tf, isValid);
+            }
+        });
+    }
+
+    private void resetStyle(TextField... fields) {
+        for (TextField tf : fields) {
+            tf.getProperties().put("valido", null);
+            tf.setStyle("-fx-background-color: #F3F4F6; -fx-background-radius: 8; -fx-padding: 12; -fx-text-fill: #333333; -fx-prompt-text-fill: #9CA3AF;");
         }
     }
 
-    private void initColors() {
-        nombreClientetxt.setBackground(COLOR_CAMPO);
-        nombreClientetxt.setForeground(COLOR_TEXTO);
-        idClientetxt.setBackground(COLOR_CAMPO);
-        idClientetxt.setForeground(COLOR_TEXTO);
-        emailClientetxt.setBackground(COLOR_CAMPO);
-        emailClientetxt.setForeground(COLOR_TEXTO);
-        EdadporFechadeNacimientoClientetxt.setBackground(COLOR_CAMPO);
-        EdadporFechadeNacimientoClientetxt.setForeground(COLOR_TEXTO);
-        contrasenatxt.setBackground(COLOR_CAMPO);
-        contrasenatxt.setForeground(COLOR_TEXTO);
-        btnGenerarTicket.setBackground(new java.awt.Color(51, 153, 255));
-        btnGenerarTicket.setForeground(java.awt.Color.WHITE);
-    }
-
-    // PLACEHOLDERS
-    private void initPlaceholders() {
-        configurarPlaceholder(nombreClientetxt, "Ej. Juan Pérez");
-        configurarPlaceholder(idClientetxt, "Ej. 1234567");
-        configurarPlaceholder(emailClientetxt, "tuincreiblecorreo123@ejemplo.com");
-        configurarPlaceholder(EdadporFechadeNacimientoClientetxt, "DD/MM/AAAA");
-        // Añadir filtro para formatear la fecha automáticamente a dd/MM/aaaa
-        try {
-            javax.swing.text.Document d = EdadporFechadeNacimientoClientetxt.getDocument();
-            if (d instanceof javax.swing.text.AbstractDocument) {
-                ((javax.swing.text.AbstractDocument) d).setDocumentFilter(new DateDocumentFilter());
-            }
-        } catch (Exception ex) {
-            // no crítico
+    private void marcarCampo(TextField tf, boolean valido) {
+        tf.getProperties().put("valido", valido);
+        if (valido) {
+            tf.setStyle("-fx-background-color: #F0FDF4; -fx-border-color: #10B981; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 11; -fx-text-fill: #065F46;");
+        } else {
+            tf.setStyle("-fx-background-color: #FEF2F2; -fx-border-color: #EF4444; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 11; -fx-text-fill: #991B1B;");
         }
     }
 
-    private void configurarPlaceholder(javax.swing.JTextField campo, String placeholder) {
-        campo.setText(placeholder);
-        campo.setForeground(new java.awt.Color(120, 120, 120));
-        campo.addFocusListener(new java.awt.event.FocusAdapter() {
+    private void setupComboBox(ComboBox<Estacion> cmb, String prompt) {
+        cmb.setPromptText(prompt);
+        cmb.setStyle("-fx-background-color: #F3F4F6; -fx-background-radius: 8; -fx-padding: 5; -fx-font-family: 'Segoe UI'; -fx-font-size: 14px;");
+        cmb.setConverter(new StringConverter<Estacion>() {
             @Override
-            public void focusGained(java.awt.event.FocusEvent e) {
-                if (campo.getText().equals(placeholder)) {
-                    campo.setText("");
-                    campo.setForeground(COLOR_TEXTO);
+            public String toString(Estacion object) {
+                return object != null && object.getNombre() != null ? object.getNombre() : prompt;
+            }
+
+            @Override
+            public Estacion fromString(String string) {
+                return null;
+            }
+        });
+    }
+
+    private void validacionesdeConfiguracion(TextField txtNombre, TextField txtId, TextField txtEmail, TextField txtFechaNac, PasswordField txtPassword, ComboBox<Estacion> cmbOrigen, ComboBox<Estacion> cmbDestino) {
+        txtNombre.textProperty().addListener((obs, o, n) -> {
+            marcarCampo(txtNombre, !n.trim().isEmpty() && n.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+"));
+        });
+
+        txtId.textProperty().addListener((obs, o, n) -> {
+            marcarCampo(txtId, !n.trim().isEmpty() && n.matches("\\d{6,12}"));
+        });
+
+        txtEmail.textProperty().addListener((obs, o, n) -> {
+            marcarCampo(txtEmail, !n.trim().isEmpty() && n.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$"));
+        });
+
+        // Formato automático de fecha DD/MM/AAAA
+        txtFechaNac.textProperty().addListener((obs, o, n) -> {
+            if (n.length() > o.length()) { // Si está escribiendo
+                if (n.length() == 2 || n.length() == 5) {
+                    txtFechaNac.setText(n + "/");
                 }
             }
-            @Override
-            public void focusLost(java.awt.event.FocusEvent e) {
-                if (campo.getText().trim().isEmpty()) {
-                    campo.setText(placeholder);
-                    campo.setForeground(new java.awt.Color(120, 120, 120));
-                    marcarCampo(campo, false);
+            if (n.length() > 10) {
+                txtFechaNac.setText(o); // Limitar a 10 caracteres
+                return;
+            }
+
+            boolean valido = false;
+            if (n.matches("\\d{2}/\\d{2}/\\d{4}")) {
+                try {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    LocalDate dob = LocalDate.parse(n, formatter);
+                    int edad = Period.between(dob, LocalDate.now()).getYears();
+                    valido = !dob.isAfter(LocalDate.now()) && edad >= 0 && edad < 150;
+                } catch (Exception ex) {
+                    valido = false;
                 }
             }
+            marcarCampo(txtFechaNac, valido);
+        });
+
+        txtPassword.textProperty().addListener((obs, o, n) -> {
+            marcarCampo(txtPassword, !n.trim().isEmpty() && n.length() >= 6);
+        });
+
+        cmbOrigen.valueProperty().addListener((obs, o, n) -> {
+            actualizarEstacionesDestino(cmbOrigen, cmbDestino);
         });
     }
 
-    // VALIDACIONES
-    private void initValidaciones() {
-        nombreClientetxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
-            String v = nombreClientetxt.getText().trim();
-            marcarCampo(nombreClientetxt,
-                !v.isEmpty() && !v.equals("Ej. Juan Pérez") && v.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+"));
-        }));
+    private boolean validarTodos(TextField txtNombre, TextField txtId, TextField txtEmail, TextField txtFechaNac, PasswordField txtPassword, ComboBox<Estacion> cmbOrigen, ComboBox<Estacion> cmbDestino) {
+        Boolean nVal = (Boolean) txtNombre.getProperties().get("valido");
+        Boolean iVal = (Boolean) txtId.getProperties().get("valido");
+        Boolean eVal = (Boolean) txtEmail.getProperties().get("valido");
+        Boolean fVal = (Boolean) txtFechaNac.getProperties().get("valido");
+        Boolean pVal = (Boolean) txtPassword.getProperties().get("valido");
 
-        idClientetxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
-            String v = idClientetxt.getText().trim();
-            marcarCampo(idClientetxt,
-                !v.isEmpty() && !v.equals("Ej. 1234567") && v.matches("\\d{6,12}"));
-        }));
+        boolean fieldsValid = (nVal != null && nVal) && (iVal != null && iVal) && (eVal != null && eVal) && (fVal != null && fVal) && (pVal != null && pVal);
+        boolean combosValid = cmbOrigen.getValue() != null && cmbOrigen.getValue().getId() != null && !cmbOrigen.getValue().getId().isEmpty()
+                && cmbDestino.getValue() != null && cmbDestino.getValue().getId() != null && !cmbDestino.getValue().getId().isEmpty();
 
-        emailClientetxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
-            String v = emailClientetxt.getText().trim();
-            marcarCampo(emailClientetxt,
-                !v.isEmpty() && !v.equals("tuincreiblecorreo123@ejemplo.com") && v.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$"));
-        }));
-
-        EdadporFechadeNacimientoClientetxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
-            String v = EdadporFechadeNacimientoClientetxt.getText().trim();
-            if (v.isEmpty() || v.equals("DD/MM/AAAA")) { marcarCampo(EdadporFechadeNacimientoClientetxt, false); return; }
-            // Extraer solo dígitos
-            String digits = v.replaceAll("\\D", "");
-            if (digits.length() != 8) { marcarCampo(EdadporFechadeNacimientoClientetxt, false); return; }
-            try {
-                int day = Integer.parseInt(digits.substring(0, 2));
-                int month = Integer.parseInt(digits.substring(2, 4));
-                int year = Integer.parseInt(digits.substring(4, 8));
-                java.time.LocalDate dob = java.time.LocalDate.of(year, month, day);
-                java.time.LocalDate today = java.time.LocalDate.now();
-                int edad = java.time.Period.between(dob, today).getYears();
-                boolean valido = !dob.isAfter(today) && edad >= 0 && edad < 150;
-                marcarCampo(EdadporFechadeNacimientoClientetxt, valido);
-                if (valido) EdadporFechadeNacimientoClientetxt.putClientProperty("edad", edad);
-            } catch (Exception ex) {
-                marcarCampo(EdadporFechadeNacimientoClientetxt, false);
-            }
-        }));
-
-        contrasenatxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
-            String v = contrasenatxt.getText().trim();
-            marcarCampo(contrasenatxt, !v.isEmpty() && v.length() >= 6);
-        }));
+        return fieldsValid && combosValid;
     }
 
-    private void btnGenerarTicketActionPerformed(java.awt.event.ActionEvent evt) {
-        if (!todosValidos()) {
-            new ERRORview().setVisible(true);
-            return;
-        }
-
-        try {
-            // Obtener datos del formulario
-            String nombre = nombreClientetxt.getText().trim();
-            String id = idClientetxt.getText().trim();
-            String email = emailClientetxt.getText().trim();
-            
-            Object origenObj = cmbEstacion_origen.getSelectedItem();
-            Object destinoObj = cmbEstacion_destino.getSelectedItem();
-            
-            if (!(origenObj instanceof Estacion) || !(destinoObj instanceof Estacion)) {
-                new ERRORview().setVisible(true);
-                return;
-            }
-            
-            Estacion origen = (Estacion) origenObj;
-            Estacion destino = (Estacion) destinoObj;
-            
-            if (origen.getId() == null || origen.getId().isEmpty() ||
-                destino.getId() == null || destino.getId().isEmpty()) {
-                new ERRORview().setVisible(true);
-                return;
-            }
-            
-            // Crear o obtener pasajero
-            String contrasena = contrasenatxt.getText().trim();
-            if (contrasena.isEmpty()) {
-                new ERRORview().setVisible(true);
-                return;
-            }
-
-            PasajeroDao pasajeroDao = new PasajeroDao();
-            Pasajero pasajero = new Pasajero();
-            pasajero.setId(id);
-            pasajero.setNombre(nombre);
-            pasajero.setEmail(email);
-            pasajero.setContraseña(contrasena);
-            pasajero.setFechaRegistro(java.time.LocalDateTime.now());
-            
-            // Guardar pasajero si es nuevo
-            try {
-                pasajeroDao.registrarPasajero(pasajero);
-            } catch (Exception e) {
-                System.out.println("Pasajero puede ya existir: " + e.getMessage());
-            }
-            
-            // Crear ticket con precio base (se puede actualizar con lógica de tarifa)
-            double precio = 25000; // Precio base por defecto
-            TicketService ticketService = new TicketService();
-            ticketService.crearTicket(id, pasajero, origen, destino, precio);
-            
-            // Mostrar confirmación
-            new Confirmacion().setVisible(true);
-
-            // Limpiar campos
-            javax.swing.JTextField[] campos = { nombreClientetxt, idClientetxt, emailClientetxt, EdadporFechadeNacimientoClientetxt, contrasenatxt };
-            for (javax.swing.JTextField c : campos) {
-                c.setText("");
-                c.putClientProperty("valido", false);
-                c.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(80, 80, 80), 1, true));
-            }
-            // Restaurar placeholders
-            initPlaceholders();
-            cargarEstacionesDesdeRutas();
-            
-        } catch (Exception e) {
-            System.err.println("Error al generar ticket: " + e.getMessage());
-            e.printStackTrace();
-            new ERRORview().setVisible(true);
-        }
-    }
-
-    // HELPERS
-    private void marcarCampo(javax.swing.JTextField campo, boolean valido) {
-        java.awt.Color color = valido ? COLOR_OK : COLOR_ERROR;
-        campo.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-            javax.swing.BorderFactory.createLineBorder(color, 2, true),
-            javax.swing.BorderFactory.createEmptyBorder(4, 8, 4, 8)
-        ));
-        campo.putClientProperty("valido", valido);
-    }
-
-    private boolean todosValidos() {
-        javax.swing.JTextField[] campos = { nombreClientetxt, idClientetxt, emailClientetxt, EdadporFechadeNacimientoClientetxt, contrasenatxt };
-        for (javax.swing.JTextField c : campos) {
-            Object tag = c.getClientProperty("valido");
-            if (tag == null || !(Boolean) tag) return false;
-        }
-        return true;
-    }
-
-    private static class SimpleDocListener implements javax.swing.event.DocumentListener {
-        private final Runnable accion;
-        SimpleDocListener(Runnable accion) { this.accion = accion; }
-        @Override public void insertUpdate(javax.swing.event.DocumentEvent e)  { accion.run(); }
-        @Override public void removeUpdate(javax.swing.event.DocumentEvent e)  { accion.run(); }
-        @Override public void changedUpdate(javax.swing.event.DocumentEvent e) { accion.run(); }
-    }
-
-    // DocumentFilter para formatear la fecha a dd/MM/aaaa mientras se escribe
-    private static class DateDocumentFilter extends javax.swing.text.DocumentFilter {
-        @Override
-        public void insertString(FilterBypass fb, int offset, String string, javax.swing.text.AttributeSet attr) throws javax.swing.text.BadLocationException {
-            replace(fb, offset, 0, string, attr);
-        }
-
-        @Override
-        public void remove(FilterBypass fb, int offset, int length) throws javax.swing.text.BadLocationException {
-            javax.swing.text.Document doc = fb.getDocument();
-            String current = doc.getText(0, doc.getLength());
-            // eliminar y reformat
-            StringBuilder sb = new StringBuilder(current);
-            sb.delete(offset, offset + length);
-            String digits = sb.toString().replaceAll("\\D", "");
-            String formatted = formatDigits(digits);
-            fb.remove(0, doc.getLength());
-            if (!formatted.isEmpty()) fb.insertString(0, formatted, null);
-        }
-
-        @Override
-        public void replace(FilterBypass fb, int offset, int length, String text, javax.swing.text.AttributeSet attrs) throws javax.swing.text.BadLocationException {
-            javax.swing.text.Document doc = fb.getDocument();
-            String current = doc.getText(0, doc.getLength());
-            // construir nuevo texto
-            StringBuilder sb = new StringBuilder(current);
-            // tratar cuando placeholder está presente (letras)
-            if (sb.toString().matches(".*[A-Za-z].*")) {
-                sb = new StringBuilder();
-            }
-            if (length > 0) {
-                int end = Math.min(offset + length, sb.length());
-                if (end > offset) sb.delete(offset, end);
-            }
-            if (text != null) sb.insert(offset, text);
-            String digits = sb.toString().replaceAll("\\D", "");
-            if (digits.length() > 8) digits = digits.substring(0, 8);
-            String formatted = formatDigits(digits);
-            fb.remove(0, doc.getLength());
-            if (!formatted.isEmpty()) fb.insertString(0, formatted, attrs);
-        }
-
-        private static String formatDigits(String d) {
-            StringBuilder out = new StringBuilder();
-            int len = d.length();
-            for (int i = 0; i < len; i++) {
-                out.append(d.charAt(i));
-                if (i == 1 && len > 2) out.append('/');
-                if (i == 3 && len > 4) out.append('/');
-            }
-            return out.toString();
-        }
-    }
-
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
-
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        nombreClientetxt = new javax.swing.JTextField();
-        idClientetxt = new javax.swing.JTextField();
-        emailClientetxt = new javax.swing.JTextField();
-        EdadporFechadeNacimientoClientetxt = new javax.swing.JTextField();
-        btnGenerarTicket = new javax.swing.JButton();
-        cmbEstacion_origen = new javax.swing.JComboBox<>();
-        cmbEstacion_destino = new javax.swing.JComboBox<>();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        contrasenatxt = new javax.swing.JTextField();
-
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setText("Comprar un Ticket");
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel2.setText("Completa tus datos para generar tu ticket");
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel3.setText("Nombre Completo:");
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel4.setText("Identificación (C.C / C.E / T.I):");
-
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel5.setText("Correo Electrónico:");
-
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel6.setText("Fecha de Nacimiento:");
-
-        nombreClientetxt.setBackground(new java.awt.Color(51, 51, 51));
-        nombreClientetxt.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        nombreClientetxt.setForeground(new java.awt.Color(153, 153, 153));
-        nombreClientetxt.setText("Ej. Juan Pérez");
-        nombreClientetxt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nombreClientetxtActionPerformed(evt);
-            }
-        });
-
-        idClientetxt.setBackground(new java.awt.Color(51, 51, 51));
-        idClientetxt.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        idClientetxt.setForeground(new java.awt.Color(204, 204, 204));
-        idClientetxt.setText("Ej. 1234567");
-
-        emailClientetxt.setBackground(new java.awt.Color(51, 51, 51));
-        emailClientetxt.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        emailClientetxt.setForeground(new java.awt.Color(153, 153, 153));
-        emailClientetxt.setText("tuincreiblecorreo123@ejemplo.com");
-
-        EdadporFechadeNacimientoClientetxt.setBackground(new java.awt.Color(51, 51, 51));
-        EdadporFechadeNacimientoClientetxt.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        EdadporFechadeNacimientoClientetxt.setForeground(new java.awt.Color(153, 153, 153));
-        EdadporFechadeNacimientoClientetxt.setText("DD/MM/AAAA");
-
-        btnGenerarTicket.setBackground(new java.awt.Color(51, 51, 51));
-        btnGenerarTicket.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnGenerarTicket.setForeground(new java.awt.Color(255, 255, 255));
-        btnGenerarTicket.setText("Generar Ticket");
-        btnGenerarTicket.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGenerarTicketActionPerformed(evt);
-            }
-        });
-
-        cmbEstacion_origen.setBackground(new java.awt.Color(51, 51, 51));
-        cmbEstacion_origen.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        cmbEstacion_origen.setForeground(new java.awt.Color(255, 255, 255));
-        cmbEstacion_origen.setModel(new javax.swing.DefaultComboBoxModel<Estacion>(new Estacion[] { new Estacion("", "Seleccionar estación origen") }));
-        cmbEstacion_origen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbEstacion_origenActionPerformed(evt);
-            }
-        });
-
-        cmbEstacion_destino.setBackground(new java.awt.Color(51, 51, 51));
-        cmbEstacion_destino.setForeground(new java.awt.Color(255, 255, 255));
-        cmbEstacion_destino.setModel(new javax.swing.DefaultComboBoxModel<Estacion>(new Estacion[] { new Estacion("", "Seleccionar estación destino") }));
-
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel7.setText("¿Desde que estación Partes?:");
-
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel8.setText("¿A donde quieres ir?:");
-
-        jLabel9.setBackground(new java.awt.Color(153, 153, 153));
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel9.setText("Digite su contraseña de usuario:");
-
-        contrasenatxt.setBackground(new java.awt.Color(51, 51, 51));
-        contrasenatxt.setForeground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jLabel9))
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(nombreClientetxt)
-                        .addComponent(idClientetxt)
-                        .addComponent(emailClientetxt, javax.swing.GroupLayout.DEFAULT_SIZE, 553, Short.MAX_VALUE)
-                        .addComponent(EdadporFechadeNacimientoClientetxt))
-                    .addComponent(btnGenerarTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(contrasenatxt, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cmbEstacion_origen, javax.swing.GroupLayout.Alignment.LEADING, 0, 327, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cmbEstacion_destino, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(242, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(nombreClientetxt, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(idClientetxt, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(emailClientetxt, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(EdadporFechadeNacimientoClientetxt, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbEstacion_origen, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbEstacion_destino, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(contrasenatxt, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnGenerarTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void nombreClientetxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreClientetxtActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_nombreClientetxtActionPerformed
-
-    private void cmbEstacion_origenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEstacion_origenActionPerformed
-        actualizarEstacionesDestino();
-    }//GEN-LAST:event_cmbEstacion_origenActionPerformed
-
-    private void cargarEstacionesDesdeRutas() {
+    private void cargarEstaciones(ComboBox<Estacion> cmbOrigen, ComboBox<Estacion> cmbDestino) {
         try {
             RutaDao dao = new RutaDao();
             List<Ruta> rutas = dao.obtenerTodasLasRutas();
@@ -539,57 +293,61 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
                 }
             }
             estaciones = new ArrayList<>(mapa.values());
-            cmbEstacion_origen.removeAllItems();
-            cmbEstacion_origen.setRenderer(new EstacionRenderer());
-            cmbEstacion_origen.addItem(new Estacion("", "Seleccionar estación origen"));
-            for (Estacion estacion : estaciones) {
-                cmbEstacion_origen.addItem(estacion);
-            }
-            actualizarEstacionesDestino();
+            
+            Estacion placeholder = new Estacion("", "Seleccionar estación");
+            cmbOrigen.getItems().add(placeholder);
+            cmbOrigen.getItems().addAll(estaciones);
+            cmbOrigen.getSelectionModel().selectFirst();
+            
+            actualizarEstacionesDestino(cmbOrigen, cmbDestino);
         } catch (Exception e) {
             System.out.println("Error al cargar estaciones: " + e.getMessage());
         }
     }
 
-    private void actualizarEstacionesDestino() {
-        Estacion seleccionado = null;
-        Object item = cmbEstacion_origen.getSelectedItem();
-        if (item instanceof Estacion) {
-            Estacion estacion = (Estacion) item;
-            if (estacion.getId() != null && !estacion.getId().isEmpty()) {
-                seleccionado = estacion;
-            }
-        }
-        cmbEstacion_destino.removeAllItems();
-        cmbEstacion_destino.setRenderer(new EstacionRenderer());
-        cmbEstacion_destino.addItem(new Estacion("", "Seleccionar estación destino"));
+    private void actualizarEstacionesDestino(ComboBox<Estacion> cmbOrigen, ComboBox<Estacion> cmbDestino) {
+        Estacion seleccionado = cmbOrigen.getValue();
+        cmbDestino.getItems().clear();
+        Estacion placeholder = new Estacion("", "Seleccionar estación");
+        cmbDestino.getItems().add(placeholder);
+
         for (Estacion estacion : estaciones) {
             if (seleccionado == null || !estacion.getId().equals(seleccionado.getId())) {
-                cmbEstacion_destino.addItem(estacion);
+                cmbDestino.getItems().add(estacion);
             }
         }
-        cmbEstacion_destino.setSelectedIndex(0);
+        cmbDestino.getSelectionModel().selectFirst();
     }
 
+    private void procesarCompra(String nombre, String id, String email, String contrasena, Estacion origen, Estacion destino) {
+        try {
+            PasajeroDao pasajeroDao = new PasajeroDao();
+            Pasajero pasajero = new Pasajero();
+            pasajero.setId(id);
+            pasajero.setNombre(nombre);
+            pasajero.setEmail(email);
+            pasajero.setContraseña(contrasena);
+            pasajero.setFechaRegistro(java.time.LocalDateTime.now());
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField EdadporFechadeNacimientoClientetxt;
-    private javax.swing.JButton btnGenerarTicket;
-    private javax.swing.JComboBox<Estacion> cmbEstacion_destino;
-    private javax.swing.JComboBox<Estacion> cmbEstacion_origen;
-    private javax.swing.JTextField contrasenatxt;
-    private javax.swing.JTextField emailClientetxt;
-    private javax.swing.JTextField idClientetxt;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField nombreClientetxt;
-    // End of variables declaration//GEN-END:variables
+            // Guardar pasajero si es nuevo
+            try {
+                pasajeroDao.registrarPasajero(pasajero);
+            } catch (Exception e) {
+                System.out.println("Pasajero puede ya existir: " + e.getMessage());
+            }
+
+            // Crear ticket
+            double precio = 25000; // Precio base por defecto
+            TicketService ticketService = new TicketService();
+            ticketService.crearTicket(id, pasajero, origen, destino, precio);
+
+            // Mostrar confirmación en el hilo de Swing
+            SwingUtilities.invokeLater(() -> new Confirmacion().setVisible(true));
+
+        } catch (Exception e) {
+            System.err.println("Error al generar ticket: " + e.getMessage());
+            e.printStackTrace();
+            SwingUtilities.invokeLater(() -> new ERRORview().setVisible(true));
+        }
+    }
 }
