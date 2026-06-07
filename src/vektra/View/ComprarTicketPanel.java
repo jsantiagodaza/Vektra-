@@ -64,6 +64,8 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
         emailClientetxt.setForeground(COLOR_TEXTO);
         EdadporFechadeNacimientoClientetxt.setBackground(COLOR_CAMPO);
         EdadporFechadeNacimientoClientetxt.setForeground(COLOR_TEXTO);
+        contrasenatxt.setBackground(COLOR_CAMPO);
+        contrasenatxt.setForeground(COLOR_TEXTO);
         btnGenerarTicket.setBackground(new java.awt.Color(51, 153, 255));
         btnGenerarTicket.setForeground(java.awt.Color.WHITE);
     }
@@ -147,6 +149,11 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
                 marcarCampo(EdadporFechadeNacimientoClientetxt, false);
             }
         }));
+
+        contrasenatxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = contrasenatxt.getText().trim();
+            marcarCampo(contrasenatxt, !v.isEmpty() && v.length() >= 6);
+        }));
     }
 
     private void btnGenerarTicketActionPerformed(java.awt.event.ActionEvent evt) {
@@ -179,11 +186,18 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
             }
             
             // Crear o obtener pasajero
+            String contrasena = contrasenatxt.getText().trim();
+            if (contrasena.isEmpty()) {
+                new ERRORview().setVisible(true);
+                return;
+            }
+
             PasajeroDao pasajeroDao = new PasajeroDao();
             Pasajero pasajero = new Pasajero();
             pasajero.setId(id);
             pasajero.setNombre(nombre);
             pasajero.setEmail(email);
+            pasajero.setContraseña(contrasena);
             pasajero.setFechaRegistro(java.time.LocalDateTime.now());
             
             // Guardar pasajero si es nuevo
@@ -202,7 +216,7 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
             new Confirmacion().setVisible(true);
 
             // Limpiar campos
-            javax.swing.JTextField[] campos = { nombreClientetxt, idClientetxt, emailClientetxt, EdadporFechadeNacimientoClientetxt };
+            javax.swing.JTextField[] campos = { nombreClientetxt, idClientetxt, emailClientetxt, EdadporFechadeNacimientoClientetxt, contrasenatxt };
             for (javax.swing.JTextField c : campos) {
                 c.setText("");
                 c.putClientProperty("valido", false);
@@ -230,7 +244,7 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
     }
 
     private boolean todosValidos() {
-        javax.swing.JTextField[] campos = { nombreClientetxt, idClientetxt, emailClientetxt, EdadporFechadeNacimientoClientetxt };
+        javax.swing.JTextField[] campos = { nombreClientetxt, idClientetxt, emailClientetxt, EdadporFechadeNacimientoClientetxt, contrasenatxt };
         for (javax.swing.JTextField c : campos) {
             Object tag = c.getClientProperty("valido");
             if (tag == null || !(Boolean) tag) return false;
@@ -321,10 +335,12 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
         emailClientetxt = new javax.swing.JTextField();
         EdadporFechadeNacimientoClientetxt = new javax.swing.JTextField();
         btnGenerarTicket = new javax.swing.JButton();
-        cmbEstacion_origen = new javax.swing.JComboBox<Estacion>();
-        cmbEstacion_destino = new javax.swing.JComboBox<Estacion>();
+        cmbEstacion_origen = new javax.swing.JComboBox<>();
+        cmbEstacion_destino = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        contrasenatxt = new javax.swing.JTextField();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -389,6 +405,7 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
         cmbEstacion_origen.setBackground(new java.awt.Color(51, 51, 51));
         cmbEstacion_origen.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         cmbEstacion_origen.setForeground(new java.awt.Color(255, 255, 255));
+        cmbEstacion_origen.setModel(new javax.swing.DefaultComboBoxModel<Estacion>(new Estacion[] { new Estacion("", "Seleccionar estación origen") }));
         cmbEstacion_origen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbEstacion_origenActionPerformed(evt);
@@ -397,6 +414,7 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
 
         cmbEstacion_destino.setBackground(new java.awt.Color(51, 51, 51));
         cmbEstacion_destino.setForeground(new java.awt.Color(255, 255, 255));
+        cmbEstacion_destino.setModel(new javax.swing.DefaultComboBoxModel<Estacion>(new Estacion[] { new Estacion("", "Seleccionar estación destino") }));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(153, 153, 153));
@@ -406,6 +424,14 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
         jLabel8.setForeground(new java.awt.Color(153, 153, 153));
         jLabel8.setText("¿A donde quieres ir?:");
 
+        jLabel9.setBackground(new java.awt.Color(153, 153, 153));
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel9.setText("Digite su contraseña de usuario:");
+
+        contrasenatxt.setBackground(new java.awt.Color(51, 51, 51));
+        contrasenatxt.setForeground(new java.awt.Color(255, 255, 255));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -413,6 +439,10 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel9))
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -426,9 +456,9 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
                         .addComponent(EdadporFechadeNacimientoClientetxt))
                     .addComponent(btnGenerarTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cmbEstacion_origen, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(contrasenatxt, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cmbEstacion_origen, javax.swing.GroupLayout.Alignment.LEADING, 0, 327, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cmbEstacion_destino, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -440,37 +470,39 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(nombreClientetxt, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(idClientetxt, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(emailClientetxt, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(EdadporFechadeNacimientoClientetxt, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(2, 2, 2)))
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbEstacion_origen, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbEstacion_destino, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(contrasenatxt, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnGenerarTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -545,6 +577,7 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
     private javax.swing.JButton btnGenerarTicket;
     private javax.swing.JComboBox<Estacion> cmbEstacion_destino;
     private javax.swing.JComboBox<Estacion> cmbEstacion_origen;
+    private javax.swing.JTextField contrasenatxt;
     private javax.swing.JTextField emailClientetxt;
     private javax.swing.JTextField idClientetxt;
     private javax.swing.JLabel jLabel1;
@@ -555,6 +588,7 @@ public class ComprarTicketPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField nombreClientetxt;
     // End of variables declaration//GEN-END:variables

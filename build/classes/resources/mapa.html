@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mapa Metro</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="map"></div>
+
+<!-- Desactivar 3D Transforms para compatibilidad con JavaFX WebView -->
+<script>
+    window.L_DISABLE_3D = true;
+</script>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+
+    // ================================
+    // INICIALIZAR MAPA
+    // ================================
+
+    const map = L.map('map', {
+        zoomAnimation: false,
+        fadeAnimation: false,
+        markerZoomAnimation: false,
+        preferCanvas: true
+    }).setView([10.4631, -73.2532], 13);
+
+    // OpenStreetMap
+    L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors',
+            updateWhenIdle: false,
+            keepBuffer: 4
+        }
+    ).addTo(map);
+
+    // Fix agresivo para JavaFX WebView
+    function forceRedraw() {
+        map.invalidateSize({ animate: false, pan: false });
+        map.eachLayer(layer => {
+            if (layer._tiles) {
+                Object.values(layer._tiles).forEach(tile => {
+                    if (tile.el) {
+                        tile.el.src = tile.el.src;
+                    }
+                });
+            }
+        });
+    }
+
+    // Secuencia de redraws escalonados
+    setTimeout(() => forceRedraw(), 100);
+    setTimeout(() => forceRedraw(), 400);
+    setTimeout(() => forceRedraw(), 800);
+    setTimeout(() => forceRedraw(), 1500);
+    setTimeout(() => forceRedraw(), 3000);
+
+    window.addEventListener('resize', () => forceRedraw());
+
+    // Intervalo continuo más agresivo al inicio
+    let count = 0;
+    const interval = setInterval(() => {
+        forceRedraw();
+        count++;
+        if (count > 8) clearInterval(interval);
+    }, 500);
+
+    // ================================
+    // LISTAS DINÁMICAS
+    // ================================
+
+    let marcadores = [];
+    let polilineas = [];
+
+    // ================================
+    // FUNCIÓN PRINCIPAL
+    // Java -> HTML
+    // ================================
+
+    function cargarDatos(estaciones, rutas) {
+
+        console.log("Estaciones:", estaciones);
+        console.log("Rutas:", rutas);
+
+        // Limpiar mapa
+        marcadores.forEach(m => map.removeLayer(m));
+        polilineas.forEach(p => map.removeLayer(p));
+
+        marcadores = [];
+        polilineas = [];
+
+        // Map rápido por ID
+        const estacionesMap = {};
+
+        estaciones.forEach(estacion => {
+
+            estacionesMap[estacion.id] = estacion;
+
+        });
+
+        // ================================
+        // DIBUJAR ESTACIONES
+        // ================================
+
+        estaciones.forEach(estacion => {
+
+            const marker = L.marker([
+                estacion.lat,
+                estacion.lng
+            ]).addTo(map);
+
+            marker.bindPopup(`
+                <div style="font-family:Segoe UI;">
+                    <h3>${estacion.nombre}</h3>
+
+                    <p>
+                        <b>Línea:</b>
+                        ${estacion.linea}
+                    </p>
+                </div>
+            `);
+
+            marcadores.push(marker);
+
+        });
+
+        // ================================
+        // DIBUJAR RUTAS
+        // ================================
+
+        rutas.forEach(ruta => {
+
+            const origen =
+                estacionesMap[ruta.origen_id];
+
+            const destino =
+                estacionesMap[ruta.destino_id];
+
+            if (origen && destino) {
+
+                const color =
+                    getHexColor(ruta.color_linea);
+
+                const polyline = L.polyline(
+                    [
+                        [origen.lat, origen.lng],
+                        [destino.lat, destino.lng]
+                    ],
+                    {
+                        color: color,
+                        weight: 6,
+                        opacity: 0.9
+                    }
+                ).addTo(map);
+
+                polyline.bindPopup(`
+                    <div style="font-family:Segoe UI;">
+
+                        <h3>Ruta</h3>
+
+                        <p>
+                            <b>${origen.nombre}</b>
+                            →
+                            <b>${destino.nombre}</b>
+                        </p>
+
+                        <p>
+                            Tiempo:
+                            ${ruta.tiempo} min
+                        </p>
+
+                    </div>
+                `);
+
+                polilineas.push(polyline);
+
+            }
+
+        });
+
+        // ================================
+        // AJUSTAR ZOOM
+        // ================================
+
+        if (estaciones.length > 0) {
+
+            const bounds = L.latLngBounds(
+                estaciones.map(e => [e.lat, e.lng])
+            );
+
+            map.fitBounds(bounds, {
+                padding: [40, 40],
+                animate: false
+            });
+
+        }
+        
+        // Force complete redraw after setting bounds
+        setTimeout(() => map.invalidateSize(true), 100);
+
+    }
+
+    // ================================
+    // COLORES DE LÍNEAS
+    // ================================
+
+    function getHexColor(linea) {
+
+        if (!linea)
+            return "#7f8c8d";
+
+        const l = linea.toLowerCase();
+
+        if (l.includes("roja"))
+            return "#E50822";
+
+        if (l.includes("azul"))
+            return "#2980B9";
+
+        if (l.includes("verde"))
+            return "#27AE60";
+
+        if (l.includes("amarilla"))
+            return "#F39C12";
+
+        return "#7f8c8d";
+    }
+
+    // Mantener render correcto en JavaFX
+    setInterval(() => {
+        map.invalidateSize(true);
+    }, 1500);
+
+</script>
+
+</body>
+</html>

@@ -290,6 +290,7 @@ public class CrearCuentaFrame extends javax.swing.JFrame {
         }
 
         Pasajero pasajero = new Pasajero();
+        pasajero.setId(identificacion);
         pasajero.setNombre(nombre);
         pasajero.setCorreo(correo);
         pasajero.setContraseña(contrasena);

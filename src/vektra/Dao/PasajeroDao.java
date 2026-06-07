@@ -44,14 +44,21 @@ public class PasajeroDao {
     }
 
     public Pasajero registrarPasajero(Pasajero p) {
-        String sql = "INSERT INTO usuarios (nombre, correo, contraseña, fecha_registro) VALUES (?, ?, ?, ?)";
+        boolean tieneId = p.getId() != null && !p.getId().trim().isEmpty();
+        String sql = tieneId
+                ? "INSERT INTO usuarios (id, nombre, correo, contraseña, fecha_registro) VALUES (?, ?, ?, ?, ?)"
+                : "INSERT INTO usuarios (nombre, correo, contraseña, fecha_registro) VALUES (?, ?, ?, ?)";
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
-            ps.setString(1, p.getNombre());
-            ps.setString(2, p.getCorreo());
-            ps.setString(3, p.getContraseña());
-            ps.setTimestamp(4, p.getFechaRegistro() != null
+            int index = 1;
+            if (tieneId) {
+                ps.setInt(index++, Integer.parseInt(p.getId().trim()));
+            }
+            ps.setString(index++, p.getNombre());
+            ps.setString(index++, p.getCorreo());
+            ps.setString(index++, p.getContraseña());
+            ps.setTimestamp(index++, p.getFechaRegistro() != null
                     ? Timestamp.valueOf(p.getFechaRegistro())
                     : Timestamp.valueOf(LocalDateTime.now()));
 
