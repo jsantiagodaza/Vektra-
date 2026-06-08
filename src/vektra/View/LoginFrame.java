@@ -46,7 +46,7 @@ public class LoginFrame extends JFrame {
     public LoginFrame() {
         setTitle("Vektra - Iniciar Sesión");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(900, 600);
+        setSize(2780, 1920);
         setLocationRelativeTo(null);
         
         jfxPanel = new JFXPanel();
@@ -64,8 +64,7 @@ public class LoginFrame extends JFrame {
         // --- Columna Izquierda (Oscura con Logo) ---
         VBox leftCol = new VBox(20);
         leftCol.setAlignment(Pos.CENTER);
-        leftCol.setPrefWidth(350);
-        leftCol.setMinWidth(300);
+        leftCol.prefWidthProperty().bind(root.widthProperty().multiply(0.35));
         // Un degradado oscuro sutil para la columna izquierda
         leftCol.setStyle("-fx-background-color: linear-gradient(to bottom, #1d1a1a, #0f0e0e);");
         
@@ -75,7 +74,7 @@ public class LoginFrame extends JFrame {
             if (logoUrl != null) {
                 Image logoImage = new Image(logoUrl.toExternalForm());
                 logoView.setImage(logoImage);
-                logoView.setFitWidth(200);
+                logoView.setFitWidth(350);
                 logoView.setPreserveRatio(true);
             }
         } catch (Exception e) {
@@ -95,7 +94,7 @@ public class LoginFrame extends JFrame {
         // Contenedor del formulario (centrado)
         VBox formBox = new VBox(15);
         formBox.setAlignment(Pos.CENTER_LEFT);
-        formBox.setMaxWidth(400);
+        formBox.setMaxWidth(500);
         formBox.setPadding(new Insets(40, 40, 40, 40));
         
         // Títulos
@@ -177,7 +176,7 @@ public class LoginFrame extends JFrame {
             if (bearUrl != null) {
                 Image bearImage = new Image(bearUrl.toExternalForm());
                 bearView.setImage(bearImage);
-                bearView.setFitWidth(180);
+                bearView.fitWidthProperty().bind(root.heightProperty().multiply(0.35));
                 bearView.setPreserveRatio(true);
             }
         } catch (Exception e) {
