@@ -338,7 +338,7 @@ public class ConductoresPanel extends JPanel {
             java.net.URL url = getClass().getResource(iconPath);
             if (url != null) {
                 ImageIcon raw = new ImageIcon(url);
-                Image scaled = raw.getImage().getScaledInstance(18, 18, Image.SCALE_SMOOTH);
+                Image scaled = raw.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
                 btn.setIcon(new ImageIcon(scaled));
                 btn.setIconTextGap(8);
             }
