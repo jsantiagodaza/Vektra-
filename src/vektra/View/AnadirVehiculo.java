@@ -1,331 +1,385 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package vektra.View;
 
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.*;
+import java.time.LocalDate;
 import java.util.List;
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import vektra.Dao.ConductorDao;
 import vektra.Model.Conductor;
 
 /**
- *
- * @author santi
+ * AnadirVehiculo — formulario estilizado Vektra.
+ * Swing puro, sin NetBeans Form Editor.
  */
-public class AnadirVehiculo extends javax.swing.JPanel {
+public class AnadirVehiculo extends JPanel {
 
-    /**
-     * Creates new form AnadirVehiculo
-     */
+    // ── Paleta ────────────────────────────────────────────────────────────────
+    private static final Color BG_PAGE     = new Color(248, 250, 255);
+    private static final Color BG_CARD     = Color.WHITE;
+    private static final Color NAVY        = new Color(15,  23,  42);
+    private static final Color BLUE_ACCENT = new Color(37,  99, 235);
+    private static final Color BLUE_HOVER  = new Color(29,  78, 216);
+    private static final Color BLUE_LIGHT  = new Color(239, 246, 255);
+    private static final Color BLUE_BORDER = new Color(191, 219, 254);
+    private static final Color TEXT_PRI    = new Color(15,  23,  42);
+    private static final Color TEXT_MUT    = new Color(100, 116, 139);
+    private static final Color TEXT_LABEL  = new Color(71,  85, 105);
+    private static final Color BORDER_COL  = new Color(226, 232, 240);
+    private static final Color FIELD_BG    = new Color(249, 250, 251);
+    private static final Color FIELD_PH    = new Color(148, 163, 184);
+    private static final Color COLOR_OK    = new Color(34,  197,  94);
+    private static final Color COLOR_ERR   = new Color(239,  68,  68);
+    private static final Color WARN_BG     = new Color(255, 247, 237);
+    private static final Color WARN_BRD    = new Color(254, 215, 170);
+    private static final Color WARN_FG     = new Color(154,  52,  18);
+
+    // ── Fuentes ───────────────────────────────────────────────────────────────
+    private static final Font F_TITLE   = new Font("Segoe UI", Font.BOLD,  22);
+    private static final Font F_SUB     = new Font("Segoe UI", Font.PLAIN, 13);
+    private static final Font F_SECTION = new Font("Segoe UI", Font.BOLD,  13);
+    private static final Font F_LABEL   = new Font("Segoe UI", Font.PLAIN, 12);
+    private static final Font F_FIELD   = new Font("Segoe UI", Font.PLAIN, 13);
+    private static final Font F_BTN     = new Font("Segoe UI", Font.BOLD,  14);
+    private static final Font F_WARN    = new Font("Segoe UI", Font.PLAIN, 12);
+
+    // ── Campos ────────────────────────────────────────────────────────────────
+    private JTextField         txtPlaca;
+    private JTextField         txtAnio;
+    private JComboBox<String>  cmbLineas;
+    private JComboBox<String>  cmbCapacidad;
+    private JComboBox<Conductor> cmbConductores;
+    private JButton            btnAnadir;
+
+    // ─────────────────────────────────────────────────────────────────────────
     public AnadirVehiculo() {
-        initComponents();
-        cargarConductores();
+        initUI();
         vektra.Util.FontUtil.applyCustomFont(this);
+        cargarConductores();
+        initPlaceholders();
+        initValidaciones();
     }
 
-    private static final java.awt.Color COLOR_CAMPO = new java.awt.Color(51, 51, 51);
-    private static final java.awt.Color COLOR_ERROR = new java.awt.Color(200, 50, 50);
-    private static final java.awt.Color COLOR_OK    = new java.awt.Color(39, 174, 96);
-    private static final java.awt.Color COLOR_TEXTO = new java.awt.Color(204, 204, 204);
+    // ─────────────────────────────────────────────────────────────────────────
+    // Layout principal
+    // ─────────────────────────────────────────────────────────────────────────
+    private void initUI() {
+        setLayout(new BorderLayout());
+        setBackground(BG_PAGE);
 
-    // Inicialización adicional
-    {
-        // Se ejecuta después del initComponents cuando el constructor termina
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        // Scroll sobre todo el contenido
+        JPanel content = new JPanel();
+        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+        content.setBackground(BG_PAGE);
+        content.setBorder(new EmptyBorder(28, 36, 32, 36));
+
+        content.add(crearHeader());
+        content.add(Box.createVerticalStrut(16));
+        content.add(crearBannerObligatorio());
+        content.add(Box.createVerticalStrut(24));
+        content.add(crearSeccion("Identificación", crearFilaIdentificacion()));
+        content.add(Box.createVerticalStrut(24));
+        content.add(crearSeccion("Asignación", crearFilaAsignacion()));
+        content.add(Box.createVerticalStrut(32));
+        content.add(crearBotonAnadir());
+
+        JScrollPane scroll = new JScrollPane(content);
+        scroll.setBorder(null);
+        scroll.setOpaque(false);
+        scroll.getViewport().setOpaque(false);
+        scroll.getVerticalScrollBar().setUnitIncrement(16);
+        scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        add(scroll, BorderLayout.CENTER);
+    }
+
+    // ── Header ────────────────────────────────────────────────────────────────
+    private JPanel crearHeader() {
+        JPanel p = new JPanel();
+        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+        p.setOpaque(false);
+        p.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel title = new JLabel("Añadir Vehículo");
+        title.setFont(F_TITLE);
+        title.setForeground(TEXT_PRI);
+        title.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel sub = new JLabel("Registra un nuevo vehículo en la flota del sistema");
+        sub.setFont(F_SUB);
+        sub.setForeground(TEXT_MUT);
+        sub.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        p.add(title);
+        p.add(Box.createVerticalStrut(4));
+        p.add(sub);
+        return p;
+    }
+
+    // ── Banner campos obligatorios ────────────────────────────────────────────
+    private JPanel crearBannerObligatorio() {
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 8)) {
+            @Override protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(WARN_BG);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+                g2.setColor(WARN_BRD);
+                g2.setStroke(new BasicStroke(1f));
+                g2.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 10, 10);
+                g2.dispose();
+            }
+        };
+        p.setOpaque(false);
+        p.setMaximumSize(new Dimension(Integer.MAX_VALUE, 42));
+        p.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel icon = new JLabel("⚠");
+        icon.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        icon.setForeground(new Color(217, 119, 6));
+
+        JLabel msg = new JLabel("Todos los campos son obligatorios");
+        msg.setFont(F_WARN);
+        msg.setForeground(WARN_FG);
+
+        p.add(icon);
+        p.add(msg);
+        return p;
+    }
+
+    // ── Sección con título y contenido ────────────────────────────────────────
+    private JPanel crearSeccion(String titulo, JPanel contenido) {
+        JPanel p = new JPanel();
+        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+        p.setOpaque(false);
+        p.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        // Línea de título de sección
+        JPanel headerRow = new JPanel(new BorderLayout());
+        headerRow.setOpaque(false);
+        headerRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 28));
+        headerRow.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel lbl = new JLabel(titulo);
+        lbl.setFont(F_SECTION);
+        lbl.setForeground(TEXT_LABEL);
+
+        // Línea divisora
+        JSeparator sep = new JSeparator() {
+            @Override protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(BORDER_COL);
+                g2.fillRect(0, getHeight()/2, getWidth(), 1);
+                g2.dispose();
+            }
+        };
+
+        headerRow.add(lbl, BorderLayout.WEST);
+        headerRow.add(sep, BorderLayout.CENTER);
+
+        contenido.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        p.add(headerRow);
+        p.add(Box.createVerticalStrut(14));
+        p.add(contenido);
+        return p;
+    }
+
+    // ── Fila Identificación: Placa + Año ──────────────────────────────────────
+    private JPanel crearFilaIdentificacion() {
+        JPanel row = new JPanel(new GridLayout(1, 2, 16, 0));
+        row.setOpaque(false);
+        row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 72));
+        row.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        txtPlaca = new JTextField();
+        txtAnio  = new JTextField();
+
+        row.add(crearCampoTexto("Placa / Matrícula", txtPlaca));
+        row.add(crearCampoTexto("Año de Fabricación", txtAnio));
+        return row;
+    }
+
+    // ── Fila Asignación: Línea + Capacidad + Conductor ───────────────────────
+    private JPanel crearFilaAsignacion() {
+        JPanel row = new JPanel(new GridLayout(1, 3, 16, 0));
+        row.setOpaque(false);
+        row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 72));
+        row.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        cmbLineas = new JComboBox<>(new String[]{
+            "Línea Roja", "Línea Azul", "Línea Amarilla", "Línea Verde"
+        });
+        cmbCapacidad = new JComboBox<>(new String[]{
+            "100 Pasajeros", "200 Pasajeros", "300 Pasajeros", "400 Pasajeros"
+        });
+        cmbConductores = new JComboBox<>();
+
+        row.add(crearCampoCombo("Línea Asignada", cmbLineas));
+        row.add(crearCampoCombo("Capacidad", cmbCapacidad));
+        row.add(crearCampoCombo("Conductor", cmbConductores));
+        return row;
+    }
+
+    // ── Botón principal ───────────────────────────────────────────────────────
+    private JPanel crearBotonAnadir() {
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        p.setOpaque(false);
+        p.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        btnAnadir = new JButton("Añadir Vehículo") {
+            private boolean hov = false;
+            { addMouseListener(new MouseAdapter() {
+                @Override public void mouseEntered(MouseEvent e) { hov = true;  repaint(); }
+                @Override public void mouseExited (MouseEvent e) { hov = false; repaint(); }
+            }); }
+            @Override protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(hov ? BLUE_HOVER : BLUE_ACCENT);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+            @Override public boolean isOpaque() { return false; }
+        };
+        btnAnadir.setFont(F_BTN);
+        btnAnadir.setForeground(Color.WHITE);
+        btnAnadir.setContentAreaFilled(false);
+        btnAnadir.setBorderPainted(false);
+        btnAnadir.setFocusPainted(false);
+        btnAnadir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnAnadir.setBorder(new EmptyBorder(11, 28, 11, 28));
+        btnAnadir.setPreferredSize(new Dimension(220, 44));
+        btnAnadir.setOpaque(false);
+
+        // Ícono bus
+        try {
+            java.net.URL url = getClass().getResource("/vektra/View/Imagenes/ICONS CANVA/ADD.png");
+            if (url != null) {
+                Image img = new ImageIcon(url).getImage().getScaledInstance(18, 18, Image.SCALE_SMOOTH);
+                btnAnadir.setIcon(new ImageIcon(img));
+                btnAnadir.setIconTextGap(8);
+            }
+        } catch (Exception ignored) {}
+
+        btnAnadir.addActionListener(e -> btnAnadirVehiculoActionPerformed());
+
+        p.add(btnAnadir);
+        return p;
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Helpers: campo de texto y combo estilizados
+    // ─────────────────────────────────────────────────────────────────────────
+
+    private JPanel crearCampoTexto(String etiqueta, JTextField campo) {
+        JPanel p = new JPanel();
+        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+        p.setOpaque(false);
+
+        JLabel lbl = new JLabel(etiqueta);
+        lbl.setFont(F_LABEL);
+        lbl.setForeground(TEXT_LABEL);
+        lbl.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        campo.setFont(F_FIELD);
+        campo.setForeground(TEXT_PRI);
+        campo.setBackground(FIELD_BG);
+        campo.setCaretColor(TEXT_PRI);
+        campo.setBorder(BorderFactory.createCompoundBorder(
+            new RoundedBorder(8, BORDER_COL, 1),
+            new EmptyBorder(7, 12, 7, 12)
+        ));
+        campo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
+        campo.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        p.add(lbl);
+        p.add(Box.createVerticalStrut(5));
+        p.add(campo);
+        return p;
+    }
+
+    private JPanel crearCampoCombo(String etiqueta, JComboBox<?> combo) {
+        JPanel p = new JPanel();
+        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+        p.setOpaque(false);
+
+        JLabel lbl = new JLabel(etiqueta);
+        lbl.setFont(F_LABEL);
+        lbl.setForeground(TEXT_LABEL);
+        lbl.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        combo.setFont(F_FIELD);
+        combo.setForeground(TEXT_PRI);
+        combo.setBackground(FIELD_BG);
+        combo.setBorder(new RoundedBorder(8, BORDER_COL, 1));
+        combo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
+        combo.setAlignmentX(Component.LEFT_ALIGNMENT);
+        combo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        // Renderer limpio
+        combo.setRenderer(new DefaultListCellRenderer() {
             @Override
-            public void run() {
-                initColors();
-                initPlaceholders();
-                initValidaciones();
-                btnAnadirVehiculo.addActionListener(new java.awt.event.ActionListener() {
-                    @Override
-                    public void actionPerformed(java.awt.event.ActionEvent e) {
-                        btnAnadirVehiculoActionPerformed(e);
-                    }
-                });
-            }
-        });
-    }
-
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
-
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        IDvehiculotxt = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        aniofabricacionVehiculotxt = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        cmbLineas = new javax.swing.JComboBox<>();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        cmbCapacidad = new javax.swing.JComboBox<>();
-        cmbConductoresDisponibles = new javax.swing.JComboBox<>();
-        jLabel9 = new javax.swing.JLabel();
-        btnAnadirVehiculo = new javax.swing.JButton();
-        jLabel10 = new javax.swing.JLabel();
-
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setText("Añadir Vehiculo");
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel2.setText("Registra un nuevo vehículo en la flota del sistema");
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel3.setText("Identificación:");
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel4.setText("Placa/Matricula:");
-
-        IDvehiculotxt.setBackground(new java.awt.Color(0, 0, 0));
-        IDvehiculotxt.setForeground(new java.awt.Color(204, 204, 204));
-        IDvehiculotxt.setText("Ej. VTRAIN-928");
-        IDvehiculotxt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                IDvehiculotxtActionPerformed(evt);
+            public Component getListCellRendererComponent(
+                    JList<?> list, Object v, int idx, boolean sel, boolean foc) {
+                JLabel l = (JLabel) super.getListCellRendererComponent(list, v, idx, sel, foc);
+                l.setBorder(new EmptyBorder(5, 10, 5, 10));
+                l.setFont(F_FIELD);
+                if (sel) { l.setBackground(BLUE_LIGHT); l.setForeground(BLUE_ACCENT); }
+                else     { l.setBackground(Color.WHITE); l.setForeground(TEXT_PRI); }
+                return l;
             }
         });
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel5.setText("Línea Asignada:");
-
-        aniofabricacionVehiculotxt.setBackground(new java.awt.Color(0, 0, 0));
-        aniofabricacionVehiculotxt.setForeground(new java.awt.Color(204, 204, 204));
-        aniofabricacionVehiculotxt.setText("Ej. 2023");
-        aniofabricacionVehiculotxt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                aniofabricacionVehiculotxtActionPerformed(evt);
-            }
-        });
-
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel6.setText("Asignación:");
-
-        cmbLineas.setBackground(new java.awt.Color(51, 51, 51));
-        cmbLineas.setForeground(new java.awt.Color(255, 255, 255));
-        cmbLineas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Línea Roja", "Línea Azul", "Línea Amarilla", "Línea Verde", " " }));
-
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel7.setText("Año de Fabricación:");
-
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel8.setText("Capacidad:");
-
-        cmbCapacidad.setBackground(new java.awt.Color(51, 51, 51));
-        cmbCapacidad.setForeground(new java.awt.Color(255, 255, 255));
-        cmbCapacidad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "100 Pasajeros", "200 Pasajeros", "300 Pasajeros", "400 Pasajeros" }));
-
-        cmbConductoresDisponibles.setBackground(new java.awt.Color(51, 51, 51));
-        cmbConductoresDisponibles.setForeground(new java.awt.Color(255, 255, 255));
-        cmbConductoresDisponibles.setModel(new javax.swing.DefaultComboBoxModel<>());
-        cmbConductoresDisponibles.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbConductoresDisponiblesActionPerformed(evt);
-            }
-        });
-
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel9.setText("Conductor:");
-
-        btnAnadirVehiculo.setBackground(new java.awt.Color(51, 153, 255));
-        btnAnadirVehiculo.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnAnadirVehiculo.setForeground(new java.awt.Color(255, 255, 255));
-        btnAnadirVehiculo.setText("Añadir Vehiculo");
-
-        jLabel10.setForeground(new java.awt.Color(255, 0, 0));
-        jLabel10.setText("*Todos los campos son obligatorios");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE))
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(IDvehiculotxt, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(aniofabricacionVehiculotxt, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(btnAnadirVehiculo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
-                                .addComponent(cmbLineas, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cmbCapacidad, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cmbConductoresDisponibles, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(65, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(IDvehiculotxt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(aniofabricacionVehiculotxt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(49, 49, 49)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbLineas, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbCapacidad, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbConductoresDisponibles, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(58, 58, 58)
-                .addComponent(btnAnadirVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(100, 100, 100))
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void IDvehiculotxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IDvehiculotxtActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_IDvehiculotxtActionPerformed
-
-    private void btnAnadirVehiculoActionPerformed(java.awt.event.ActionEvent evt) {
-        if (!todosValidos()) {
-            new ERRORview().setVisible(true);
-            return;
-        }
-
-        new Confirmacion().setVisible(true);
-
-        // Limpiar campos
-        IDvehiculotxt.setText("");
-        aniofabricacionVehiculotxt.setText("");
-        IDvehiculotxt.putClientProperty("valido", false);
-        aniofabricacionVehiculotxt.putClientProperty("valido", false);
-        IDvehiculotxt.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(80,80,80),1,true));
-        aniofabricacionVehiculotxt.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(80,80,80),1,true));
-        cmbLineas.setSelectedIndex(0);
-        cmbCapacidad.setSelectedIndex(0);
-        cmbConductoresDisponibles.setSelectedIndex(0);
+        p.add(lbl);
+        p.add(Box.createVerticalStrut(5));
+        p.add(combo);
+        return p;
     }
 
-    private void aniofabricacionVehiculotxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aniofabricacionVehiculotxtActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_aniofabricacionVehiculotxtActionPerformed
-
-    private void cmbConductoresDisponiblesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbConductoresDisponiblesActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbConductoresDisponiblesActionPerformed
-
-
-    // ── Inicialización y validaciones ─────────────────────────────────
-    private void initColors() {
-        IDvehiculotxt.setBackground(COLOR_CAMPO);
-        IDvehiculotxt.setForeground(COLOR_TEXTO);
-        aniofabricacionVehiculotxt.setBackground(COLOR_CAMPO);
-        aniofabricacionVehiculotxt.setForeground(COLOR_TEXTO);
-        cmbLineas.setBackground(COLOR_CAMPO);
-        cmbLineas.setForeground(COLOR_TEXTO);
-        cmbCapacidad.setBackground(COLOR_CAMPO);
-        cmbCapacidad.setForeground(COLOR_TEXTO);
-        cmbConductoresDisponibles.setBackground(COLOR_CAMPO);
-        cmbConductoresDisponibles.setForeground(COLOR_TEXTO);
-        btnAnadirVehiculo.setBackground(new java.awt.Color(51, 153, 255));
-        btnAnadirVehiculo.setForeground(java.awt.Color.WHITE);
-    }
-
-    private void initPlaceholders() {
-        configurarPlaceholder(IDvehiculotxt, "Ej. VTRAIN-928");
-        configurarPlaceholder(aniofabricacionVehiculotxt, "Ej. 2023");
-    }
+    // ─────────────────────────────────────────────────────────────────────────
+    // Lógica preservada del original
+    // ─────────────────────────────────────────────────────────────────────────
 
     private void cargarConductores() {
         try {
             ConductorDao dao = new ConductorDao();
-            List<Conductor> conductores = dao.obtenerTodos();
-            cmbConductoresDisponibles.removeAllItems();
-            cmbConductoresDisponibles.addItem(new Conductor() {
+            List<Conductor> lista = dao.obtenerTodos();
+            cmbConductores.removeAllItems();
+            cmbConductores.addItem(new Conductor() {
                 @Override public String toString() { return "Seleccionar conductor..."; }
             });
-            for (Conductor conductor : conductores) {
-                cmbConductoresDisponibles.addItem(conductor);
-            }
-            cmbConductoresDisponibles.setSelectedIndex(0);
+            for (Conductor c : lista) cmbConductores.addItem(c);
+            cmbConductores.setSelectedIndex(0);
         } catch (Exception e) {
             System.out.println("Error al cargar conductores: " + e.getMessage());
         }
     }
 
-    private void configurarPlaceholder(javax.swing.JTextField campo, String placeholder) {
-        campo.setText(placeholder);
-        campo.setForeground(new java.awt.Color(150, 150, 150));
-        campo.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
-            public void focusGained(java.awt.event.FocusEvent e) {
-                if (campo.getText().equals(placeholder)) {
+    private void initPlaceholders() {
+        configurarPlaceholder(txtPlaca, "Ej. VTRAIN-928");
+        configurarPlaceholder(txtAnio,  "Ej. 2023");
+    }
+
+    private void configurarPlaceholder(JTextField campo, String ph) {
+        campo.setText(ph);
+        campo.setForeground(FIELD_PH);
+        campo.addFocusListener(new FocusAdapter() {
+            @Override public void focusGained(FocusEvent e) {
+                if (campo.getText().equals(ph)) {
                     campo.setText("");
-                    campo.setForeground(COLOR_TEXTO);
+                    campo.setForeground(TEXT_PRI);
                 }
             }
-            @Override
-            public void focusLost(java.awt.event.FocusEvent e) {
+            @Override public void focusLost(FocusEvent e) {
                 if (campo.getText().trim().isEmpty()) {
-                    campo.setText(placeholder);
-                    campo.setForeground(new java.awt.Color(150, 150, 150));
+                    campo.setText(ph);
+                    campo.setForeground(FIELD_PH);
                     marcarCampo(campo, false);
                 }
             }
@@ -333,91 +387,109 @@ public class AnadirVehiculo extends javax.swing.JPanel {
     }
 
     private void initValidaciones() {
-        IDvehiculotxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
-            String v = IDvehiculotxt.getText().trim();
-            marcarCampo(IDvehiculotxt, !v.isEmpty() && !v.equals("Ej. VTRAIN-928") && v.matches("[A-Za-z0-9\\- ]{5,}"));
+        txtPlaca.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = txtPlaca.getText().trim();
+            marcarCampo(txtPlaca, !v.isEmpty() && !v.equals("Ej. VTRAIN-928")
+                    && v.matches("[A-Za-z0-9\\- ]{5,}"));
         }));
 
-        aniofabricacionVehiculotxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
-            String v = aniofabricacionVehiculotxt.getText().trim();
+        txtAnio.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = txtAnio.getText().trim();
             boolean ok = false;
             if (!v.isEmpty() && !v.equals("Ej. 2023") && v.matches("\\d{4}")) {
                 try {
                     int y = Integer.parseInt(v);
-                    int thisYear = java.time.LocalDate.now().getYear();
-                    ok = y >= 1950 && y <= thisYear;
-                } catch (Exception ex) { ok = false; }
+                    ok = y >= 1950 && y <= LocalDate.now().getYear();
+                } catch (Exception ignored) {}
             }
-            marcarCampo(aniofabricacionVehiculotxt, ok);
+            marcarCampo(txtAnio, ok);
         }));
 
-        // Combos: marcar válidos si no están en su índice 0 (si se agrega placeholder en futuro)
         cmbLineas.addItemListener(e -> {
-            if (e.getStateChange() != java.awt.event.ItemEvent.SELECTED) return;
-            marcarCampo(cmbLineas, cmbLineas.getSelectedIndex() > -1);
+            if (e.getStateChange() == ItemEvent.SELECTED)
+                marcarCampo(cmbLineas, cmbLineas.getSelectedIndex() >= 0);
         });
         cmbCapacidad.addItemListener(e -> {
-            if (e.getStateChange() != java.awt.event.ItemEvent.SELECTED) return;
-            marcarCampo(cmbCapacidad, cmbCapacidad.getSelectedIndex() > -1);
+            if (e.getStateChange() == ItemEvent.SELECTED)
+                marcarCampo(cmbCapacidad, cmbCapacidad.getSelectedIndex() >= 0);
         });
-        cmbConductoresDisponibles.addItemListener(e -> {
-            if (e.getStateChange() != java.awt.event.ItemEvent.SELECTED) return;
-            marcarCampo(cmbConductoresDisponibles, cmbConductoresDisponibles.getSelectedIndex() > 0);
+        cmbConductores.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED)
+                marcarCampo(cmbConductores, cmbConductores.getSelectedIndex() > 0);
         });
     }
 
-    private void marcarCampo(javax.swing.JComponent campo, boolean valido) {
-        java.awt.Color color = valido ? COLOR_OK : COLOR_ERROR;
-        if (campo instanceof javax.swing.JTextField) {
-            ((javax.swing.JTextField) campo).setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createLineBorder(color, 2, true),
-                javax.swing.BorderFactory.createEmptyBorder(4, 8, 4, 8)
-            ));
-            campo.putClientProperty("valido", valido);
-        } else if (campo instanceof javax.swing.JComboBox) {
-            campo.setBorder(javax.swing.BorderFactory.createLineBorder(color, 2, true));
-            campo.putClientProperty("valido", valido);
+    private void btnAnadirVehiculoActionPerformed() {
+        if (!todosValidos()) {
+            new ERRORview().setVisible(true);
+            return;
         }
+        new Confirmacion().setVisible(true);
+        // Reset campos
+        txtPlaca.setText("Ej. VTRAIN-928"); txtPlaca.setForeground(FIELD_PH);
+        txtAnio.setText("Ej. 2023");        txtAnio.setForeground(FIELD_PH);
+        txtPlaca.putClientProperty("valido", false);
+        txtAnio.putClientProperty("valido", false);
+        marcarCampo(txtPlaca, false);
+        marcarCampo(txtAnio,  false);
+        cmbLineas.setSelectedIndex(0);
+        cmbCapacidad.setSelectedIndex(0);
+        cmbConductores.setSelectedIndex(0);
+    }
+
+    private void marcarCampo(JComponent campo, boolean valido) {
+        Color c = valido ? COLOR_OK : COLOR_ERR;
+        if (campo instanceof JTextField) {
+            ((JTextField) campo).setBorder(BorderFactory.createCompoundBorder(
+                new RoundedBorder(8, c, 2),
+                new EmptyBorder(7, 12, 7, 12)
+            ));
+        } else if (campo instanceof JComboBox) {
+            campo.setBorder(new RoundedBorder(8, c, 2));
+        }
+        campo.putClientProperty("valido", valido);
     }
 
     private boolean todosValidos() {
-        Object id = IDvehiculotxt.getClientProperty("valido");
-        Object anio = aniofabricacionVehiculotxt.getClientProperty("valido");
-        Object l = cmbLineas.getClientProperty("valido");
-        Object c = cmbCapacidad.getClientProperty("valido");
-        Object d = cmbConductoresDisponibles.getClientProperty("valido");
-        return id instanceof Boolean && (Boolean) id
-            && anio instanceof Boolean && (Boolean) anio
-            && l instanceof Boolean && (Boolean) l
-            && c instanceof Boolean && (Boolean) c
-            && d instanceof Boolean && (Boolean) d;
+        for (JComponent c : new JComponent[]{
+                txtPlaca, txtAnio, cmbLineas, cmbCapacidad, cmbConductores}) {
+            Object v = c.getClientProperty("valido");
+            if (!(v instanceof Boolean) || !(Boolean) v) return false;
+        }
+        return true;
     }
 
-    private static class SimpleDocListener implements javax.swing.event.DocumentListener {
+    // ─────────────────────────────────────────────────────────────────────────
+    // Helpers internos
+    // ─────────────────────────────────────────────────────────────────────────
+
+    /** Borde redondeado reutilizable */
+    private static class RoundedBorder extends AbstractBorder {
+        private final int radius;
+        private final Color color;
+        private final float stroke;
+        RoundedBorder(int radius, Color color, float stroke) {
+            this.radius = radius; this.color = color; this.stroke = stroke;
+        }
+        @Override
+        public void paintBorder(Component c, Graphics g, int x, int y, int w, int h) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(color);
+            g2.setStroke(new BasicStroke(stroke));
+            g2.drawRoundRect(x, y, w-1, h-1, radius, radius);
+            g2.dispose();
+        }
+        @Override public Insets getBorderInsets(Component c) {
+            return new Insets((int)stroke+1, (int)stroke+1, (int)stroke+1, (int)stroke+1);
+        }
+    }
+
+    private static class SimpleDocListener implements DocumentListener {
         private final Runnable accion;
         SimpleDocListener(Runnable accion) { this.accion = accion; }
-        @Override public void insertUpdate(javax.swing.event.DocumentEvent e) { accion.run(); }
-        @Override public void removeUpdate(javax.swing.event.DocumentEvent e) { accion.run(); }
-        @Override public void changedUpdate(javax.swing.event.DocumentEvent e) { accion.run(); }
+        @Override public void insertUpdate (DocumentEvent e) { accion.run(); }
+        @Override public void removeUpdate (DocumentEvent e) { accion.run(); }
+        @Override public void changedUpdate(DocumentEvent e) { accion.run(); }
     }
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField IDvehiculotxt;
-    private javax.swing.JTextField aniofabricacionVehiculotxt;
-    private javax.swing.JButton btnAnadirVehiculo;
-    private javax.swing.JComboBox<String> cmbCapacidad;
-    private javax.swing.JComboBox<Conductor> cmbConductoresDisponibles;
-    private javax.swing.JComboBox<String> cmbLineas;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    // End of variables declaration//GEN-END:variables
 }

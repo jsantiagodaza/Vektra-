@@ -9,6 +9,21 @@
 <!-- in the project's Project Properties dialog box.-->
 <project name="Vektra-" default="default" basedir=".">
     <description>Builds, tests, and runs the project Vektra-.</description>
+
+    <target name="-pre-compile">
+        <delete>
+            <fileset dir="${src.dir}" includes="**/*.class"/>
+            <fileset dir="${build.classes.dir}" includes="**/*.class"/>
+        </delete>
+    </target>
+
+    <target name="-post-clean">
+        <delete>
+            <fileset dir="${src.dir}" includes="**/*.class"/>
+            <fileset dir="${build.classes.dir}" includes="**/*.class"/>
+        </delete>
+    </target>
+
     <import file="nbproject/build-impl.xml"/>
     <!--
 

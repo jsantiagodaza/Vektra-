@@ -17,7 +17,7 @@ public class PasajeroDao {
 
     public Pasajero validarPasajero(String correo, String contrasena) {
         Pasajero pasajero = null;
-        String sql = "SELECT * FROM usuarios WHERE correo = ? AND contrasena = ?";
+        String sql = "SELECT id, nombre, correo, contraseña, fecha_registro FROM usuarios WHERE correo = ? AND contraseña = ?";
 
         try (Connection con = ConexionBD.getConexion(); PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -31,7 +31,7 @@ public class PasajeroDao {
                         rs.getString("id"),
                         rs.getString("nombre"),
                         rs.getString("correo"),
-                        rs.getString("contrasena"),
+                        rs.getString("contraseña"),
                         rs.getTimestamp("fecha_registro").toLocalDateTime()
                 );
             }
@@ -43,27 +43,42 @@ public class PasajeroDao {
         return pasajero;
     }
 
-    public void registrarPasajero(Pasajero p) {
-        String sql = "INSERT INTO usuarios (id, nombre, correo, contraseña, fecha_registro) "
-                + "VALUES (?, ?, ?, ?, ?)";
-        try {
-            Connection con = Conexion.conectar();
-            PreparedStatement ps = con.prepareStatement(sql);
+    public Pasajero registrarPasajero(Pasajero p) {
+        boolean tieneId = p.getId() != null && !p.getId().trim().isEmpty();
+        String sql = tieneId
+                ? "INSERT INTO usuarios (id, nombre, correo, contraseña, fecha_registro) VALUES (?, ?, ?, ?, ?)"
+                : "INSERT INTO usuarios (nombre, correo, contraseña, fecha_registro) VALUES (?, ?, ?, ?)";
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
-            ps.setInt(1, Integer.parseInt(p.getId()));
-            ps.setString(2, p.getNombre());
-            ps.setString(3, p.getEmail());
-            ps.setString(4, p.getContraseña());
-            ps.setTimestamp(5, p.getFechaRegistro() != null
+            int index = 1;
+            if (tieneId) {
+                ps.setInt(index++, Integer.parseInt(p.getId().trim()));
+            }
+            ps.setString(index++, p.getNombre());
+            ps.setString(index++, p.getCorreo());
+            ps.setString(index++, p.getContraseña());
+            ps.setTimestamp(index++, p.getFechaRegistro() != null
                     ? Timestamp.valueOf(p.getFechaRegistro())
                     : Timestamp.valueOf(LocalDateTime.now()));
 
-            ps.executeUpdate();
-            ps.close();
+            int afectadas = ps.executeUpdate();
+            if (afectadas == 0) {
+                throw new SQLException("No se pudo insertar el pasajero");
+            }
+
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    p.setId(String.valueOf(generatedKeys.getInt(1)));
+                }
+            }
+
             System.out.println("[PasajeroDao] Pasajero registrado: " + p.getNombre());
+            return p;
 
         } catch (SQLException e) {
             System.err.println("[PasajeroDao] Error en registrarPasajero: " + e.getMessage());
+            return null;
         }
     }
 

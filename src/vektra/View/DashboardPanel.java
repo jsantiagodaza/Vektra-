@@ -1,301 +1,141 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package vektra.View;
 
+import java.awt.BorderLayout;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javax.swing.JPanel;
 
-public class DashboardPanel extends javax.swing.JPanel {
+/**
+ * Panel central del Dashboard conectado a MainFrameView.
+ * Utiliza JavaFX Bento Grid con tema claro.
+ */
+public class DashboardPanel extends JPanel {
 
-    /**
-     * Creates new form DashboardPanel
-     */
     public DashboardPanel() {
-        initComponents();
-        // Aplicar la fuente personalizada a todo el panel y sus hijos
-        vektra.Util.FontUtil.applyCustomFont(this);
-        // Aplicar los estilos de bordes redondeados a las tarjetas
-        initStyles();
+        setLayout(new BorderLayout());
+        
+        JFXPanel jfxPanel = new JFXPanel();
+        add(jfxPanel, BorderLayout.CENTER);
+        
+        Platform.runLater(() -> initBentoGrid(jfxPanel));
     }
 
-    private void initStyles() {
-        // Lista de las tarjetas (paneles) que queremos redondear
-        javax.swing.JPanel[] tarjetas = {
-            PanelEstacionesActivas, PanelPasajerosenCirculacion, 
-            PanelTicketsActivos, PanelLineasActivas, PanelTicketsHoy
+    private void initBentoGrid(JFXPanel jfxPanel) {
+        GridPane grid = new GridPane();
+        // Fondo base blanco como solicitaste
+        grid.setStyle("-fx-background-color: #FFFFFF; -fx-padding: 40;");
+        grid.setHgap(20);
+        grid.setVgap(20);
+
+        ColumnConstraints col1 = new ColumnConstraints();
+        col1.setPercentWidth(33.33);
+        ColumnConstraints col2 = new ColumnConstraints();
+        col2.setPercentWidth(33.33);
+        ColumnConstraints col3 = new ColumnConstraints();
+        col3.setPercentWidth(33.33);
+        grid.getColumnConstraints().addAll(col1, col2, col3);
+
+        // Tarjeta 1: Bienvenida
+        VBox cardWelcome = createBentoCard();
+        Label lblWelcome = new Label("Bienvenido a Vektra");
+        lblWelcome.setFont(Font.font("Segoe UI", FontWeight.BOLD, 36));
+        lblWelcome.setTextFill(Color.web("#333333"));
+        Label lblDesc = new Label("Resumen general del sistema y estadísticas clave de hoy.");
+        lblDesc.setFont(Font.font("Segoe UI", 16));
+        lblDesc.setTextFill(Color.web("#888888"));
+        cardWelcome.getChildren().addAll(lblWelcome, lblDesc);
+        grid.add(cardWelcome, 0, 0, 2, 1);
+
+        // Tarjeta 2: Pasajeros (Gris oscuro)
+        VBox cardPasajeros = createBentoCard();
+        Label lblPasajerosVal = new Label("0");
+        lblPasajerosVal.setFont(Font.font("Segoe UI", FontWeight.BOLD, 54));
+        lblPasajerosVal.setTextFill(Color.web("#4A4A4A")); // Gris oscuro
+        Label lblPasajerosTit = new Label("Pasajeros en Circulación");
+        lblPasajerosTit.setFont(Font.font("Segoe UI", 18));
+        lblPasajerosTit.setTextFill(Color.web("#666666"));
+        cardPasajeros.getChildren().addAll(lblPasajerosVal, lblPasajerosTit);
+        grid.add(cardPasajeros, 2, 0, 1, 1);
+
+        // Tarjeta 3: Estaciones (Verde suave oscuro)
+        VBox cardEstaciones = createBentoCard();
+        Label lblEstacionesVal = new Label("0");
+        lblEstacionesVal.setFont(Font.font("Segoe UI", FontWeight.BOLD, 54));
+        lblEstacionesVal.setTextFill(Color.web("#2E7D32")); // Verde suave oscuro
+        Label lblEstacionesTit = new Label("Estaciones Activas");
+        lblEstacionesTit.setFont(Font.font("Segoe UI", 18));
+        lblEstacionesTit.setTextFill(Color.web("#666666"));
+        cardEstaciones.getChildren().addAll(lblEstacionesVal, lblEstacionesTit);
+        grid.add(cardEstaciones, 0, 1, 1, 1);
+
+        // Tarjeta 4: Tickets (Azul)
+        VBox cardTickets = createBentoCard();
+        Label lblTicketsVal = new Label("0");
+        lblTicketsVal.setFont(Font.font("Segoe UI", FontWeight.BOLD, 54));
+        lblTicketsVal.setTextFill(Color.web("#0263C8")); // Azul Vektra
+        Label lblTicketsTit = new Label("Tickets Vendidos Hoy");
+        lblTicketsTit.setFont(Font.font("Segoe UI", 18));
+        lblTicketsTit.setTextFill(Color.web("#666666"));
+        cardTickets.getChildren().addAll(lblTicketsVal, lblTicketsTit);
+        grid.add(cardTickets, 1, 1, 1, 1);
+
+        // Tarjeta 5: Líneas Activas
+        VBox cardLineas = createBentoCard();
+        Label lblLineasTit = new Label("Estado de las Líneas");
+        lblLineasTit.setFont(Font.font("Segoe UI", FontWeight.BOLD, 22));
+        lblLineasTit.setTextFill(Color.web("#333333"));
+        cardLineas.getChildren().add(lblLineasTit);
+        
+        String[][] lineasData = {
+            {"Línea Roja Activa", "#E50822"},
+            {"Línea Amarilla Activa", "#F39C12"},
+            {"Línea Verde Activa", "#27AE60"},
+            {"Línea Azul Activa", "#2980B9"}
         };
-
-        for (javax.swing.JPanel tarjeta : tarjetas) {
-            // Hacemos que el fondo cuadrado por defecto no se dibuje
-            tarjeta.setOpaque(false);
-            
-            // Le inyectamos una forma de dibujarse personalizada (redondeada)
-            tarjeta.setUI(new javax.swing.plaf.basic.BasicPanelUI() {
-                @Override
-                public void paint(java.awt.Graphics g, javax.swing.JComponent c) {
-                    java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
-                    // Antialiasing para que los bordes se vean suaves
-                    g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
-                    
-                    // Tomamos el color de fondo gris claro que configuraste en NetBeans
-                    g2.setColor(c.getBackground());
-                    
-                    // Dibujamos el fondo redondeado (radio de 25 píxeles)
-                    g2.fillRoundRect(0, 0, c.getWidth(), c.getHeight(), 25, 25);
-                    
-                    super.paint(g2, c); // Dibuja los textos encima
-                    g2.dispose();
-                }
-            });
+        for (String[] ld : lineasData) {
+            HBox hbLinea = new HBox(10);
+            hbLinea.setAlignment(Pos.CENTER_LEFT);
+            Circle dot = new Circle(6, Color.web(ld[1]));
+            Label lName = new Label(ld[0]);
+            lName.setTextFill(Color.web("#555555"));
+            lName.setFont(Font.font("Segoe UI", 16));
+            hbLinea.getChildren().addAll(dot, lName);
+            cardLineas.getChildren().add(hbLinea);
         }
+        grid.add(cardLineas, 2, 1, 1, 1);
+        
+        GridPane.setVgrow(cardWelcome, Priority.ALWAYS);
+        GridPane.setVgrow(cardPasajeros, Priority.ALWAYS);
+        GridPane.setVgrow(cardEstaciones, Priority.ALWAYS);
+        GridPane.setVgrow(cardTickets, Priority.ALWAYS);
+        GridPane.setVgrow(cardLineas, Priority.ALWAYS);
+
+        Scene scene = new Scene(grid);
+        jfxPanel.setScene(scene);
     }
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
-
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        PanelEstacionesActivas = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        EstacionesActivasTxt = new javax.swing.JLabel();
-        PanelPasajerosenCirculacion = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
-        PanelTicketsActivos = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        PasajerosEnCirculacionTxt = new javax.swing.JLabel();
-        PanelLineasActivas = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        PanelTicketsHoy = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel1.setFont(new java.awt.Font("MS PGothic", 1, 24)); // NOI18N
-        jLabel1.setText("Bienvenido a Vektra");
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel3.setText("Estaciones Activas");
-
-        EstacionesActivasTxt.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
-        EstacionesActivasTxt.setForeground(new java.awt.Color(0, 153, 255));
-        EstacionesActivasTxt.setText("0");
-
-        javax.swing.GroupLayout PanelEstacionesActivasLayout = new javax.swing.GroupLayout(PanelEstacionesActivas);
-        PanelEstacionesActivas.setLayout(PanelEstacionesActivasLayout);
-        PanelEstacionesActivasLayout.setHorizontalGroup(
-            PanelEstacionesActivasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelEstacionesActivasLayout.createSequentialGroup()
-                .addGroup(PanelEstacionesActivasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PanelEstacionesActivasLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(PanelEstacionesActivasLayout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(EstacionesActivasTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(78, Short.MAX_VALUE))
-        );
-        PanelEstacionesActivasLayout.setVerticalGroup(
-            PanelEstacionesActivasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelEstacionesActivasLayout.createSequentialGroup()
-                .addContainerGap(37, Short.MAX_VALUE)
-                .addComponent(EstacionesActivasTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel4.setText("Pasajeros en Circulación");
-
-        jLabel5.setBackground(new java.awt.Color(153, 153, 153));
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel5.setText("Tickets vendidos Hoy");
-
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel8.setText("0");
-
-        javax.swing.GroupLayout PanelTicketsActivosLayout = new javax.swing.GroupLayout(PanelTicketsActivos);
-        PanelTicketsActivos.setLayout(PanelTicketsActivosLayout);
-        PanelTicketsActivosLayout.setHorizontalGroup(
-            PanelTicketsActivosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelTicketsActivosLayout.createSequentialGroup()
-                .addGroup(PanelTicketsActivosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PanelTicketsActivosLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(PanelTicketsActivosLayout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(42, Short.MAX_VALUE))
-        );
-        PanelTicketsActivosLayout.setVerticalGroup(
-            PanelTicketsActivosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelTicketsActivosLayout.createSequentialGroup()
-                .addGap(52, 52, 52)
-                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
-        PasajerosEnCirculacionTxt.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
-        PasajerosEnCirculacionTxt.setForeground(new java.awt.Color(102, 102, 102));
-        PasajerosEnCirculacionTxt.setText("0");
-
-        javax.swing.GroupLayout PanelPasajerosenCirculacionLayout = new javax.swing.GroupLayout(PanelPasajerosenCirculacion);
-        PanelPasajerosenCirculacion.setLayout(PanelPasajerosenCirculacionLayout);
-        PanelPasajerosenCirculacionLayout.setHorizontalGroup(
-            PanelPasajerosenCirculacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelPasajerosenCirculacionLayout.createSequentialGroup()
-                .addGroup(PanelPasajerosenCirculacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PanelPasajerosenCirculacionLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(PanelPasajerosenCirculacionLayout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(PasajerosEnCirculacionTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
-                .addComponent(PanelTicketsActivos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        PanelPasajerosenCirculacionLayout.setVerticalGroup(
-            PanelPasajerosenCirculacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelPasajerosenCirculacionLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(PasajerosEnCirculacionTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelPasajerosenCirculacionLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(PanelTicketsActivos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel6.setText("Lineas Activas");
-
-        javax.swing.GroupLayout PanelLineasActivasLayout = new javax.swing.GroupLayout(PanelLineasActivas);
-        PanelLineasActivas.setLayout(PanelLineasActivasLayout);
-        PanelLineasActivasLayout.setHorizontalGroup(
-            PanelLineasActivasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelLineasActivasLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(149, Short.MAX_VALUE))
-        );
-        PanelLineasActivasLayout.setVerticalGroup(
-            PanelLineasActivasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelLineasActivasLayout.createSequentialGroup()
-                .addContainerGap(213, Short.MAX_VALUE)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel7.setText("Tickets Vendidos Hoy");
-
-        javax.swing.GroupLayout PanelTicketsHoyLayout = new javax.swing.GroupLayout(PanelTicketsHoy);
-        PanelTicketsHoy.setLayout(PanelTicketsHoyLayout);
-        PanelTicketsHoyLayout.setHorizontalGroup(
-            PanelTicketsHoyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelTicketsHoyLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(195, Short.MAX_VALUE))
-        );
-        PanelTicketsHoyLayout.setVerticalGroup(
-            PanelTicketsHoyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelTicketsHoyLayout.createSequentialGroup()
-                .addContainerGap(211, Short.MAX_VALUE)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel2.setText("Resumen del Sistema Hoy...");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(PanelEstacionesActivas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(PanelPasajerosenCirculacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(PanelLineasActivas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(PanelTicketsHoy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 429, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(22, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addGap(49, 49, 49)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(PanelEstacionesActivas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(PanelPasajerosenCirculacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(PanelLineasActivas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(PanelTicketsHoy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(34, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-    }// </editor-fold>//GEN-END:initComponents
-
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel EstacionesActivasTxt;
-    private javax.swing.JPanel PanelEstacionesActivas;
-    private javax.swing.JPanel PanelLineasActivas;
-    private javax.swing.JPanel PanelPasajerosenCirculacion;
-    private javax.swing.JPanel PanelTicketsActivos;
-    private javax.swing.JPanel PanelTicketsHoy;
-    private javax.swing.JLabel PasajerosEnCirculacionTxt;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JPanel jPanel1;
-    // End of variables declaration//GEN-END:variables
+    private VBox createBentoCard() {
+        VBox card = new VBox(15);
+        // Gris claro de fondo para las cards
+        card.setStyle("-fx-background-color: #F3F4F6; -fx-background-radius: 15; -fx-padding: 30;");
+        card.setAlignment(Pos.CENTER_LEFT);
+        
+        // Suave contorno iluminado en hover
+        card.setOnMouseEntered(e -> card.setStyle("-fx-background-color: #FFFFFF; -fx-background-radius: 15; -fx-padding: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 15, 0, 0, 4);"));
+        card.setOnMouseExited(e -> card.setStyle("-fx-background-color: #F3F4F6; -fx-background-radius: 15; -fx-padding: 30;"));
+        
+        return card;
+    }
 }

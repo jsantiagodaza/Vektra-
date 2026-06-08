@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package vektra.Service;
 
 import java.time.LocalDateTime;
@@ -23,11 +19,19 @@ public class TicketService {
         ticketDao = new TicketDao();
     }
 
-    public void crearTicket(String id, Pasajero pasajero, Estacion origen, Estacion destino, double precio) {
+   public void crearTicket(String id, Pasajero pasajero, Estacion origen, Estacion destino, double precio) {
 
-        Ticket ticket = new Ticket(id, LocalDateTime.now(), precio, "QR-" + id, pasajero, origen, destino);
-        ticketDao.guardarTicket(ticket);
-    }
+    Ticket ticket = new Ticket(id);
+
+    ticket.setFecha(LocalDateTime.now());
+    ticket.setPrecio(precio);
+    ticket.setCodigoQR("QR-" + id);
+    ticket.setPasajero(pasajero);
+    ticket.setEstacionOrigen(origen);
+    ticket.setEstacionDestino(destino);
+
+    ticketDao.guardarTicket(ticket);
+}
 
     public void mostrarTickets() {
         ticketDao.obtenerTickets();
