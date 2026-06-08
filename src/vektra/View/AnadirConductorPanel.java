@@ -1,397 +1,502 @@
 package vektra.View;
 
-import javax.swing.JOptionPane;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.*;
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.event.*;
 import vektra.Dao.ConductorDao;
 import vektra.Model.Conductor;
 
 /**
- *
- * @author santi
+ * AnadirConductorPanel — rediseñado con estética Vektra.
+ * Swing puro, sin NetBeans Form Editor.
  */
-public class AnadirConductorPanel extends javax.swing.JPanel {
+public class AnadirConductorPanel extends JPanel {
 
-    private static final java.awt.Color COLOR_CAMPO = new java.awt.Color(51, 51, 51);
-    private static final java.awt.Color COLOR_ERROR = new java.awt.Color(200, 50, 50);
-    private static final java.awt.Color COLOR_OK = new java.awt.Color(39, 174, 96);
-    private static final java.awt.Color COLOR_TEXTO = new java.awt.Color(204, 204, 204);
+    // ── Paleta ────────────────────────────────────────────────────────────────
+    private static final Color BG_PAGE    = new Color(248, 250, 255);
+    private static final Color TEXT_PRI   = new Color(15,  23,  42);
+    private static final Color TEXT_MUT   = new Color(100, 116, 139);
+    private static final Color TEXT_LABEL = new Color(71,  85, 105);
+    private static final Color BORDER_COL = new Color(226, 232, 240);
+    private static final Color FIELD_BG   = new Color(249, 250, 251);
+    private static final Color FIELD_PH   = new Color(148, 163, 184);
+    private static final Color COLOR_OK   = new Color(34,  197,  94);
+    private static final Color COLOR_ERR  = new Color(239,  68,  68);
+    private static final Color BLUE_ACC   = new Color(37,  99, 235);
+    private static final Color BLUE_HOV   = new Color(29,  78, 216);
+    private static final Color BLUE_LIGHT = new Color(239, 246, 255);
+    private static final Color WARN_BG    = new Color(255, 247, 237);
+    private static final Color WARN_BRD   = new Color(254, 215, 170);
+    private static final Color WARN_FG    = new Color(154,  52,  18);
 
+    // ── Fuentes ───────────────────────────────────────────────────────────────
+    private static final Font F_TITLE   = new Font("Segoe UI", Font.BOLD,  22);
+    private static final Font F_SUB     = new Font("Segoe UI", Font.PLAIN, 13);
+    private static final Font F_SECTION = new Font("Segoe UI", Font.BOLD,  13);
+    private static final Font F_LABEL   = new Font("Segoe UI", Font.PLAIN, 12);
+    private static final Font F_FIELD   = new Font("Segoe UI", Font.PLAIN, 13);
+    private static final Font F_BTN     = new Font("Segoe UI", Font.BOLD,  14);
+
+    // ── Campos ────────────────────────────────────────────────────────────────
+    private JTextField        txtNombre;
+    private JTextField        txtApellidos;
+    private JTextField        txtCedula;
+    private JTextField        txtTelefono;
+    private JTextField        txtCorreo;
+    private JTextField        txtLicencia;
+    private JComboBox<String> cmbRutas;
+    private JButton           btnAnadir;
+
+    // ─────────────────────────────────────────────────────────────────────────
     public AnadirConductorPanel() {
-        initComponents();
+        initUI();
         vektra.Util.FontUtil.applyCustomFont(this);
-        initPlaceholders();
         cargarRutas();
+        initPlaceholders();
         initValidaciones();
     }
 
-    // ── PLACEHOLDERS ──────────────────────────────────────────────
-    private void initPlaceholders() {
-        configurarPlaceholder(nombreConductortxt, "Ej. Marco Javier");
-        configurarPlaceholder(apellidosConductortxt, "Ej. Torres Piña");
-        configurarPlaceholder(cedulaConductortxt, "Ej. 12345678");
-        configurarPlaceholder(telefonoConductortxt, "Ej. +57 300 000 0000");
-        configurarPlaceholder(correoConductortxt, "Ej. correo@email.com");
-        configurarPlaceholder(licenciaConductortxt, "Ej. LIC-2025-9293839");
+    // ─────────────────────────────────────────────────────────────────────────
+    // Layout
+    // ─────────────────────────────────────────────────────────────────────────
+    private void initUI() {
+        setLayout(new BorderLayout());
+        setBackground(BG_PAGE);
+
+        JPanel content = new JPanel();
+        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+        content.setBackground(BG_PAGE);
+        content.setBorder(new EmptyBorder(28, 36, 32, 36));
+
+        content.add(crearHeader());
+        content.add(Box.createVerticalStrut(14));
+        content.add(crearBannerObligatorio());
+        content.add(Box.createVerticalStrut(26));
+        content.add(crearSeccion("Información personal",  crearFilaPersonal()));
+        content.add(Box.createVerticalStrut(22));
+        content.add(crearSeccion("Contacto",              crearFilaContacto()));
+        content.add(Box.createVerticalStrut(22));
+        content.add(crearSeccion("Asignación y licencia", crearFilaAsignacion()));
+        content.add(Box.createVerticalStrut(32));
+        content.add(crearBoton());
+
+        JScrollPane scroll = new JScrollPane(content);
+        scroll.setBorder(null);
+        scroll.setOpaque(false);
+        scroll.getViewport().setOpaque(false);
+        scroll.getVerticalScrollBar().setUnitIncrement(16);
+        scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        add(scroll, BorderLayout.CENTER);
     }
 
+    // ── Header ────────────────────────────────────────────────────────────────
+    private JPanel crearHeader() {
+        JPanel p = new JPanel();
+        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+        p.setOpaque(false);
+        p.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel title = new JLabel("Añadir Conductor");
+        title.setFont(F_TITLE);
+        title.setForeground(TEXT_PRI);
+        title.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel sub = new JLabel("Registra un nuevo conductor en el sistema");
+        sub.setFont(F_SUB);
+        sub.setForeground(TEXT_MUT);
+        sub.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        p.add(title);
+        p.add(Box.createVerticalStrut(4));
+        p.add(sub);
+        return p;
+    }
+
+    // ── Banner obligatorio ────────────────────────────────────────────────────
+    private JPanel crearBannerObligatorio() {
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 8)) {
+            @Override protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                                    RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(WARN_BG);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+                g2.setColor(WARN_BRD);
+                g2.setStroke(new BasicStroke(1f));
+                g2.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 10, 10);
+                g2.dispose();
+            }
+        };
+        p.setOpaque(false);
+        p.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        p.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel icon = new JLabel("*");
+        icon.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        icon.setForeground(new Color(217, 119, 6));
+
+        JLabel msg = new JLabel("Todos los campos son obligatorios");
+        msg.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        msg.setForeground(WARN_FG);
+
+        p.add(icon);
+        p.add(msg);
+        return p;
+    }
+
+    // ── Sección con separador ─────────────────────────────────────────────────
+    private JPanel crearSeccion(String titulo, JPanel contenido) {
+        JPanel p = new JPanel();
+        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+        p.setOpaque(false);
+        p.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JPanel headerRow = new JPanel(new BorderLayout(10, 0));
+        headerRow.setOpaque(false);
+        headerRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 24));
+        headerRow.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel lbl = new JLabel(titulo);
+        lbl.setFont(F_SECTION);
+        lbl.setForeground(TEXT_LABEL);
+
+        JSeparator sep = new JSeparator() {
+            @Override protected void paintComponent(Graphics g) {
+                g.setColor(BORDER_COL);
+                g.fillRect(0, getHeight()/2, getWidth(), 1);
+            }
+        };
+        headerRow.add(lbl, BorderLayout.WEST);
+        headerRow.add(sep, BorderLayout.CENTER);
+
+        contenido.setAlignmentX(Component.LEFT_ALIGNMENT);
+        p.add(headerRow);
+        p.add(Box.createVerticalStrut(12));
+        p.add(contenido);
+        return p;
+    }
+
+    // ── Fila 1: Nombres + Apellidos ───────────────────────────────────────────
+    private JPanel crearFilaPersonal() {
+        txtNombre    = nuevoTextField();
+        txtApellidos = nuevoTextField();
+
+        JPanel row = new JPanel(new GridLayout(1, 2, 10, 0));
+        row.setOpaque(false);
+        row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
+        row.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        row.add(grupo("Nombres",   txtNombre));
+        row.add(grupo("Apellidos", txtApellidos));
+        return row;
+    }
+
+    // ── Fila 2: Teléfono + Correo ─────────────────────────────────────────────
+    private JPanel crearFilaContacto() {
+        txtTelefono = nuevoTextField();
+        txtCorreo   = nuevoTextField();
+
+        JPanel row = new JPanel(new GridLayout(1, 2, 16, 0));
+        row.setOpaque(false);
+        row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 68));
+        row.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        row.add(grupo("Teléfono",           txtTelefono));
+        row.add(grupo("Correo electrónico", txtCorreo));
+        return row;
+    }
+
+    // ── Fila 3: Cédula + Licencia + Ruta ─────────────────────────────────────
+    private JPanel crearFilaAsignacion() {
+        txtCedula   = nuevoTextField();
+        txtLicencia = nuevoTextField();
+
+        cmbRutas = new JComboBox<>();
+        cmbRutas.setFont(F_FIELD);
+        cmbRutas.setBackground(FIELD_BG);
+        cmbRutas.setForeground(TEXT_PRI);
+        cmbRutas.setBorder(new RoundedBorder(8, BORDER_COL, 1));
+        cmbRutas.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        cmbRutas.setRenderer(new DefaultListCellRenderer() {
+            @Override public Component getListCellRendererComponent(
+                    JList<?> list, Object v, int i, boolean sel, boolean foc) {
+                JLabel l = (JLabel) super.getListCellRendererComponent(list,v,i,sel,foc);
+                l.setBorder(new EmptyBorder(5,10,5,10));
+                l.setFont(F_FIELD);
+                if (sel) { l.setBackground(BLUE_LIGHT); l.setForeground(BLUE_ACC); }
+                else     { l.setBackground(Color.WHITE); l.setForeground(TEXT_PRI); }
+                return l;
+            }
+        });
+
+        JPanel row = new JPanel(new GridLayout(1, 3, 16, 0));
+        row.setOpaque(false);
+        row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 68));
+        row.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        row.add(grupo("Cédula",             txtCedula));
+        row.add(grupo("Número de licencia", txtLicencia));
+        row.add(grupoCombo("Ruta asignada", cmbRutas));
+        return row;
+    }
+
+    // ── Botón ─────────────────────────────────────────────────────────────────
+    private JPanel crearBoton() {
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        p.setOpaque(false);
+        p.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        btnAnadir = new JButton("Añadir Conductor") {
+            private boolean hov = false;
+            { addMouseListener(new MouseAdapter() {
+                @Override public void mouseEntered(MouseEvent e) { hov=true;  repaint(); }
+                @Override public void mouseExited (MouseEvent e) { hov=false; repaint(); }
+            }); }
+            @Override protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                                    RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(hov ? BLUE_HOV : BLUE_ACC);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+            @Override public boolean isOpaque() { return false; }
+        };
+        btnAnadir.setFont(F_BTN);
+        btnAnadir.setForeground(Color.WHITE);
+        btnAnadir.setContentAreaFilled(false);
+        btnAnadir.setBorderPainted(false);
+        btnAnadir.setFocusPainted(false);
+        btnAnadir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnAnadir.setBorder(new EmptyBorder(11, 28, 11, 28));
+        btnAnadir.setPreferredSize(new Dimension(220, 44));
+        btnAnadir.setOpaque(false);
+
+        try {
+            java.net.URL url = getClass().getResource(
+                "/vektra/View/Imagenes/PLUS (1) (1).png");
+            if (url != null) {
+                Image img = new ImageIcon(url).getImage()
+                        .getScaledInstance(18, 18, Image.SCALE_SMOOTH);
+                btnAnadir.setIcon(new ImageIcon(img));
+                btnAnadir.setIconTextGap(8);
+            }
+        } catch (Exception ignored) {}
+
+        btnAnadir.addActionListener(e -> btnAnadirActionPerformed());
+        p.add(btnAnadir);
+        return p;
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Helpers constructores de campo
+    // ─────────────────────────────────────────────────────────────────────────
+    private JTextField nuevoTextField() {
+        JTextField f = new JTextField();
+        f.setFont(F_FIELD);
+        f.setForeground(TEXT_PRI);
+        f.setBackground(FIELD_BG);
+        f.setCaretColor(TEXT_PRI);
+        f.setBorder(BorderFactory.createCompoundBorder(
+            new RoundedBorder(8, BORDER_COL, 1),
+            new EmptyBorder(7, 12, 7, 12)
+        ));
+        return f;
+    }
+
+    private JPanel grupo(String etiqueta, JTextField campo) {
+        JPanel p = new JPanel();
+        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+        p.setOpaque(false);
+
+        JLabel lbl = new JLabel(etiqueta);
+        lbl.setFont(F_LABEL);
+        lbl.setForeground(TEXT_LABEL);
+        lbl.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        campo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
+        campo.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        p.add(lbl);
+        p.add(Box.createVerticalStrut(5));
+        p.add(campo);
+        return p;
+    }
+
+    private JPanel grupoCombo(String etiqueta, JComboBox<?> combo) {
+        JPanel p = new JPanel();
+        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+        p.setOpaque(false);
+
+        JLabel lbl = new JLabel(etiqueta);
+        lbl.setFont(F_LABEL);
+        lbl.setForeground(TEXT_LABEL);
+        lbl.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        combo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
+        combo.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        p.add(lbl);
+        p.add(Box.createVerticalStrut(5));
+        p.add(combo);
+        return p;
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Lógica preservada del original
+    // ─────────────────────────────────────────────────────────────────────────
     private void cargarRutas() {
         try {
             vektra.Dao.RutaDao dao = new vektra.Dao.RutaDao();
             java.util.List<vektra.Model.Ruta> rutas = dao.obtenerTodasLasRutas();
             cmbRutas.removeAllItems();
             cmbRutas.addItem("Seleccionar ruta...");
-            for (vektra.Model.Ruta r : rutas) {
-                cmbRutas.addItem(r.formatoUI());
-            }
+            for (vektra.Model.Ruta r : rutas) cmbRutas.addItem(r.formatoUI());
         } catch (Exception e) {
             System.out.println("Error al cargar rutas: " + e.getMessage());
         }
     }
 
-    private void configurarPlaceholder(javax.swing.JTextField campo, String placeholder) {
-        campo.setText(placeholder);
-        campo.setForeground(new java.awt.Color(120, 120, 120));
-        campo.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
-            public void focusGained(java.awt.event.FocusEvent e) {
-                if (campo.getText().equals(placeholder)) {
+    private void initPlaceholders() {
+        configurarPlaceholder(txtNombre,    "Ej. Marco Javier");
+        configurarPlaceholder(txtApellidos, "Ej. Torres Piña");
+        configurarPlaceholder(txtCedula,    "Ej. 12345678");
+        configurarPlaceholder(txtTelefono,  "Ej. +57 300 000 0000");
+        configurarPlaceholder(txtCorreo,    "Ej. correo@email.com");
+        configurarPlaceholder(txtLicencia,  "Ej. LIC-2025-9293839");
+    }
+
+    private void configurarPlaceholder(JTextField campo, String ph) {
+        campo.setText(ph);
+        campo.setForeground(FIELD_PH);
+        campo.addFocusListener(new FocusAdapter() {
+            @Override public void focusGained(FocusEvent e) {
+                if (campo.getText().equals(ph)) {
                     campo.setText("");
-                    campo.setForeground(COLOR_TEXTO);
+                    campo.setForeground(TEXT_PRI);
                 }
             }
-
-            @Override
-            public void focusLost(java.awt.event.FocusEvent e) {
+            @Override public void focusLost(FocusEvent e) {
                 if (campo.getText().trim().isEmpty()) {
-                    campo.setText(placeholder);
-                    campo.setForeground(new java.awt.Color(120, 120, 120));
+                    campo.setText(ph);
+                    campo.setForeground(FIELD_PH);
                     marcarCampo(campo, false);
                 }
             }
         });
     }
 
-    // ── VALIDACIONES ──────────────────────────────────────────────
     private void initValidaciones() {
-        nombreConductortxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
-            String v = nombreConductortxt.getText().trim();
-            marcarCampo(nombreConductortxt,
-                    !v.isEmpty() && !v.equals("Ej. Marco Javier") && v.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+"));
+        txtNombre.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = txtNombre.getText().trim();
+            marcarCampo(txtNombre, !v.isEmpty() && !v.equals("Ej. Marco Javier")
+                    && v.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+"));
         }));
-
-        apellidosConductortxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
-            String v = apellidosConductortxt.getText().trim();
-            marcarCampo(apellidosConductortxt,
-                    !v.isEmpty() && !v.equals("Ej. Torres Piña") && v.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+"));
+        txtApellidos.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = txtApellidos.getText().trim();
+            marcarCampo(txtApellidos, !v.isEmpty() && !v.equals("Ej. Torres Piña")
+                    && v.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+"));
         }));
-
-        cedulaConductortxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
-            String v = cedulaConductortxt.getText().trim();
-            marcarCampo(cedulaConductortxt,
-                    !v.isEmpty() && !v.equals("Ej. 12345678") && v.matches("\\d{6,12}"));
+        txtCedula.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = txtCedula.getText().trim();
+            marcarCampo(txtCedula, !v.isEmpty() && !v.equals("Ej. 12345678")
+                    && v.matches("\\d{6,12}"));
         }));
-
-        telefonoConductortxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
-            String v = telefonoConductortxt.getText().trim().replaceAll("\\s", "");
-            marcarCampo(telefonoConductortxt,
-                    !v.isEmpty() && !v.equals("Ej.+57300000000") && v.matches("\\+57\\d{10}"));
+        txtTelefono.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = txtTelefono.getText().trim().replaceAll("\\s","");
+            marcarCampo(txtTelefono, !v.isEmpty() && !v.equals("Ej.+57300000000")
+                    && v.matches("\\+57\\d{10}"));
         }));
-
-        correoConductortxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
-            String v = correoConductortxt.getText().trim();
-            marcarCampo(correoConductortxt,
-                    !v.isEmpty() && !v.equals("Ej. correo@email.com") && v.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$"));
+        txtCorreo.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = txtCorreo.getText().trim();
+            marcarCampo(txtCorreo, !v.isEmpty() && !v.equals("Ej. correo@email.com")
+                    && v.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$"));
         }));
-
-        licenciaConductortxt.getDocument().addDocumentListener(new SimpleDocListener(() -> {
-            String v = licenciaConductortxt.getText().trim();
-            marcarCampo(licenciaConductortxt,
-                    !v.isEmpty() && !v.equals("Ej. LIC-2025-9293839") && v.matches("[A-Za-z0-9\\-]+") && v.length() >= 5);
+        txtLicencia.getDocument().addDocumentListener(new SimpleDocListener(() -> {
+            String v = txtLicencia.getText().trim();
+            marcarCampo(txtLicencia, !v.isEmpty() && !v.equals("Ej. LIC-2025-9293839")
+                    && v.matches("[A-Za-z0-9\\-]+") && v.length() >= 5);
         }));
     }
 
-    // ── HELPERS ───────────────────────────────────────────────────
-    private void marcarCampo(javax.swing.JTextField campo, boolean valido) {
-        java.awt.Color color = valido ? COLOR_OK : COLOR_ERROR;
-        campo.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createLineBorder(color, 2, true),
-                javax.swing.BorderFactory.createEmptyBorder(4, 8, 4, 8)
+    private void btnAnadirActionPerformed() {
+        if (!todosValidos()) { new ERRORview().setVisible(true); return; }
+        if (cmbRutas.getSelectedItem() == null
+                || cmbRutas.getSelectedItem().toString().equals("Seleccionar ruta...")) {
+            new ERRORview().setVisible(true); return;
+        }
+        try {
+            Conductor c = new Conductor();
+            c.setNombre(txtNombre.getText());
+            c.setApellido(txtApellidos.getText());
+            c.setCedula(txtCedula.getText());
+            c.setTelefono(txtTelefono.getText());
+            c.setLicencia(txtLicencia.getText());
+            c.setCorreo(txtCorreo.getText());
+            c.setRutaAsignada(cmbRutas.getSelectedItem().toString());
+
+            ConductorDao dao = new ConductorDao();
+            if (dao.agregarConductor(c)) {
+                new Confirmacion().setVisible(true);
+                // Reset
+                for (JTextField f : new JTextField[]{
+                        txtNombre,txtApellidos,txtCedula,txtTelefono,txtCorreo,txtLicencia})
+                    f.setText("");
+                cmbRutas.setSelectedIndex(0);
+                initPlaceholders();
+            } else {
+                new ERRORview().setVisible(true);
+            }
+        } catch (Exception ex) {
+            new ERRORview().setVisible(true);
+        }
+    }
+
+    private void marcarCampo(JTextField campo, boolean valido) {
+        Color c = valido ? COLOR_OK : COLOR_ERR;
+        campo.setBorder(BorderFactory.createCompoundBorder(
+            new RoundedBorder(8, c, 2),
+            new EmptyBorder(7, 12, 7, 12)
         ));
         campo.putClientProperty("valido", valido);
     }
 
     private boolean todosValidos() {
-        javax.swing.JTextField[] campos = {
-            nombreConductortxt, apellidosConductortxt, cedulaConductortxt,
-            telefonoConductortxt, correoConductortxt, licenciaConductortxt
-        };
-        for (javax.swing.JTextField c : campos) {
-            Object tag = c.getClientProperty("valido");
-            if (tag == null || !(Boolean) tag) {
-                return false;
-            }
+        for (JTextField f : new JTextField[]{
+                txtNombre,txtApellidos,txtCedula,txtTelefono,txtCorreo,txtLicencia}) {
+            Object v = f.getClientProperty("valido");
+            if (!(v instanceof Boolean b) || !b) return false;
         }
         return true;
     }
 
-    private static class SimpleDocListener implements javax.swing.event.DocumentListener {
-
-        private final Runnable accion;
-
-        SimpleDocListener(Runnable accion) {
-            this.accion = accion;
+    // ─────────────────────────────────────────────────────────────────────────
+    // Utilidades
+    // ─────────────────────────────────────────────────────────────────────────
+    private static class RoundedBorder extends AbstractBorder {
+        private final int radius; private final Color color; private final float stroke;
+        RoundedBorder(int r, Color c, float s) { radius=r; color=c; stroke=s; }
+        @Override public void paintBorder(Component c, Graphics g, int x, int y, int w, int h) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(color); g2.setStroke(new BasicStroke(stroke));
+            g2.drawRoundRect(x, y, w-1, h-1, radius, radius);
+            g2.dispose();
         }
-
-        @Override
-        public void insertUpdate(javax.swing.event.DocumentEvent e) {
-            accion.run();
-        }
-
-        @Override
-        public void removeUpdate(javax.swing.event.DocumentEvent e) {
-            accion.run();
-        }
-
-        @Override
-        public void changedUpdate(javax.swing.event.DocumentEvent e) {
-            accion.run();
+        @Override public Insets getBorderInsets(Component c) {
+            int i=(int)stroke+1; return new Insets(i,i,i,i);
         }
     }
 
-    // ── GEN — NO TOCAR ────────────────────────────────────────────
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">
-    private void initComponents() {
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        nombreConductortxt = new javax.swing.JTextField();
-        cedulaConductortxt = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        telefonoConductortxt = new javax.swing.JTextField();
-        correoConductortxt = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        licenciaConductortxt = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
-        btnAnadirConductor = new javax.swing.JButton();
-        apellidosConductortxt = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
-        cmbRutas = new javax.swing.JComboBox<>();
-        jLabel10 = new javax.swing.JLabel();
-
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24));
-        jLabel1.setText("Añadir Conductor");
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14));
-        jLabel2.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel2.setText("Registra un nuevo conductor en el sistema");
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14));
-        jLabel3.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel3.setText("Nombres:");
-        nombreConductortxt.setBackground(COLOR_CAMPO);
-        nombreConductortxt.setForeground(COLOR_TEXTO);
-        cedulaConductortxt.setBackground(COLOR_CAMPO);
-        cedulaConductortxt.setForeground(COLOR_TEXTO);
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14));
-        jLabel4.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel4.setText("Cédula:");
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14));
-        jLabel5.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel5.setText("Apellidos:");
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14));
-        jLabel6.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel6.setText("Correo Electronico:");
-        telefonoConductortxt.setBackground(COLOR_CAMPO);
-        telefonoConductortxt.setForeground(COLOR_TEXTO);
-        correoConductortxt.setBackground(COLOR_CAMPO);
-        correoConductortxt.setForeground(COLOR_TEXTO);
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14));
-        jLabel7.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel7.setText("Número de Licencia:");
-        licenciaConductortxt.setBackground(COLOR_CAMPO);
-        licenciaConductortxt.setForeground(COLOR_TEXTO);
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14));
-        jLabel8.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel8.setText("Teléfono:");
-        btnAnadirConductor.setBackground(new java.awt.Color(51, 153, 255));
-        btnAnadirConductor.setFont(new java.awt.Font("Segoe UI", 1, 18));
-        btnAnadirConductor.setForeground(java.awt.Color.WHITE);
-        btnAnadirConductor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vektra/View/Imagenes/PLUS (1) (1).png")));
-        btnAnadirConductor.setText("Añadir Conductor");
-        btnAnadirConductor.addActionListener(e -> btnAnadirConductorActionPerformed(e));
-        apellidosConductortxt.setBackground(COLOR_CAMPO);
-        apellidosConductortxt.setForeground(COLOR_TEXTO);
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 14));
-        jLabel9.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel9.setText("Ruta Asignada:");
-        cmbRutas.setBackground(COLOR_CAMPO);
-        cmbRutas.setForeground(COLOR_TEXTO);
-        cmbRutas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Seleccionar ruta...", "Item 1", "Item 2"}));
-        jLabel10.setForeground(new java.awt.Color(255, 0, 0));
-        jLabel10.setText("*Todos los campos son obligatorios");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel1)
-                                        .addComponent(jLabel2)
-                                        .addComponent(jLabel10)
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                        .addComponent(jLabel3)
-                                                        .addComponent(nombreConductortxt, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
-                                                        .addComponent(jLabel5)
-                                                        .addComponent(apellidosConductortxt)
-                                                        .addComponent(jLabel4)
-                                                        .addComponent(cedulaConductortxt)
-                                                        .addComponent(jLabel8)
-                                                        .addComponent(telefonoConductortxt)
-                                                        .addComponent(jLabel7)
-                                                        .addComponent(licenciaConductortxt))
-                                                .addGap(18)
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                        .addComponent(jLabel6)
-                                                        .addComponent(correoConductortxt, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
-                                                        .addComponent(jLabel9)
-                                                        .addComponent(cmbRutas, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(btnAnadirConductor, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE))))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(16)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel2)
-                                .addGap(2)
-                                .addComponent(jLabel10)
-                                .addGap(10)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel3).addComponent(jLabel6))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(nombreConductortxt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(correoConductortxt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(12)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel5).addComponent(jLabel9))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(apellidosConductortxt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(cmbRutas, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(12)
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(cedulaConductortxt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btnAnadirConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(12)
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(telefonoConductortxt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(12)
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(licenciaConductortxt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
-        layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
-    }// </editor-fold>
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
-
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
-
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
-
-    private void btnAnadirConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnadirConductorActionPerformed
-        if (!todosValidos()) {
-            new ERRORview().setVisible(true);
-            return;
-        }
-
-        if (cmbRutas.getSelectedItem() == null
-                || cmbRutas.getSelectedItem().toString().startsWith("Item")
-                || cmbRutas.getSelectedItem().toString().equals("Seleccionar ruta...")) {
-
-            new ERRORview().setVisible(true);
-            return;
-        }
-
-        try {
-
-            Conductor c = new Conductor();
-
-            c.setNombre(nombreConductortxt.getText());
-            c.setApellido(apellidosConductortxt.getText());
-            c.setCedula(cedulaConductortxt.getText());
-            c.setTelefono(telefonoConductortxt.getText());
-            c.setLicencia(licenciaConductortxt.getText());
-            c.setCorreo(correoConductortxt.getText());
-            c.setRutaAsignada(cmbRutas.getSelectedItem().toString());
-
-            ConductorDao dao = new ConductorDao();
-
-            boolean registrado = dao.agregarConductor(c);
-
-            if (registrado) {
-
-                new Confirmacion().setVisible(true);
-
-                nombreConductortxt.setText("");
-                apellidosConductortxt.setText("");
-                cedulaConductortxt.setText("");
-                telefonoConductortxt.setText("");
-                licenciaConductortxt.setText("");
-                correoConductortxt.setText("");
-
-                cmbRutas.setSelectedIndex(0);
-
-            } else {
-
-                new ERRORview().setVisible(true);
-            }
-
-        } catch (Exception e) {
-
-            new ERRORview().setVisible(true);
-        }
-    }//GEN-LAST:event_btnAnadirConductorActionPerformed
-
-    // Variables declaration - do not modify                     
-    // Variables declaration - do not modify
-    private javax.swing.JTextField apellidosConductortxt;
-    private javax.swing.JButton btnAnadirConductor;
-    private javax.swing.JTextField cedulaConductortxt;
-    private javax.swing.JComboBox<String> cmbRutas;
-    private javax.swing.JTextField correoConductortxt;
-    private javax.swing.JLabel jLabel1, jLabel2, jLabel3, jLabel4, jLabel5;
-    private javax.swing.JLabel jLabel6, jLabel7, jLabel8, jLabel9, jLabel10;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField licenciaConductortxt;
-    private javax.swing.JTextField nombreConductortxt;
-    private javax.swing.JTextField telefonoConductortxt;
-    // End of variables declaration
+    private static class SimpleDocListener implements DocumentListener {
+        private final Runnable accion;
+        SimpleDocListener(Runnable a) { accion = a; }
+        @Override public void insertUpdate (DocumentEvent e) { accion.run(); }
+        @Override public void removeUpdate (DocumentEvent e) { accion.run(); }
+        @Override public void changedUpdate(DocumentEvent e) { accion.run(); }
+    }
 }
