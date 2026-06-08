@@ -123,7 +123,7 @@ public class BorrarConductorPanel extends javax.swing.JPanel {
         jLabel6.setBackground(new java.awt.Color(102, 102, 102));
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel6.setText("Este es el Número de Conductor de la empresa:");
+        jLabel6.setText("Este es el ID listado del conductor:");
 
         jTextField1.setBackground(new java.awt.Color(51, 51, 51));
         jTextField1.setForeground(new java.awt.Color(255, 255, 255));
