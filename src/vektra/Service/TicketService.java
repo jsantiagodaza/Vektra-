@@ -31,6 +31,12 @@ public class TicketService {
     ticket.setEstacionDestino(destino);
 
     ticketDao.guardarTicket(ticket);
+
+       EmailService emailService = new EmailService();
+       emailService.enviarTicket(ticket);
+     
+     System.out.println("=== ENVIANDO CORREO ===");
+     System.out.println("Destino: " + ticket.getPasajero().getCorreo());
 }
 
     public void mostrarTickets() {

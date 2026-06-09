@@ -11,14 +11,14 @@
     <description>Builds, tests, and runs the project Vektra-.</description>
 
     <target name="-pre-compile">
-        <delete>
+        <delete failonerror="false">
             <fileset dir="${src.dir}" includes="**/*.class"/>
             <fileset dir="${build.classes.dir}" includes="**/*.class"/>
         </delete>
     </target>
 
     <target name="-post-clean">
-        <delete>
+        <delete failonerror="false">
             <fileset dir="${src.dir}" includes="**/*.class"/>
             <fileset dir="${build.classes.dir}" includes="**/*.class"/>
         </delete>

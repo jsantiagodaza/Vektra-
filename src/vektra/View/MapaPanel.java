@@ -4,6 +4,7 @@
  */
 package vektra.View;
 
+
 /**
  *
  * @author santi
@@ -36,6 +37,11 @@ public class MapaPanel extends javax.swing.JPanel {
         
         this.revalidate();
         this.repaint();
+
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+       jPanel2.add(new MapaView(), java.awt.BorderLayout.CENTER);
+
     }
 
     /**
