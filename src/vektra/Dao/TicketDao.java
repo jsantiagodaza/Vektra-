@@ -1,9 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package vektra.Dao;
-
 import java.util.ArrayList;
 import java.util.List;
 import vektra.Model.Estacion;
@@ -15,14 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import vektra.Conexion.Conexion;
+import vektra.Dao.ConexionBD;
 import vektra.Util.Sesion;
 
-
-
-/**
- *
- * @author santi
- */
 public class TicketDao {
 
     private List<Ticket> tickets;
@@ -228,6 +218,3 @@ public class TicketDao {
         return obtenerTicketsPorUsuario(usuarioId);
     }
 }
-
-
-
