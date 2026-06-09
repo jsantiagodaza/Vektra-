@@ -337,7 +337,7 @@ public class ComprarTicketPanel extends JPanel {
             }
 
             // Crear ticket
-            double precio = 25000; // Precio base por defecto
+            double precio = 2500; // Precio base por defecto
             TicketService ticketService = new TicketService();
             ticketService.crearTicket(id, pasajero, origen, destino, precio);
             

@@ -22,13 +22,13 @@ public class MainFrameView extends javax.swing.JFrame {
         vektra.Util.FontUtil.applyCustomFont(this);
         iniciarEstilos(); // Llama al método para aplicar los estilos minimalistas
         iniciarContenido();
-        
+
         if (!isAdmin) {
             btnEditarConductoresdelaEmpresa.setVisible(false);
             btnAnadirVehiculo.setVisible(false);
         }
     }
-    
+
     private javax.swing.JPanel panelContenido;
 
     public void mostrarPanel(javax.swing.JPanel panel) {
@@ -45,14 +45,12 @@ public class MainFrameView extends javax.swing.JFrame {
         panelContenido = new javax.swing.JPanel(new java.awt.BorderLayout());
         panelContenido.setBackground(new java.awt.Color(255, 255, 255));
 
-        
-        // Agregar al lado derecho del sidebar
+        //lado derecho del sidebar
         jPanel1.setLayout(new java.awt.BorderLayout());
         jPanel1.add(jPanel2, java.awt.BorderLayout.WEST);
         jPanel1.add(panelContenido, java.awt.BorderLayout.CENTER);
 
         // Cargar dashboard por defecto
-        
         mostrarPanel(new DashboardPanel());
         btnDashboardInicial.addActionListener(e -> mostrarPanel(new DashboardPanel()));
         btnGenerarticket.addActionListener(new java.awt.event.ActionListener() {
@@ -69,6 +67,7 @@ public class MainFrameView extends javax.swing.JFrame {
         });
         btnGestionRutas.addActionListener(new java.awt.event.ActionListener() {
             private MapaPanel mapaPanelInstance;
+
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 if (mapaPanelInstance == null) {
@@ -83,7 +82,7 @@ public class MainFrameView extends javax.swing.JFrame {
                 mostrarPanel(new AnadirVehiculo());
             }
         });
-        
+
         btnCerrar.addActionListener(e -> {
             int confirm = javax.swing.JOptionPane.showConfirmDialog(
                     this,
@@ -98,6 +97,7 @@ public class MainFrameView extends javax.swing.JFrame {
     }
 
     private void iniciarEstilos() {
+
         // Color oscuro cuando el botón es seleccionado
         java.awt.Color colorSeleccionado = new java.awt.Color(40, 44, 52); // Negro/gris oscuro
         java.awt.Color colorHover = new java.awt.Color(240, 240, 240); // Gris claro
@@ -110,6 +110,7 @@ public class MainFrameView extends javax.swing.JFrame {
         };
 
         for (javax.swing.JButton btn : botones) {
+
             // Quitar bordes y fondo por defecto
             btn.setBorderPainted(false);
             btn.setFocusPainted(false);
@@ -123,7 +124,7 @@ public class MainFrameView extends javax.swing.JFrame {
                 @Override
                 public void paint(java.awt.Graphics g, javax.swing.JComponent c) {
                     java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
-                    // Antialiasing para que los bordes redondeados se vean suaves y no pixelados
+                    //bordes redondeados suaves y no pixelados
                     g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
 
                     Boolean seleccionado = (Boolean) c.getClientProperty("seleccionado");

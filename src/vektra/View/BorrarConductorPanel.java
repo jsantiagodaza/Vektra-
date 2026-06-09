@@ -15,26 +15,26 @@ import vektra.Dao.ConductorDao;
 public class BorrarConductorPanel extends JPanel {
 
     // ── Paleta ────────────────────────────────────────────────────────────────
-    private static final Color BG_PAGE    = new Color(248, 250, 255);
-    private static final Color TEXT_PRI   = new Color(15,  23,  42);
-    private static final Color TEXT_MUT   = new Color(100, 116, 139);
-    private static final Color TEXT_LABEL = new Color(71,  85, 105);
-    private static final Color BORDER_COL = new Color(226, 232, 240);
-    private static final Color FIELD_BG   = new Color(249, 250, 251);
+    private static final Color background_Pagina    = new Color(248, 250, 255);
+    private static final Color textoPrincipal   = new Color(15,  23,  42);
+    private static final Color textoMult   = new Color(100, 116, 139);
+    private static final Color textoLabel = new Color(71,  85, 105);
+    private static final Color colorBorde = new Color(226, 232, 240);
+    private static final Color background_Campo   = new Color(249, 250, 251);
     private static final Color FIELD_PH   = new Color(148, 163, 184);
     private static final Color FIELD_DIS  = new Color(241, 245, 249);
     private static final Color COLOR_OK   = new Color(34,  197,  94);
     private static final Color COLOR_ERR  = new Color(239,  68,  68);
-    private static final Color BLUE_LIGHT = new Color(239, 246, 255);
+    private static final Color AzulClaro = new Color(239, 246, 255);
     private static final Color BLUE_ACC   = new Color(37,  99, 235);
     // Danger
-    private static final Color WARN_BG    = new Color(255, 241, 242);
+    private static final Color background_Advertencia    = new Color(255, 241, 242);
     private static final Color WARN_BRD   = new Color(254, 202, 202);
     private static final Color WARN_FG    = new Color(159,  18,  57);
-    private static final Color WARN_ICON  = new Color(220,  38,  38);
-    private static final Color BTN_BG     = new Color(220,  38,  38);
-    private static final Color BTN_HOV    = new Color(185,  28,  28);
-    private static final Color BTN_DIS    = new Color(252, 165, 165);
+    private static final Color Advertencia_Icono  = new Color(220,  38,  38);
+    private static final Color boton_Background     = new Color(220,  38,  38);
+    private static final Color Boton_Hover    = new Color(185,  28,  28);
+    private static final Color boton_display    = new Color(252, 165, 165);
 
     // ── Fuentes ───────────────────────────────────────────────────────────────
     private static final Font F_TITLE   = new Font("Segoe UI", Font.BOLD,  22);
@@ -57,7 +57,7 @@ public class BorrarConductorPanel extends JPanel {
         initUI();
         vektra.Util.FontUtil.applyCustomFont(this);
         cargarConductores();
-        initPlaceholders();
+        inicializarPlaceholders();
         initValidaciones();
     }
 
@@ -66,11 +66,11 @@ public class BorrarConductorPanel extends JPanel {
     // ─────────────────────────────────────────────────────────────────────────
     private void initUI() {
         setLayout(new BorderLayout());
-        setBackground(BG_PAGE);
+        setBackground(background_Pagina);
 
         JPanel content = new JPanel();
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-        content.setBackground(BG_PAGE);
+        content.setBackground(background_Pagina);
         content.setBorder(new EmptyBorder(28, 36, 32, 36));
 
         content.add(crearHeader());
@@ -101,12 +101,12 @@ public class BorrarConductorPanel extends JPanel {
 
         JLabel title = new JLabel("Borrar Conductor");
         title.setFont(F_TITLE);
-        title.setForeground(TEXT_PRI);
+        title.setForeground(textoPrincipal);
         title.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel sub = new JLabel("Esta acción es permanente y no se puede deshacer");
         sub.setFont(F_SUB);
-        sub.setForeground(TEXT_MUT);
+        sub.setForeground(textoMult);
         sub.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         p.add(title);
@@ -121,10 +121,10 @@ public class BorrarConductorPanel extends JPanel {
             @Override protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(WARN_BG);
+                g2.setColor(background_Advertencia);
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
                 // borde izquierdo grueso rojo
-                g2.setColor(WARN_ICON);
+                g2.setColor(Advertencia_Icono);
                 g2.fillRoundRect(0, 0, 4, getHeight(), 4, 4);
                 // borde exterior
                 g2.setColor(WARN_BRD);
@@ -139,11 +139,11 @@ public class BorrarConductorPanel extends JPanel {
         p.setBorder(new EmptyBorder(12, 16, 12, 16));
 
         // Ícono ⚠ pintado
-        JLabel icon = new JLabel("⚠") {
+        JLabel icon = new JLabel("*") {
             @Override protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(WARN_ICON);
+                g2.setColor(Advertencia_Icono);
                 g2.setFont(new Font("Segoe UI", Font.BOLD, 22));
                 g2.drawString("*", 0, 20);
                 g2.dispose();
@@ -177,11 +177,11 @@ public class BorrarConductorPanel extends JPanel {
 
         JLabel lbl = new JLabel(titulo);
         lbl.setFont(F_SECTION);
-        lbl.setForeground(TEXT_LABEL);
+        lbl.setForeground(textoLabel);
 
         JSeparator sep = new JSeparator() {
             @Override protected void paintComponent(Graphics g) {
-                g.setColor(BORDER_COL);
+                g.setColor(colorBorde);
                 g.fillRect(0, getHeight()/2, getWidth(), 1);
             }
         };
@@ -205,9 +205,9 @@ public class BorrarConductorPanel extends JPanel {
         // Combo conductor
         cmbConductores = new JComboBox<>();
         cmbConductores.setFont(F_FIELD);
-        cmbConductores.setBackground(FIELD_BG);
-        cmbConductores.setForeground(TEXT_PRI);
-        cmbConductores.setBorder(new RoundedBorder(8, BORDER_COL, 1));
+        cmbConductores.setBackground(background_Campo);
+        cmbConductores.setForeground(textoPrincipal);
+        cmbConductores.setBorder(new RoundedBorder(8, colorBorde, 1));
         cmbConductores.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         cmbConductores.setRenderer(new DefaultListCellRenderer() {
             @Override public Component getListCellRendererComponent(
@@ -215,8 +215,8 @@ public class BorrarConductorPanel extends JPanel {
                 JLabel l = (JLabel) super.getListCellRendererComponent(list,v,i,sel,foc);
                 l.setBorder(new EmptyBorder(5,10,5,10));
                 l.setFont(F_FIELD);
-                if (sel) { l.setBackground(BLUE_LIGHT); l.setForeground(BLUE_ACC); }
-                else     { l.setBackground(Color.WHITE); l.setForeground(TEXT_PRI); }
+                if (sel) { l.setBackground(AzulClaro); l.setForeground(BLUE_ACC); }
+                else     { l.setBackground(Color.WHITE); l.setForeground(textoPrincipal); }
                 return l;
             }
         });
@@ -227,8 +227,7 @@ public class BorrarConductorPanel extends JPanel {
         txtIdMostrada.setFont(F_ID);
         txtIdMostrada.setForeground(new Color(148, 163, 184));
         txtIdMostrada.setBackground(FIELD_DIS);
-        txtIdMostrada.setBorder(BorderFactory.createCompoundBorder(
-            new RoundedBorder(8, BORDER_COL, 1),
+        txtIdMostrada.setBorder(BorderFactory.createCompoundBorder(new RoundedBorder(8, colorBorde, 1),
             new EmptyBorder(4, 14, 4, 14)
         ));
         txtIdMostrada.setHorizontalAlignment(JTextField.CENTER);
@@ -247,11 +246,10 @@ public class BorrarConductorPanel extends JPanel {
 
         txtConfirmaId = new JTextField();
         txtConfirmaId.setFont(F_FIELD);
-        txtConfirmaId.setForeground(TEXT_PRI);
-        txtConfirmaId.setBackground(FIELD_BG);
-        txtConfirmaId.setCaretColor(TEXT_PRI);
-        txtConfirmaId.setBorder(BorderFactory.createCompoundBorder(
-            new RoundedBorder(8, BORDER_COL, 1),
+        txtConfirmaId.setForeground(textoPrincipal);
+        txtConfirmaId.setBackground(background_Campo);
+        txtConfirmaId.setCaretColor(textoPrincipal);
+        txtConfirmaId.setBorder(BorderFactory.createCompoundBorder(new RoundedBorder(8, colorBorde, 1),
             new EmptyBorder(7, 12, 7, 12)
         ));
 
@@ -276,7 +274,7 @@ public class BorrarConductorPanel extends JPanel {
             @Override protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                Color bg = !isEnabled() ? BTN_DIS : (hov ? BTN_HOV : BTN_BG);
+                Color bg = !isEnabled() ? boton_display : (hov ? Boton_Hover : boton_Background);
                 g2.setColor(bg);
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
                 g2.dispose();
@@ -321,7 +319,7 @@ public class BorrarConductorPanel extends JPanel {
 
         JLabel lbl = new JLabel(etiqueta);
         lbl.setFont(F_LABEL);
-        lbl.setForeground(TEXT_LABEL);
+        lbl.setForeground(textoLabel);
         lbl.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         campo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
@@ -340,7 +338,7 @@ public class BorrarConductorPanel extends JPanel {
 
         JLabel lbl = new JLabel(etiqueta);
         lbl.setFont(F_LABEL);
-        lbl.setForeground(TEXT_LABEL);
+        lbl.setForeground(textoLabel);
         lbl.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         combo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
@@ -369,14 +367,14 @@ public class BorrarConductorPanel extends JPanel {
         }
     }
 
-    private void initPlaceholders() {
+    private void inicializarPlaceholders() {
         txtConfirmaId.setText("Digite la ID del conductor...");
         txtConfirmaId.setForeground(FIELD_PH);
         txtConfirmaId.addFocusListener(new FocusAdapter() {
             @Override public void focusGained(FocusEvent e) {
                 if (txtConfirmaId.getText().equals("Digite la ID del conductor...")) {
                     txtConfirmaId.setText("");
-                    txtConfirmaId.setForeground(TEXT_PRI);
+                    txtConfirmaId.setForeground(textoPrincipal);
                 }
             }
             @Override public void focusLost(FocusEvent e) {
@@ -411,7 +409,7 @@ public class BorrarConductorPanel extends JPanel {
         } else {
             String id = sel.split(" - ")[0];
             txtIdMostrada.setText(id);
-            txtIdMostrada.setForeground(WARN_ICON);
+            txtIdMostrada.setForeground(Advertencia_Icono);
             marcarCampo(cmbConductores, true);
         }
     }
@@ -457,6 +455,7 @@ public class BorrarConductorPanel extends JPanel {
                 marcarCampo(txtConfirmaId, false);
                 validarCampos();
             } else {
+                
                 new ERRORview().setVisible(true);
             }
         }
