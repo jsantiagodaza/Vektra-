@@ -15,19 +15,19 @@ import vektra.Model.Conductor;
 public class AnadirConductorPanel extends JPanel {
 
     // ── Paleta ────────────────────────────────────────────────────────────────
-    private static final Color BG_PAGE = new Color(248, 250, 255);
-    private static final Color TEXT_PRI = new Color(15, 23, 42);
-    private static final Color TEXT_MUT = new Color(100, 116, 139);
-    private static final Color TEXT_LABEL = new Color(71, 85, 105);
-    private static final Color BORDER_COL = new Color(226, 232, 240);
-    private static final Color FIELD_BG = new Color(249, 250, 251);
+    private static final Color background_pagina = new Color(248, 250, 255);
+    private static final Color textoPrincipal = new Color(15, 23, 42);
+    private static final Color textoMut = new Color(100, 116, 139);
+    private static final Color labelTexto = new Color(71, 85, 105);
+    private static final Color colorBorde = new Color(226, 232, 240);
+    private static final Color campoBackground = new Color(249, 250, 251);
     private static final Color FIELD_PH = new Color(148, 163, 184);
-    private static final Color COLOR_OK = new Color(34, 197, 94);
-    private static final Color COLOR_ERR = new Color(239, 68, 68);
+    private static final Color color_OK = new Color(34, 197, 94);
+    private static final Color color_Error = new Color(239, 68, 68);
     private static final Color BLUE_ACC = new Color(37, 99, 235);
-    private static final Color BLUE_HOV = new Color(29, 78, 216);
-    private static final Color BLUE_LIGHT = new Color(239, 246, 255);
-    private static final Color WARN_BG = new Color(255, 247, 237);
+    private static final Color hoverAzul = new Color(29, 78, 216);
+    private static final Color AzulClaro = new Color(239, 246, 255);
+    private static final Color BackgroundAdvertencia = new Color(255, 247, 237);
     private static final Color WARN_BRD = new Color(254, 215, 170);
     private static final Color WARN_FG = new Color(154, 52, 18);
 
@@ -51,7 +51,7 @@ public class AnadirConductorPanel extends JPanel {
 
     // ─────────────────────────────────────────────────────────────────────────
     public AnadirConductorPanel() {
-        initUI();
+        inicializarUI();
         vektra.Util.FontUtil.applyCustomFont(this);
         cargarRutas();
         initPlaceholders();
@@ -61,13 +61,13 @@ public class AnadirConductorPanel extends JPanel {
     // ─────────────────────────────────────────────────────────────────────────
     // Layout
     // ─────────────────────────────────────────────────────────────────────────
-    private void initUI() {
+    private void inicializarUI() {
         setLayout(new BorderLayout());
-        setBackground(BG_PAGE);
+        setBackground(background_pagina);
 
         JPanel content = new JPanel();
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-        content.setBackground(BG_PAGE);
+        content.setBackground(background_pagina);
         content.setBorder(new EmptyBorder(28, 36, 32, 36));
 
         content.add(crearHeader());
@@ -100,12 +100,12 @@ public class AnadirConductorPanel extends JPanel {
 
         JLabel title = new JLabel("Añadir Conductor");
         title.setFont(F_TITLE);
-        title.setForeground(TEXT_PRI);
+        title.setForeground(textoPrincipal);
         title.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel sub = new JLabel("Registra un nuevo conductor en el sistema");
         sub.setFont(F_SUB);
-        sub.setForeground(TEXT_MUT);
+        sub.setForeground(textoMut);
         sub.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         p.add(title);
@@ -122,7 +122,7 @@ public class AnadirConductorPanel extends JPanel {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                         RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(WARN_BG);
+                g2.setColor(BackgroundAdvertencia);
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
                 g2.setColor(WARN_BRD);
                 g2.setStroke(new BasicStroke(1f));
@@ -161,12 +161,12 @@ public class AnadirConductorPanel extends JPanel {
 
         JLabel lbl = new JLabel(titulo);
         lbl.setFont(F_SECTION);
-        lbl.setForeground(TEXT_LABEL);
+        lbl.setForeground(labelTexto);
 
         JSeparator sep = new JSeparator() {
             @Override
             protected void paintComponent(Graphics g) {
-                g.setColor(BORDER_COL);
+                g.setColor(colorBorde);
                 g.fillRect(0, getHeight() / 2, getWidth(), 1);
             }
         };
@@ -217,9 +217,9 @@ public class AnadirConductorPanel extends JPanel {
 
         cmbRutas = new JComboBox<>();
         cmbRutas.setFont(F_FIELD);
-        cmbRutas.setBackground(FIELD_BG);
-        cmbRutas.setForeground(TEXT_PRI);
-        cmbRutas.setBorder(new RoundedBorder(8, BORDER_COL, 1));
+        cmbRutas.setBackground(campoBackground);
+        cmbRutas.setForeground(textoPrincipal);
+        cmbRutas.setBorder(new bordeRedondeado(8, colorBorde, 1));
         cmbRutas.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         cmbRutas.setRenderer(new DefaultListCellRenderer() {
             @Override
@@ -229,11 +229,11 @@ public class AnadirConductorPanel extends JPanel {
                 l.setBorder(new EmptyBorder(5, 10, 5, 10));
                 l.setFont(F_FIELD);
                 if (sel) {
-                    l.setBackground(BLUE_LIGHT);
+                    l.setBackground(AzulClaro);
                     l.setForeground(BLUE_ACC);
                 } else {
                     l.setBackground(Color.WHITE);
-                    l.setForeground(TEXT_PRI);
+                    l.setForeground(textoPrincipal);
                 }
                 return l;
             }
@@ -280,7 +280,7 @@ public class AnadirConductorPanel extends JPanel {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                         RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(hov ? BLUE_HOV : BLUE_ACC);
+                g2.setColor(hov ? hoverAzul : BLUE_ACC);
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
                 g2.dispose();
                 super.paintComponent(g);
@@ -324,11 +324,10 @@ public class AnadirConductorPanel extends JPanel {
     private JTextField nuevoTextField() {
         JTextField f = new JTextField();
         f.setFont(F_FIELD);
-        f.setForeground(TEXT_PRI);
-        f.setBackground(FIELD_BG);
-        f.setCaretColor(TEXT_PRI);
-        f.setBorder(BorderFactory.createCompoundBorder(
-                new RoundedBorder(8, BORDER_COL, 1),
+        f.setForeground(textoPrincipal);
+        f.setBackground(campoBackground);
+        f.setCaretColor(textoPrincipal);
+        f.setBorder(BorderFactory.createCompoundBorder(new bordeRedondeado(8, colorBorde, 1),
                 new EmptyBorder(7, 12, 7, 12)
         ));
         return f;
@@ -341,7 +340,7 @@ public class AnadirConductorPanel extends JPanel {
 
         JLabel lbl = new JLabel(etiqueta);
         lbl.setFont(F_LABEL);
-        lbl.setForeground(TEXT_LABEL);
+        lbl.setForeground(labelTexto);
         lbl.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         campo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
@@ -360,7 +359,7 @@ public class AnadirConductorPanel extends JPanel {
 
         JLabel lbl = new JLabel(etiqueta);
         lbl.setFont(F_LABEL);
-        lbl.setForeground(TEXT_LABEL);
+        lbl.setForeground(labelTexto);
         lbl.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         combo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
@@ -406,7 +405,7 @@ public class AnadirConductorPanel extends JPanel {
             public void focusGained(FocusEvent e) {
                 if (campo.getText().equals(ph)) {
                     campo.setText("");
-                    campo.setForeground(TEXT_PRI);
+                    campo.setForeground(textoPrincipal);
                 }
             }
 
@@ -493,9 +492,9 @@ public class AnadirConductorPanel extends JPanel {
     }
 
     private void marcarCampo(JTextField campo, boolean valido) {
-        Color c = valido ? COLOR_OK : COLOR_ERR;
+        Color c = valido ? color_OK : color_Error;
         campo.setBorder(BorderFactory.createCompoundBorder(
-                new RoundedBorder(8, c, 2),
+                new bordeRedondeado(8, c, 2),
                 new EmptyBorder(7, 12, 7, 12)
         ));
         campo.putClientProperty("valido", valido);
@@ -515,16 +514,16 @@ public class AnadirConductorPanel extends JPanel {
     // ─────────────────────────────────────────────────────────────────────────
     // Utilidades
     // ─────────────────────────────────────────────────────────────────────────
-    private static class RoundedBorder extends AbstractBorder {
+    private static class bordeRedondeado extends AbstractBorder {
 
-        private final int radius;
+        private final int radio;
         private final Color color;
-        private final float stroke;
+        private final float trazado;
 
-        RoundedBorder(int r, Color c, float s) {
-            radius = r;
+        bordeRedondeado(int r, Color c, float s) {
+            radio = r;
             color = c;
-            stroke = s;
+            trazado = s;
         }
 
         @Override
@@ -532,18 +531,19 @@ public class AnadirConductorPanel extends JPanel {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setColor(color);
-            g2.setStroke(new BasicStroke(stroke));
-            g2.drawRoundRect(x, y, w - 1, h - 1, radius, radius);
+            g2.setStroke(new BasicStroke(trazado));
+            g2.drawRoundRect(x, y, w - 1, h - 1, radio, radio);
             g2.dispose();
         }
 
         @Override
         public Insets getBorderInsets(Component c) {
-            int i = (int) stroke + 1;
+            int i = (int) trazado + 1;
             return new Insets(i, i, i, i);
         }
     }
 
+    
     private static class SimpleDocListener implements DocumentListener {
 
         private final Runnable accion;
