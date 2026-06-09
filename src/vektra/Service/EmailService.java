@@ -15,11 +15,11 @@ import vektra.Model.Ticket;
 public class EmailService {
 
     private final String remitente = "xaviacostamaldonado@gmail.com";
-    private final String contraseña = "zadk tuhu ovee ldxt";
+    private final String contraseña = "zadktuhuoveeldxt";
 
     public void enviarTicket(Ticket t) {
 
-        String destinatario = t.getPasajero().getCorreo();
+        String destinatario = t.getPasajero().getEmail();
 
         String asunto = "Ticket de Compra";
 

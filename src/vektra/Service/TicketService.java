@@ -36,7 +36,7 @@ public class TicketService {
        emailService.enviarTicket(ticket);
      
      System.out.println("=== ENVIANDO CORREO ===");
-     System.out.println("Destino: " + ticket.getPasajero().getCorreo());
+     System.out.println("Destino: " + ticket.getPasajero().getEmail());
 }
 
     public void mostrarTickets() {
