@@ -543,7 +543,6 @@ public class AnadirConductorPanel extends JPanel {
         }
     }
 
-    
     private static class SimpleDocListener implements DocumentListener {
 
         private final Runnable accion;
