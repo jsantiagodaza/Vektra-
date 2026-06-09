@@ -2,7 +2,6 @@ package vektra.View;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.*;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -17,19 +16,19 @@ import vektra.Model.Conductor;
 public class ConductoresPanel extends JPanel {
 
     // ── Paleta ────────────────────────────────────────────────────────────────
-    private static final Color BG_PAGE      = new Color(248, 250, 255);
+    private static final Color background_Pagina      = new Color(248, 250, 255);
     private static final Color NAVY         = new Color(15,  23,  42);
-    private static final Color BLUE_ACCENT  = new Color(37,  99, 235);
-    private static final Color BLUE_LIGHT   = new Color(219, 234, 254);
-    private static final Color TEXT_PRIMARY = new Color(15,  23,  42);
+    private static final Color AzulAcentuado  = new Color(37,  99, 235);
+    private static final Color AzulClaro   = new Color(219, 234, 254);
+    private static final Color textoPrincipal = new Color(15,  23,  42);
     private static final Color TEXT_MUTED   = new Color(100, 116, 139);
-    private static final Color BORDER_COLOR = new Color(226, 232, 240);
-    private static final Color ROW_ALT      = new Color(241, 245, 255);   // azul muy suave
-    private static final Color ROW_HOVER    = new Color(219, 234, 254);
-    private static final Color ROW_SELECT   = new Color(191, 219, 254);
+    private static final Color colorBorde = new Color(226, 232, 240);
+    private static final Color filaAlt      = new Color(241, 245, 255);   // azul muy suave
+    private static final Color FilaHover    = new Color(219, 234, 254);
+    private static final Color filaSelect   = new Color(191, 219, 254);
     private static final Color HDR_BG       = NAVY;
     private static final Color HDR_FG       = Color.WHITE;
-    private static final Color BTN_ADD_BG   = BLUE_ACCENT;
+    private static final Color BTN_ADD_BG   = AzulAcentuado;
     private static final Color BTN_ADD_FG   = Color.WHITE;
     private static final Color BTN_DEL_BG   = new Color(254, 242, 242);
     private static final Color BTN_DEL_FG   = new Color(185,  28,  28);
@@ -59,7 +58,7 @@ public class ConductoresPanel extends JPanel {
     // ─────────────────────────────────────────────────────────────────────────
     public ConductoresPanel(MainFrameView frame) {
         this.mainFrame = frame;
-        initUI();
+        inicializarUI();
         vektra.Util.FontUtil.applyCustomFont(this);
         cargarConductores();
     }
@@ -67,9 +66,9 @@ public class ConductoresPanel extends JPanel {
     // ─────────────────────────────────────────────────────────────────────────
     // Layout principal
     // ─────────────────────────────────────────────────────────────────────────
-    private void initUI() {
+    private void inicializarUI() {
         setLayout(new BorderLayout());
-        setBackground(BG_PAGE);
+        setBackground(background_Pagina);
 
         add(crearHeader(),  BorderLayout.NORTH);
         add(crearCuerpo(),  BorderLayout.CENTER);
@@ -79,17 +78,17 @@ public class ConductoresPanel extends JPanel {
     // ── Header ────────────────────────────────────────────────────────────────
     private JPanel crearHeader() {
         JPanel p = new JPanel(new BorderLayout());
-        p.setBackground(BG_PAGE);
+        p.setBackground(background_Pagina);
         p.setBorder(new EmptyBorder(24, 32, 12, 32));
 
         // Título + subtítulo
         JPanel left = new JPanel();
         left.setLayout(new BoxLayout(left, BoxLayout.Y_AXIS));
-        left.setBackground(BG_PAGE);
+        left.setBackground(background_Pagina);
 
         JLabel title = new JLabel("Conductores");
         title.setFont(FONT_TITLE);
-        title.setForeground(TEXT_PRIMARY);
+        title.setForeground(textoPrincipal);
 
         JLabel sub = new JLabel("Gestión del personal de conducción");
         sub.setFont(FONT_SUB);
@@ -105,19 +104,19 @@ public class ConductoresPanel extends JPanel {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                     RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(BLUE_LIGHT);
+                g2.setColor(AzulClaro);
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
                 g2.dispose();
                 super.paintComponent(g);
             }
         };
         lblConteo.setFont(FONT_BADGE);
-        lblConteo.setForeground(BLUE_ACCENT);
+        lblConteo.setForeground(AzulAcentuado);
         lblConteo.setBorder(new EmptyBorder(4, 12, 4, 12));
         lblConteo.setOpaque(false);
 
         JPanel right = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 8));
-        right.setBackground(BG_PAGE);
+        right.setBackground(background_Pagina);
         right.add(lblConteo);
 
         p.add(left,  BorderLayout.WEST);
@@ -150,13 +149,13 @@ public class ConductoresPanel extends JPanel {
             @Override public Component prepareRenderer(TableCellRenderer r, int row, int col) {
                 Component c = super.prepareRenderer(r, row, col);
                 if (isRowSelected(row)) {
-                    c.setBackground(ROW_SELECT);
+                    c.setBackground(filaSelect);
                 } else if (row == hoverRow) {
-                    c.setBackground(ROW_HOVER);
+                    c.setBackground(FilaHover);
                 } else {
-                    c.setBackground(row % 2 == 0 ? Color.WHITE : ROW_ALT);
+                    c.setBackground(row % 2 == 0 ? Color.WHITE : filaAlt);
                 }
-                c.setForeground(TEXT_PRIMARY);
+                c.setForeground(textoPrincipal);
                 return c;
             }
         };
@@ -166,9 +165,9 @@ public class ConductoresPanel extends JPanel {
         tabla.setRowHeight(36);
         tabla.setShowVerticalLines(false);
         tabla.setShowHorizontalLines(true);
-        tabla.setGridColor(BORDER_COLOR);
-        tabla.setSelectionBackground(ROW_SELECT);
-        tabla.setSelectionForeground(TEXT_PRIMARY);
+        tabla.setGridColor(colorBorde);
+        tabla.setSelectionBackground(filaSelect);
+        tabla.setSelectionForeground(textoPrincipal);
         tabla.setFillsViewportHeight(true);
         tabla.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         tabla.setIntercellSpacing(new Dimension(0, 0));
@@ -223,7 +222,7 @@ public class ConductoresPanel extends JPanel {
         scroll.getVerticalScrollBar().setUnitIncrement(16);
 
         JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBackground(BG_PAGE);
+        wrapper.setBackground(background_Pagina);
         wrapper.setBorder(new EmptyBorder(0, 32, 16, 32));
         wrapper.add(scroll, BorderLayout.CENTER);
         return wrapper;
@@ -232,7 +231,7 @@ public class ConductoresPanel extends JPanel {
     // ── Footer (botones) ──────────────────────────────────────────────────────
     private JPanel crearFooter() {
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 0));
-        p.setBackground(BG_PAGE);
+        p.setBackground(background_Pagina);
         p.setBorder(new EmptyBorder(0, 32, 24, 32));
 
         JButton btnAdd = crearBoton(
@@ -355,7 +354,7 @@ public class ConductoresPanel extends JPanel {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                     RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(BORDER_COLOR);
+                g2.setColor(colorBorde);
                 g2.setStroke(new BasicStroke(1f));
                 g2.drawRoundRect(x, y, w - 1, h - 1, 10, 10);
                 g2.dispose();
