@@ -340,6 +340,7 @@ public class ComprarTicketPanel extends JPanel {
             double precio = 25000; // Precio base por defecto
             TicketService ticketService = new TicketService();
             ticketService.crearTicket(id, pasajero, origen, destino, precio);
+            
 
             // Mostrar confirmación en el hilo de Swing
             SwingUtilities.invokeLater(() -> new Confirmacion().setVisible(true));
@@ -349,5 +350,5 @@ public class ComprarTicketPanel extends JPanel {
             e.printStackTrace();
             SwingUtilities.invokeLater(() -> new ERRORview().setVisible(true));
         }
-    }
+    }   
 }
